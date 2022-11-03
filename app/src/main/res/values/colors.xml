@@ -7,10 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="whitetrasparente">#C4FFFFFF</color>
 
+    <color name="fondo_cardView">#1E4A4947</color>
     <color name="amarillo">#FFB039</color>
     <color name="trasparente">#00FFB039</color>
 
+
     <color name="negroFondo">#1E1B14</color>
     <color name="amarilloFondo">#DF885A28</color>
+    <color name="md_green_500">#2F5915</color>
 </resources>

@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".pantallas.Usuarios">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +28,8 @@
                 android:layout_marginTop="10sp"
                 android:layout_marginRight="20sp"
                 android:layout_marginBottom="10sp"
-                app:cardBackgroundColor="#66818181"
+                app:cardElevation="10sp"
+                app:cardBackgroundColor="@color/fondo_cardView"
                 app:cardCornerRadius="20dp">
 
                 <LinearLayout
@@ -48,13 +46,14 @@
 
                         <TextView
                             android:id="@+id/textView6"
-                            android:layout_width="224dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
                             android:layout_weight="2"
                             android:gravity="center"
                             android:text="@string/Perfil"
-                            android:theme="@style/texto_sub_titulo" />
+                            android:theme="@style/texto_sub_titulo"
+                            tools:ignore="TextContrastCheck" />
 
                         <Spinner
                             android:id="@+id/spinnerTipo"
@@ -74,7 +73,7 @@
                         android:textColorHint="@color/white">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editText_usuario"
+                            android:id="@+id/editText_nombre"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="4dp"
@@ -82,7 +81,8 @@
                             android:hint="@string/Nombre"
                             android:inputType="textPersonName"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            tools:ignore="TextContrastCheck" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -100,7 +100,8 @@
                             android:hint="@string/Telefono"
                             android:inputType="phone"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            tools:ignore="TextContrastCheck" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -110,7 +111,7 @@
                         android:textColorHint="@color/white">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editText_correo"
+                            android:id="@+id/editText_correoGmail"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="4dp"
@@ -118,7 +119,8 @@
                             android:hint="@string/CorreoGmail"
                             android:inputType="textEmailAddress"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            tools:ignore="TextContrastCheck" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -137,7 +139,8 @@
                             android:hint="@string/Direccion"
                             android:inputType="textMultiLine"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            tools:ignore="TextContrastCheck" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -156,14 +159,16 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_marginTop="10dp"
-                app:cardBackgroundColor="#66818181"
+                app:cardElevation="10sp"
+                app:cardBackgroundColor="@color/fondo_cardView"
                 app:cardCornerRadius="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="22sp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
 
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -177,11 +182,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="4dp"
+                            android:autofillHints="apline"
                             android:background="@color/trasparente"
                             android:hint="@string/Apline"
                             android:inputType="textPersonName"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textColorHint="#6D4C41"
+                            android:textSize="16sp"
+                            tools:ignore="TextContrastCheck" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -196,11 +204,13 @@
                             android:layout_height="match_parent"
                             android:layout_margin="4dp"
                             android:background="@color/trasparente"
+                            android:autofillHints="usuarioValidus"
                             android:hint="@string/UsuarioValidus"
                             android:inputType="textPersonName"
                             android:textColor="@color/white"
                             android:textColorHint="#6D4C41"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            tools:ignore="TextContrastCheck" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -209,7 +219,7 @@
             </androidx.cardview.widget.CardView>
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/button_guardar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -220,6 +230,6 @@
                 android:text="@string/Guardar" />
 
         </LinearLayout>
-    </ScrollView>
 
-</FrameLayout>
+
+</ScrollView>

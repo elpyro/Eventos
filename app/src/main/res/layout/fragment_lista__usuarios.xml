@@ -1,38 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".pantallas.Lista_Usuarios">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-                <SearchView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </SearchView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-
-                </androidx.cardview.widget.CardView>
-
-                <Button
-                    android:id="@+id/button_nuevoUsuario"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@drawable/boton"
-                    android:theme="@style/Botones"
-                    android:textColor="@color/black"
-                    android:gravity="center"
-                    android:text="@string/NuevoUsuario" />
+                    android:orientation="vertical">
 
-        </LinearLayout>
-</ScrollView>
+                        <SearchView
+                            android:id="@+id/searchView_filtro_usuarios"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/whitetrasparente"
+                            android:layout_margin="20dp">
+
+                        </SearchView>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerView_usuarios"
+                            android:layout_width="match_parent"
+                            android:layout_height="486dp">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+                        <Button
+                            android:id="@+id/button_nuevoUsuario"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="20dp"
+                            android:background="@drawable/boton"
+                            android:gravity="center"
+                            android:text="@string/NuevoUsuario"
+                            android:textColor="@color/black"
+                            android:theme="@style/Botones" />
+                </LinearLayout>
+
+        </ScrollView>
+
+
+
+</FrameLayout>
