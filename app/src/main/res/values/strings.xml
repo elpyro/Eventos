@@ -29,6 +29,7 @@
     <string name="UsuarioValidus">Usuario Validus</string>
     <string name="Apline">Apline</string>
     <string name="Guardar">Guardar</string>
+    <string name="ListadeUsuarios">Lista de Usuarios</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

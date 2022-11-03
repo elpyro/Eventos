@@ -12,7 +12,7 @@
     <group android:checkableBehavior="single" android:id="@+id/menu_administrador" >
 
         <item
-            android:id="@+id/fragmento_usuario"
+            android:id="@+id/lista_Usuarios"
             android:icon="@drawable/icono_usuario"
             android:title="@string/Usuarios" />
         <item

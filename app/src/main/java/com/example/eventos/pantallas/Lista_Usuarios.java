@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,14 @@ public class Lista_Usuarios extends Fragment {
         context = getContext();
         vista = inflater.inflate(R.layout.fragment_lista__usuarios, container, false);
 
+        boton_nuevo_usuario=vista.findViewById(R.id.button_nuevoUsuario);
+
+        boton_nuevo_usuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(vista).navigate(R.id.usuarios);
+            }
+        });
 
         return vista;
     }

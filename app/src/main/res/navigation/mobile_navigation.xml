@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/usuarios">
+    app:startDestination="@+id/nav_inicio">
 
     <fragment
         android:id="@+id/nav_inicio"
@@ -13,7 +13,21 @@
     <fragment
         android:id="@+id/usuarios"
         android:name="com.example.eventos.pantallas.Usuarios"
-        android:label="fragment_usuarios"
-        tools:layout="@layout/fragment_usuarios" />
+        android:label="@string/Usuario"
+        tools:layout="@layout/fragment_usuarios" >
+        <action
+            android:id="@+id/action_usuarios_to_lista_Usuarios"
+            app:destination="@id/lista_Usuarios" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/lista_Usuarios"
+        android:name="com.example.eventos.pantallas.Lista_Usuarios"
+        android:label="@string/ListadeUsuarios"
+        tools:layout="@layout/fragment_lista__usuarios" >
+        <action
+            android:id="@+id/action_lista_Usuarios_to_usuarios"
+            app:destination="@id/usuarios" />
+    </fragment>
 
 </navigation>
