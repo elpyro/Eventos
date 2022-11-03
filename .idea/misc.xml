@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/drawable/boton.xml" value="0.1775" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/drawable/fondo.xml" value="0.183" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/drawable/fondo_splash.xml" value="0.183" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/drawable/side_nav_bar.xml" value="0.183" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/drawable/splash_screem.xml" value="0.183" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/app_bar_main.xml" value="0.28888888888888886" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/content_main.xml" value="0.28888888888888886" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_fragmento_usuario.xml" value="0.28888888888888886" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_lista__usuarios.xml" value="0.28888888888888886" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_usuarios.xml" value="0.28888888888888886" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/nav_header_main.xml" value="0.33" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/spinner.xml" value="0.16875" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/spinner_dropdown_item.xml" value="0.16875" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/spinner_item.xml" value="0.28888888888888886" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/menu/activity_main_drawer.xml" value="0.3323076923076923" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/menu/main.xml" value="0.16875" />
+        <entry key="..\:/Users/eloy_/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/test_list_item.xml" value="0.16875" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
