@@ -25,40 +25,39 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
 
 public class Usuarios extends Fragment {
-    String id_exitente="", id_usuario;
+
+    String id_exitente="", correoExistente, id_usuario;
     View vista;
     Context context;
     Spinner spinner_tipo_usuario;
     Button boton_guardar;
     EditText editText_nombre, editText_telefono,editText_correo,editText_direccion, editText_apline, editText_usuarioValidus;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = getContext();
         vista = inflater.inflate(R.layout.fragment_usuarios, container, false);
+
         inicializando();
 
         recibirArgumentos();
 
-        String [] opciones= {"Promotor","Auditor","Administrador"};
-        ArrayAdapter<String> adapter=new ArrayAdapter<String >(context,R.layout.spinner_item, opciones);
-        spinner_tipo_usuario.setAdapter(adapter);
-
-
         boton_guardar.setOnClickListener((View v) -> {
-            guardarUsuario();
+            guardar();
         });
 
     return vista;
     }
 
     private void recibirArgumentos() {
-        //recibir argumentos
+        //si hay argumentos el usuario va a ser editado
         if (getArguments() != null) {
             id_usuario =getArguments().getString("id_usuario");
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
@@ -73,6 +72,7 @@ public class Usuarios extends Fragment {
                             editText_nombre.setText(usuario.getNombre());
                             editText_telefono.setText(usuario.getTelefono());
                             editText_correo.setText(usuario.getCorreoGmail());
+                            correoExistente=usuario.getCorreoGmail();
                             editText_direccion.setText(usuario.getDireccion());
                             editText_apline.setText(usuario.getApline());
                             editText_usuarioValidus.setText(usuario.getValidusUsuario());
@@ -86,17 +86,13 @@ public class Usuarios extends Fragment {
 
                         }
                     } else {
-
                         Toast.makeText(context,getString(R.string.UsuarioInexistente) , Toast.LENGTH_SHORT).show();
-
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     Toast.makeText(context, getString(R.string.problemasConexion), Toast.LENGTH_SHORT).show();
                 }
-
             });
         }
     }
@@ -110,38 +106,19 @@ public class Usuarios extends Fragment {
         editText_direccion=vista.findViewById(R.id.editText_direccion);
         editText_apline=vista.findViewById(R.id.editText_apline);
         editText_usuarioValidus=vista.findViewById(R.id.editText_usuarioValidus);
+
+        String [] opciones= {"Promotor","Auditor","Administrador"};
+        ArrayAdapter<String> adapter=new ArrayAdapter<String >(context,R.layout.spinner_item, opciones);
+        spinner_tipo_usuario.setAdapter(adapter);
     }
 
-    private void guardarUsuario() {
+    private void guardar() {
 
         if (validacionDeCampos()==false) return;
 
-        new Thread(new Runnable() {
+        verificaCorreoRepetido();
 
-            @Override
-            public void run() {
-                DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
-                Modelo_usuario usuario = new Modelo_usuario();
 
-                //si se recibieron argumentos el id es el mismo. EDITAR
-                if (!id_exitente.equals("")){
-                    usuario.setId(id_exitente);
-                }else{
-                    usuario.setId(UUID.randomUUID().toString());
-                }
-
-                usuario.setPerfil(spinner_tipo_usuario.getSelectedItem().toString().trim());
-                usuario.setNombre(editText_nombre.getText().toString().trim());
-                usuario.setTelefono(editText_telefono.getText().toString().trim());
-                usuario.setCorreoGmail(editText_correo.getText().toString().trim());
-                usuario.setDireccion(editText_direccion.getText().toString().trim());
-                usuario.setApline(editText_apline.getText().toString().trim());
-                usuario.setValidusUsuario(editText_usuarioValidus.getText().toString().trim());
-                myRefe.child("Usuarios").child(usuario.getId()).setValue(usuario);
-            }
-        }).start();
-        Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show();
-        getActivity().onBackPressed();
     }
 
 
@@ -158,34 +135,83 @@ public class Usuarios extends Fragment {
         if (!validarEmail(editText_correo.getText().toString().trim())){
             editText_correo.setError("Email no válido");
             datosAceptados=false;
+        }else{
+            if (!validarEmailGmail(editText_correo.getText().toString().trim())){
+                editText_correo.setError("Email no válido");
+                datosAceptados=false;
+                Toast.makeText(context, "El correo debe ser Gmail", Toast.LENGTH_LONG).show();
+            }
         }
-
         return datosAceptados;
     }
 
-//    private boolean correoRepetido() {
-//        final boolean[] coincidencia = {false};
-//
-//            DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
-//            Query dataQuery = myRefe.child("Usuarios").orderByChild("correoGmail").equalTo(editText_correo.getText().toString().trim().toLowerCase()).limitToFirst(1);
-//            dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    if (dataSnapshot.exists()) {
-//                        coincidencia[0] =true;
-//                        return;
-//                    }else {
-//                        return;
-//                    }
-//                }
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//                    Toast.makeText(context, getString(R.string.problemasConexion), Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//
-//
-//    }
+    private boolean validarEmailGmail(String correo) {
+        boolean correoGmail=true;
+
+        String ultimasLetras= correo.substring(correo.length() - 10);
+        if (!ultimasLetras.toLowerCase(Locale.ROOT).equals("@gmail.com")){
+            correoGmail=false;
+        }
+        return correoGmail;
+    }
+
+    private void verificaCorreoRepetido() {
+
+        if (!id_exitente.equals("") && correoExistente.equals(editText_correo.getText().toString().trim())){
+            guardarUsuario();
+        }else{
+            DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
+            Query dataQuery = myRefe.child("Usuarios").orderByChild("correoGmail").equalTo(editText_correo.getText().toString().trim().toLowerCase()).limitToFirst(1);
+            dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Toast.makeText(context, "Correo ya registrado", Toast.LENGTH_SHORT).show();
+                    }else {
+                        guardarUsuario();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(context, getString(R.string.problemasConexion), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+
+
+    }
+
+    private void guardarUsuario() {
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
+                Modelo_usuario usuario = new Modelo_usuario();
+
+                //si se recibieron argumentos el id es el mismo. EDITAR
+                if (!id_exitente.equals("")){
+                    usuario.setId(id_exitente);
+                }else{
+                    usuario.setId(UUID.randomUUID().toString());
+                }
+                usuario.setPerfil(spinner_tipo_usuario.getSelectedItem().toString().trim());
+                usuario.setNombre(editText_nombre.getText().toString().trim());
+                usuario.setTelefono(editText_telefono.getText().toString().trim());
+                usuario.setCorreoGmail(editText_correo.getText().toString().trim());
+                usuario.setDireccion(editText_direccion.getText().toString().trim());
+                usuario.setApline(editText_apline.getText().toString().trim());
+                usuario.setValidusUsuario(editText_usuarioValidus.getText().toString().trim());
+                myRefe.child("Usuarios").child(usuario.getId()).setValue(usuario);
+
+
+            }
+
+        }).start();
+        Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show();
+        getActivity().onBackPressed();
+    }
 
     private boolean validarEmail(String email) {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
