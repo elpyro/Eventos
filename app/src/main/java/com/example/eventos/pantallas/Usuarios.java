@@ -1,5 +1,6 @@
 package com.example.eventos.pantallas;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -14,8 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.eventos.PantallaPrincipal;
 import com.example.eventos.R;
 import com.example.eventos.modelos.Modelo_usuario;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -38,6 +43,7 @@ public class Usuarios extends Fragment {
     Spinner spinner_tipo_usuario;
     Button boton_guardar;
     EditText editText_nombre, editText_telefono,editText_correo,editText_direccion, editText_apline, editText_usuarioValidus;
+    TextView textView_titulo,textView_edicion;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,9 +55,7 @@ public class Usuarios extends Fragment {
 
         recibirArgumentos();
 
-        boton_guardar.setOnClickListener((View v) -> {
-            guardar();
-        });
+        boton_guardar.setOnClickListener((View v) -> guardar());
 
     return vista;
     }
@@ -59,15 +63,17 @@ public class Usuarios extends Fragment {
     private void recibirArgumentos() {
         //si hay argumentos el usuario va a ser editado
         if (getArguments() != null) {
+            textView_titulo.setText("Editar Usuario");
             id_usuario =getArguments().getString("id_usuario");
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
             Query dataQuery = myRefe.child("Usuarios").orderByChild("id").equalTo(id_usuario).limitToFirst(1);
             dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
                             Modelo_usuario usuario = userSnapshot.getValue(Modelo_usuario.class);
+                            assert usuario != null;
                             id_exitente=usuario.getId();
                             editText_nombre.setText(usuario.getNombre());
                             editText_telefono.setText(usuario.getTelefono());
@@ -76,12 +82,17 @@ public class Usuarios extends Fragment {
                             editText_direccion.setText(usuario.getDireccion());
                             editText_apline.setText(usuario.getApline());
                             editText_usuarioValidus.setText(usuario.getValidusUsuario());
-                            if (usuario.getPerfil().equals("Administrador")){
-                                spinner_tipo_usuario.setSelection(2);
-                            } else if (usuario.getPerfil().equals("Auditor")){
-                                spinner_tipo_usuario.setSelection(1);
-                            } else if (usuario.getPerfil().equals("Promotor")){
-                                spinner_tipo_usuario.setSelection(0);
+                            textView_edicion.setText(usuario.getEdicion());
+                            switch (usuario.getPerfil()) {
+                                case "Administrador":
+                                    spinner_tipo_usuario.setSelection(2);
+                                    break;
+                                case "Auditor":
+                                    spinner_tipo_usuario.setSelection(1);
+                                    break;
+                                case "Promotor":
+                                    spinner_tipo_usuario.setSelection(0);
+                                    break;
                             }
 
                         }
@@ -106,15 +117,17 @@ public class Usuarios extends Fragment {
         editText_direccion=vista.findViewById(R.id.editText_direccion);
         editText_apline=vista.findViewById(R.id.editText_apline);
         editText_usuarioValidus=vista.findViewById(R.id.editText_usuarioValidus);
+        textView_titulo= vista.findViewById(R.id.textView_titulo);
+        textView_edicion=vista.findViewById(R.id.textView_edicion);
 
         String [] opciones= {"Promotor","Auditor","Administrador"};
-        ArrayAdapter<String> adapter=new ArrayAdapter<String >(context,R.layout.spinner_item, opciones);
+        ArrayAdapter<String> adapter= new ArrayAdapter<>(context, R.layout.spinner_item, opciones);
         spinner_tipo_usuario.setAdapter(adapter);
     }
 
     private void guardar() {
 
-        if (validacionDeCampos()==false) return;
+        if (!validacionDeCampos()) return;
 
         verificaCorreoRepetido();
 
@@ -123,6 +136,7 @@ public class Usuarios extends Fragment {
 
 
     private boolean validacionDeCampos() {
+        editText_correo.setText(editText_correo.getText().toString().toLowerCase(Locale.ROOT).trim());
         boolean datosAceptados=true;
         if (editText_nombre.getText().toString().length()<3){
             editText_nombre.setError("Requerido");
@@ -164,7 +178,7 @@ public class Usuarios extends Fragment {
             Query dataQuery = myRefe.child("Usuarios").orderByChild("correoGmail").equalTo(editText_correo.getText().toString().trim().toLowerCase()).limitToFirst(1);
             dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         Toast.makeText(context, "Correo ya registrado", Toast.LENGTH_SHORT).show();
                     }else {
@@ -183,34 +197,32 @@ public class Usuarios extends Fragment {
     }
 
     private void guardarUsuario() {
-        new Thread(new Runnable() {
+        new Thread(() -> {
+            DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
+            Modelo_usuario usuario = new Modelo_usuario();
 
-            @Override
-            public void run() {
-                DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
-                Modelo_usuario usuario = new Modelo_usuario();
-
-                //si se recibieron argumentos el id es el mismo. EDITAR
-                if (!id_exitente.equals("")){
-                    usuario.setId(id_exitente);
-                }else{
-                    usuario.setId(UUID.randomUUID().toString());
-                }
-                usuario.setPerfil(spinner_tipo_usuario.getSelectedItem().toString().trim());
-                usuario.setNombre(editText_nombre.getText().toString().trim());
-                usuario.setTelefono(editText_telefono.getText().toString().trim());
-                usuario.setCorreoGmail(editText_correo.getText().toString().trim());
-                usuario.setDireccion(editText_direccion.getText().toString().trim());
-                usuario.setApline(editText_apline.getText().toString().trim());
-                usuario.setValidusUsuario(editText_usuarioValidus.getText().toString().trim());
-                myRefe.child("Usuarios").child(usuario.getId()).setValue(usuario);
-
-
+            //si se recibieron argumentos el id es el mismo. EDITAR
+            if (!id_exitente.equals("")){
+                usuario.setId(id_exitente);
+            }else{
+                usuario.setId(UUID.randomUUID().toString());
             }
+            @SuppressLint("SimpleDateFormat") String fecha= new SimpleDateFormat("dd-MM-yy HH:mm:ss aa").format(new Date());
+            usuario.setPerfil(spinner_tipo_usuario.getSelectedItem().toString().trim());
+            usuario.setNombre(editText_nombre.getText().toString().trim());
+            usuario.setTelefono(editText_telefono.getText().toString().trim());
+            usuario.setCorreoGmail(editText_correo.getText().toString().toLowerCase(Locale.ROOT).trim());
+            usuario.setDireccion(editText_direccion.getText().toString().trim());
+            usuario.setApline(editText_apline.getText().toString().trim());
+            usuario.setValidusUsuario(editText_usuarioValidus.getText().toString().trim());
+            usuario.setEdicion("Editado: " +PantallaPrincipal.nombreUsuario +" "+ fecha );
+            myRefe.child("Usuarios").child(usuario.getId()).setValue(usuario);
+
+
 
         }).start();
         Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show();
-        getActivity().onBackPressed();
+        requireActivity().onBackPressed();
     }
 
     private boolean validarEmail(String email) {

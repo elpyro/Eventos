@@ -19,13 +19,21 @@ import android.widget.Toast;
 
 import com.example.eventos.R;
 import com.example.eventos.modelos.Modelo_usuario;
+
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import adaptadorRecyclerView.AdaptadorUsuarios;
 
@@ -41,6 +49,7 @@ public class Lista_Usuarios extends Fragment {
     ValueEventListener oyente;
     Button boton_nuevo_usuario;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,16 +61,11 @@ public class Lista_Usuarios extends Fragment {
         llenandoRecyclerView();
 
 
-
-        boton_nuevo_usuario.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(vista).navigate(R.id.usuarios);
-            }
-        });
+        boton_nuevo_usuario.setOnClickListener(view -> Navigation.findNavController(vista).navigate(R.id.usuarios));
 
         return vista;
     }
+
 
     private void llenandoRecyclerView() {
 
@@ -115,12 +119,13 @@ public class Lista_Usuarios extends Fragment {
     private void inicializando() {
 
         boton_nuevo_usuario=vista.findViewById(R.id.button_nuevoUsuario);
-        recview=(RecyclerView)vista.findViewById(R.id.recyclerView_usuarios);
+        recview= vista.findViewById(R.id.recyclerView_usuarios);
         recview.setHasFixedSize(true);
         recview.setLayoutManager(new LinearLayoutManager(context));
         searchView_usuarios=vista.findViewById(R.id.searchView_filtro_usuarios);
         referencia= FirebaseDatabase.getInstance().getReference().child("Usuarios");
     }
+
 
 
     @Override

@@ -1,12 +1,12 @@
 package com.example.eventos.modelos;
 
 public class Modelo_usuario {
-    String id,  perfil,nombre, telefono, correoGmail, direccion, apline, validusUsuario;
+    String id,  perfil,nombre, telefono, correoGmail, direccion, apline, validusUsuario, edicion;
 
     public Modelo_usuario() {
     }
 
-    public Modelo_usuario(String id, String perfil, String nombre, String telefono, String correoGmail, String direccion, String apline, String validusUsuario) {
+    public Modelo_usuario(String id, String perfil, String nombre, String telefono, String correoGmail, String direccion, String apline, String validusUsuario, String edicion) {
         this.id = id;
         this.perfil = perfil;
         this.nombre = nombre;
@@ -15,6 +15,7 @@ public class Modelo_usuario {
         this.direccion = direccion;
         this.apline = apline;
         this.validusUsuario = validusUsuario;
+        this.edicion = edicion;
     }
 
     public String getId() {
@@ -79,5 +80,13 @@ public class Modelo_usuario {
 
     public void setValidusUsuario(String validusUsuario) {
         this.validusUsuario = validusUsuario;
+    }
+
+    public String getEdicion() {
+        return edicion;
+    }
+
+    public void setEdicion(String edicion) {
+        this.edicion = edicion;
     }
 }

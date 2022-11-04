@@ -1,8 +1,11 @@
 package com.example.eventos
 
+
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Menu
+import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -13,17 +16,44 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.eventos.databinding.ActivityMainBinding
+import com.example.eventos.databinding.NavHeaderMainBinding
+import com.example.eventos.modelos.Modelo_usuario
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import java.util.*
 import kotlin.concurrent.thread
 
+
+
+@Suppress("DEPRECATION")
 class PantallaPrincipal : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    companion object {
+        lateinit var nombreUsuario: String
+        lateinit var perfilUsaurio: String
+        lateinit var idUsuario: String
+    }
+
+    //https://www.youtube.com/watch?v=IwdjCApjIzA&t=442s autenticacion
+    var firebaseAutenticacion: FirebaseAuth? = null
+    var authStateListener: FirebaseAuth.AuthStateListener? = null
+    var dataQuery: Query? = null
+
+    val REQUEST_CODE = 1234
+    var provinder = Arrays.asList(
+        AuthUI.IdpConfig.GoogleBuilder().build()
+    )
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
@@ -46,11 +76,71 @@ class PantallaPrincipal : AppCompatActivity() {
         navView.setItemTextColor(ColorStateList.valueOf(getResources().getColor(R.color.white)));
 
 
+
+        login();
 //        Thread.sleep(1000)
-        binding.appBarMain.toolbar.setTitle("Usuario")
+
+
+
     }
 
+    private fun login() {
+        firebaseAutenticacion = FirebaseAuth.getInstance()
+        authStateListener = FirebaseAuth.AuthStateListener {
+            val user = firebaseAutenticacion!!.currentUser
+            if (user != null) {
+                val Correo = user.email
 
+                //verificar perfil segun el correo
+                val myRefe = FirebaseDatabase.getInstance().reference
+                dataQuery = myRefe.child("Usuarios").orderByChild("correoGmail").equalTo(Correo)
+                    .limitToFirst(1)
+                dataQuery!!.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (userSnapshot in dataSnapshot.children) {
+                                val usuario: Modelo_usuario? = userSnapshot.getValue(
+                                    Modelo_usuario::class.java
+                                )
+                                nombreUsuario = usuario?.nombre.toString()
+                                perfilUsaurio = usuario?.perfil.toString()
+                                idUsuario = usuario?.id.toString()
+                                binding.appBarMain.toolbar.setTitle("Hola $nombreUsuario")
+
+
+                            }
+                            return
+                        } else {
+                            Toast.makeText(applicationContext, "no resgistrado", Toast.LENGTH_SHORT)
+                                .show()
+                            binding.appBarMain.toolbar.setTitle("Usuario no registrado")
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {}
+                })
+            } else {
+
+//                    textView_credenciales.setVisibility(View.VISIBLE);
+                startActivityForResult(
+                    AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(provinder)
+                        .setIsSmartLockEnabled(false).build(), REQUEST_CODE
+                )
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        firebaseAutenticacion!!.addAuthStateListener(authStateListener!!)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        firebaseAutenticacion!!.removeAuthStateListener(authStateListener!!)
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
