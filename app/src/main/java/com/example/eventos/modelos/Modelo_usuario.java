@@ -6,21 +6,7 @@ public class Modelo_usuario {
     public Modelo_usuario() {
     }
 
-    public Modelo_usuario(String id, String perfil, String nombre, String telefono, String correoGmail, String direccion, String apline, String validusUsuario, String edicion) {
-        this.id = id;
-        this.perfil = perfil;
-        this.nombre = nombre;
-        this.telefono = telefono;
-        this.correoGmail = correoGmail;
-        this.direccion = direccion;
-        this.apline = apline;
-        this.validusUsuario = validusUsuario;
-        this.edicion = edicion;
-    }
-
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
 
     public void setId(String id) {
         this.id = id;

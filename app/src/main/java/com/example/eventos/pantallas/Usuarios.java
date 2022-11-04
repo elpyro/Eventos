@@ -63,7 +63,7 @@ public class Usuarios extends Fragment {
     private void recibirArgumentos() {
         //si hay argumentos el usuario va a ser editado
         if (getArguments() != null) {
-            textView_titulo.setText("Editar Usuario");
+            textView_titulo.setText(getString(R.string.EditarUsuario));
             id_usuario =getArguments().getString("id_usuario");
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
             Query dataQuery = myRefe.child("Usuarios").orderByChild("id").equalTo(id_usuario).limitToFirst(1);
@@ -207,7 +207,7 @@ public class Usuarios extends Fragment {
             }else{
                 usuario.setId(UUID.randomUUID().toString());
             }
-            @SuppressLint("SimpleDateFormat") String fecha= new SimpleDateFormat("dd-MM-yy HH:mm:ss aa").format(new Date());
+            @SuppressLint("SimpleDateFormat") String fecha= new SimpleDateFormat("hh:mm aa dd-MM-yy").format(new Date());
             usuario.setPerfil(spinner_tipo_usuario.getSelectedItem().toString().trim());
             usuario.setNombre(editText_nombre.getText().toString().trim());
             usuario.setTelefono(editText_telefono.getText().toString().trim());

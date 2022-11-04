@@ -32,6 +32,18 @@
     <string name="ListadeUsuarios">Lista de Usuarios</string>
     <string name="UsuarioInexistente">Usuario inexistente</string>
     <string name="problemasConexion">Problemas de conexion</string>
+    <string name="EditarUsuario">Editar Usuario</string>
+    <string name="Ciudad">Ciudad</string>
+    <string name="descripcion">Descripción</string>
+    <string name="Fecha">Fecha</string>
+    <string name="Hora">Hora</string>
+    <string name="Costo">Costo</string>
+    <string name="Boletos">Boletos</string>
+    <string name="BoletosVendidos">Boletos Vendidos</string>
+    <string name="Imagen">Imagen</string>
+    <string name="NuevoEvento">Nuevo Evento</string>
+    <string name="Evento">Evento</string>
+    <string name="ListaDeEventos">Lista de eventos</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

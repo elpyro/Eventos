@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Evento">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginEnd="0dp"
+                android:text="@string/NuevoUsuario"
+                android:theme="@style/texto_titulo" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginRight="20sp"
+                android:layout_marginBottom="10sp"
+                app:cardBackgroundColor="@color/fondo_cardView"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10sp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="22sp"
+                    android:orientation="vertical">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColorHint="@color/white">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_nombre"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="4dp"
+                            android:background="@color/trasparente"
+                            android:hint="@string/Nombre"
+                            android:inputType="textPersonName"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            tools:ignore="TextContrastCheck" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColorHint="@color/white">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_descripcion"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="4dp"
+                            android:background="@color/trasparente"
+                            android:hint="@string/descripcion"
+                            android:inputType="phone"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            tools:ignore="TextContrastCheck" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColorHint="@color/white">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_ciudad"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="4dp"
+                            android:background="@color/trasparente"
+                            android:hint="@string/Ciudad"
+                            android:inputType="textEmailAddress"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            tools:ignore="TextContrastCheck" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColorHint="@color/white">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_direccion"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="4dp"
+                            android:background="@color/trasparente"
+                            android:hint="@string/Direccion"
+                            android:inputType="textEmailAddress"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            tools:ignore="TextContrastCheck" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:textColorHint="@color/white">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editText_fecha"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:autofillHints="apline"
+                                android:background="@color/trasparente"
+                                android:hint="@string/Fecha"
+                                android:inputType="textPersonName"
+                                android:textColor="@color/white"
+                                android:textColorHint="#6D4C41"
+                                android:textSize="16sp"
+                                tools:ignore="TextContrastCheck" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:textColorHint="@color/white">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editText_hora"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:autofillHints="usuarioValidus"
+                                android:background="@color/trasparente"
+                                android:hint="@string/Hora"
+                                android:inputType="textPersonName"
+                                android:textColor="@color/white"
+                                android:textColorHint="#6D4C41"
+                                android:textSize="16sp"
+                                tools:ignore="TextContrastCheck" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:textColorHint="@color/white">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editText_costo"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:autofillHints="apline"
+                                android:background="@color/trasparente"
+                                android:hint="@string/Costo"
+                                android:inputType="textPersonName"
+                                android:textColor="@color/white"
+                                android:textColorHint="#6D4C41"
+                                android:textSize="16sp"
+                                tools:ignore="TextContrastCheck" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:textColorHint="@color/white">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editText_boletos"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:autofillHints="usuarioValidus"
+                                android:background="@color/trasparente"
+                                android:hint="@string/Boletos"
+                                android:inputType="textPersonName"
+                                android:textColor="@color/white"
+                                android:textColorHint="#6D4C41"
+                                android:textSize="16sp"
+                                tools:ignore="TextContrastCheck" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColorHint="@color/white">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_boletos_vendidos"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="4dp"
+                            android:background="@color/trasparente"
+                            android:hint="@string/BoletosVendidos"
+                            android:inputType="textMultiLine"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            tools:ignore="TextContrastCheck" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:id="@+id/button_imagen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/boton"
+                            android:gravity="center"
+                            android:text="@string/Imagen"
+                            android:textColor="@color/black"
+                            android:theme="@style/Botones" />
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            tools:src="@tools:sample/avatars" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <Button
+                android:id="@+id/button_guardar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/boton"
+                android:gravity="center"
+                android:text="@string/Guardar"
+                android:textColor="@color/black"
+                android:theme="@style/Botones" />
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/textView_edicion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        android:textColor="#FBFBFB" />
+</RelativeLayout>
