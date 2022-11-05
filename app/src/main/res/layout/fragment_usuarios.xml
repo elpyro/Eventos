@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".pantallas.Usuarios">
+    tools:context=".usuario.Usuarios">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                             android:gravity="center"
                             android:text="@string/Perfil"
                             android:theme="@style/texto_sub_titulo"
-                            tools:ignore="TextContrastCheck" />
+                            tools:ignore="NestedWeights,TextContrastCheck" />
 
                         <Spinner
                             android:id="@+id/spinnerTipo"
@@ -222,6 +222,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-
-        android:textColor="#FBFBFB" />
+        android:gravity="center"
+        android:textSize="11sp"
+        android:textColor="#94FBFBFB" />
 </RelativeLayout>

@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/nav_inicio"
-        android:name="com.example.eventos.ui.home.HomeFragment"
+        android:name="com.example.eventos.ui.inicio.Inicio"
         android:label="@string/Inicio"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/usuarios"
-        android:name="com.example.eventos.pantallas.Usuarios"
+        android:name="com.example.eventos.usuario.Usuarios"
         android:label="@string/Usuario"
         tools:layout="@layout/fragment_usuarios" >
         <action
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/lista_Usuarios"
-        android:name="com.example.eventos.pantallas.Lista_Usuarios"
+        android:name="com.example.eventos.usuario.Lista_Usuarios"
         android:label="@string/ListadeUsuarios"
         tools:layout="@layout/fragment_lista__usuarios" >
         <action
@@ -36,17 +36,17 @@
         tools:layout="@layout/app_bar_main" />
     <fragment
         android:id="@+id/cerrarSesion"
-        android:name="com.example.eventos.CerrarSesion"
+        android:name="com.example.eventos.cerrarSesion.CerrarSesion"
         android:label="@string/CerraSesion"
         tools:layout="@layout/fragment_cerrar_sesion" />
     <fragment
         android:id="@+id/evento"
-        android:name="com.example.eventos.Evento"
+        android:name="com.example.eventos.evento.Evento"
         android:label="@string/Evento"
         tools:layout="@layout/fragment_evento" />
     <fragment
         android:id="@+id/listaEventos"
-        android:name="com.example.eventos.ListaEventos"
+        android:name="com.example.eventos.evento.ListaEventos"
         android:label="@string/ListaDeEventos"
         tools:layout="@layout/fragment_lista_eventos" />
 

@@ -1,0 +1,278 @@
+package com.example.eventos.evento;
+
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.example.eventos.PantallaPrincipal;
+import com.example.eventos.R;
+//import com.example.eventos.SeleccionarImagen;
+import com.example.eventos.modelos.Modelo_evento;
+import com.example.eventos.modelos.Modelo_usuario;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.UUID;
+
+
+public class Evento extends Fragment {
+
+        private String id_exitente="";
+        private View vista;
+        private Context context;
+        private EditText editText_nombre, editText_descripcion, editText_ciudad,editText_direccion,editText_boletos_vendidos,editText_boletos,
+                editText_costo;
+        private Button button_imagen, button_guardar;
+        private TextView textView_titulo, textView_edicion;
+        public static ImageView imageView_evento;
+        private String id_evento;
+        private TextView textView_fecha, textView_hora;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        vista= inflater.inflate(R.layout.fragment_evento, container, false);
+
+        incializando();
+        recibirArgumentos();
+
+        button_guardar.setOnClickListener(view -> guardar());
+        button_imagen.setOnClickListener(view -> seleccionarImagen());
+        textView_fecha.setOnClickListener(view -> mostrarSelectorFecha());
+        textView_hora.setOnClickListener(view -> mostrarSelectorHora());
+        return vista;
+    }
+
+    private void seleccionarImagen() {
+                        // muestra el cuadro de diálogo de selección de imagen
+
+                //ocultar teclado
+                InputMethodManager input = (InputMethodManager) (getActivity().getSystemService(context.INPUT_METHOD_SERVICE));
+                input.hideSoftInputFromWindow(vista.getWindowToken(), 0);
+
+//                Intent intent=new Intent(context, SeleccionarImagen.class);
+//                intent.putExtra("nombre_imagen", "Fragment_empresa.imageView_incluir_foto1");
+//                startActivity(intent);
+    }
+
+    private void mostrarSelectorHora() {
+        final Calendar getDate = Calendar.getInstance();
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                getDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                getDate.set(Calendar.MINUTE, minute);
+                SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm a");
+                String formatedDate = timeformat.format(getDate.getTime());
+                textView_hora.setText(formatedDate);
+            }
+        }, getDate.get(Calendar.HOUR_OF_DAY), getDate.get(Calendar.MINUTE), false);
+
+        timePickerDialog.show();
+    }
+
+    private void mostrarSelectorFecha() {
+        final Calendar c=Calendar.getInstance();
+        int dia = c.get(Calendar.DAY_OF_MONTH);
+        int mes = c.get(Calendar.MONTH);
+        int ano=c.get(Calendar.YEAR);
+
+        DatePickerDialog datepickerDialogo = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month=month+1;
+                String fecha_desde;
+
+                if(dayOfMonth<10){
+                    fecha_desde=year+"-"+month+"-"+"0"+dayOfMonth;
+                }else{
+                    fecha_desde=year+"-"+month+"-"+dayOfMonth;
+                }
+                textView_fecha.setText(fecha_desde);
+            }
+        },ano,mes,dia);
+        datepickerDialogo.show();
+    }
+
+    private void recibirArgumentos() {
+        //si hay argumentos el evento va a ser editado
+        if (getArguments() != null) {
+            textView_titulo.setText(getString(R.string.EditarEvento));
+            id_evento =getArguments().getString("id_evento");
+            DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
+            Query dataQuery = myRefe.child("Eventos").orderByChild("id").equalTo(id_evento).limitToFirst(1);
+            dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                            Modelo_evento evento = userSnapshot.getValue(Modelo_evento.class);
+                            assert evento != null;
+                            id_exitente=evento.getId();
+                            editText_nombre.setText(evento.getNombre());
+                            editText_descripcion.setText(evento.getDescripcion());
+                            editText_ciudad.setText(evento.getCiudad());
+                            editText_direccion.setText(evento.getDireccion());
+                            textView_fecha.setText(evento.getFecha());
+                            textView_hora.setText(evento.getHora());
+                            editText_costo.setText(evento.getCosto());
+                            editText_boletos.setText(evento.getBoletos());
+                            editText_boletos_vendidos.setText(evento.getBoletosVendidos());
+
+                            textView_edicion.setText(evento.getEdicion());
+
+                        }
+                    } else {
+                        Toast.makeText(context,getString(R.string.EventoInexistente) , Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(context, getString(R.string.problemasConexion), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private boolean validarDatos(){
+        boolean datosAceptados=true;
+        if (editText_nombre.getText().toString().length()<3){
+            editText_nombre.setError("Requerido");
+            datosAceptados=false;
+        }
+        if (editText_ciudad.getText().toString().length()<3){
+            editText_ciudad.setError("Requerido");
+            datosAceptados=false;
+        }
+        if (editText_direccion.getText().toString().length()<3){
+            editText_direccion.setError("Requerido");
+            datosAceptados=false;
+        }
+
+        if (editText_costo.getText().toString().length()<3){
+            editText_costo.setError("Requerido");
+            datosAceptados=false;
+        }
+        if (editText_boletos.getText().toString().length()<1){
+            editText_boletos.setError("Requerido");
+            datosAceptados=false;
+        }
+        if (textView_hora.getText().toString().trim().equals("Hora")){
+            datosAceptados=false;
+            Toast.makeText(context, "Por favor establecer hora del evento", Toast.LENGTH_LONG).show();
+        }
+        if (textView_fecha.getText().toString().trim().equals("Fecha")) {
+            datosAceptados=false;
+            Toast.makeText(context, "Por favor establecer fecha del evento", Toast.LENGTH_LONG).show();
+        }
+        if (!verificarFecha()) datosAceptados=false;
+        return  datosAceptados;
+    }
+
+    private boolean verificarFecha() {
+
+        boolean fechaCorrecta=true;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        String fechaActual= new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+        Date fechaSeleccionada = null;
+        try {
+            fechaSeleccionada = dateFormat.parse(textView_fecha.getText().toString());
+            Date fechaActualf=dateFormat.parse(fechaActual);
+            if (fechaSeleccionada.compareTo(fechaActualf)<0 ){
+                fechaCorrecta=false;
+                Toast.makeText(context, "Fecha incorrecta", Toast.LENGTH_SHORT).show();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return fechaCorrecta;
+    }
+
+    private void guardar() {
+
+        if (!validarDatos())return;
+
+        new Thread(() -> {
+            DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
+            Modelo_evento evento = new Modelo_evento();
+
+            //si se recibieron argumentos el id es el mismo. EDITAR
+            if (!id_exitente.equals("")){
+                evento.setId(id_exitente);
+            }else{
+                evento.setId(UUID.randomUUID().toString());
+            }
+            @SuppressLint("SimpleDateFormat") String fecha= new SimpleDateFormat("hh:mm aa dd-MM-yy").format(new Date());
+
+            evento.setNombre(editText_nombre.getText().toString().trim());
+            evento.setDescripcion(editText_descripcion.getText().toString().trim());
+            evento.setCiudad(editText_ciudad.getText().toString().trim());
+            evento.setDireccion(editText_direccion.getText().toString().trim());
+            evento.setFecha(textView_fecha.getText().toString().trim());
+            evento.setHora(textView_hora.getText().toString().trim());
+            evento.setCosto(editText_costo.getText().toString().trim());
+            evento.setBoletos(editText_boletos.getText().toString().trim());
+            evento.setBoletosVendidos(editText_boletos_vendidos.getText().toString().trim());
+            evento.setEstado(getString(R.string.Proximamente));
+            evento.setEdicion("Editado: " + PantallaPrincipal.nombreUsuario +" "+ fecha );
+            myRefe.child("Eventos").child(evento.getId()).setValue(evento);
+
+            getActivity().runOnUiThread( new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show();
+                }
+            });
+
+        }).start();
+        requireActivity().onBackPressed();
+    }
+
+    private void incializando() {
+        context=getContext();
+        editText_nombre=vista.findViewById(R.id.editText_nombre);
+        editText_ciudad=vista.findViewById(R.id.editText_ciudad);
+        editText_descripcion=vista.findViewById(R.id.editText_descripcion);
+        editText_direccion=vista.findViewById(R.id.editText_direccion);
+        editText_boletos_vendidos=vista.findViewById(R.id.editText_boletos_vendidos);
+        editText_boletos=vista.findViewById(R.id.editText_boletos);
+        editText_costo=vista.findViewById(R.id.editText_costo);
+        textView_fecha=vista.findViewById(R.id.textView_fecha);
+        textView_hora=vista.findViewById(R.id.textView_hora);
+        button_imagen=vista.findViewById(R.id.button_imagen);
+        button_guardar=vista.findViewById(R.id.button_guardar);
+        textView_titulo=vista.findViewById(R.id.textView_titulo);
+        textView_edicion=vista.findViewById(R.id.textView_edicion);
+
+    }
+}

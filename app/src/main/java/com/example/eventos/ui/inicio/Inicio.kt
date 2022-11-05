@@ -1,4 +1,4 @@
-package com.example.eventos.ui.home
+package com.example.eventos.ui.inicio
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.eventos.databinding.FragmentHomeBinding
 
-class HomeFragment : Fragment() {
+class Inicio : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 

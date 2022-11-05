@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Evento">
+    tools:context="com.example.eventos.evento.Evento">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_marginEnd="0dp"
-                android:text="@string/NuevoUsuario"
+                android:text="@string/NuevoEvento"
                 android:theme="@style/texto_titulo" />
 
             <androidx.cardview.widget.CardView
@@ -74,7 +74,7 @@
                             android:layout_margin="4dp"
                             android:background="@color/trasparente"
                             android:hint="@string/descripcion"
-                            android:inputType="phone"
+                            android:inputType="textMultiLine"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             tools:ignore="TextContrastCheck" />
@@ -93,7 +93,7 @@
                             android:layout_margin="4dp"
                             android:background="@color/trasparente"
                             android:hint="@string/Ciudad"
-                            android:inputType="textEmailAddress"
+                            android:inputType="textAutoComplete"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             tools:ignore="TextContrastCheck" />
@@ -111,7 +111,7 @@
                             android:layout_margin="4dp"
                             android:background="@color/trasparente"
                             android:hint="@string/Direccion"
-                            android:inputType="textEmailAddress"
+                            android:inputType="textMultiLine"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             tools:ignore="TextContrastCheck" />
@@ -124,45 +124,30 @@
                         android:orientation="horizontal">
 
 
-                        <com.google.android.material.textfield.TextInputLayout
+                        <TextView
+                            android:id="@+id/textView_fecha"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="4dp"
                             android:layout_weight="1"
-                            android:textColorHint="@color/white">
+                            android:background="@color/amarilloFondo"
+                            android:gravity="center"
+                            android:text="@string/Fecha"
+                            android:theme="@style/texto_sub_titulo" />
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/editText_fecha"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:autofillHints="apline"
-                                android:background="@color/trasparente"
-                                android:hint="@string/Fecha"
-                                android:inputType="textPersonName"
-                                android:textColor="@color/white"
-                                android:textColorHint="#6D4C41"
-                                android:textSize="16sp"
-                                tools:ignore="TextContrastCheck" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
+                        <TextView
+                            android:id="@+id/textView_hora"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:textColorHint="@color/white">
+                            android:gravity="center"
+                            android:layout_margin="4dp"
+                            android:text="@string/Hora"
+                            android:background="@color/amarilloFondo"
+                            android:theme="@style/texto_sub_titulo" />
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/editText_hora"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:autofillHints="usuarioValidus"
-                                android:background="@color/trasparente"
-                                android:hint="@string/Hora"
-                                android:inputType="textPersonName"
-                                android:textColor="@color/white"
-                                android:textColorHint="#6D4C41"
-                                android:textSize="16sp"
-                                tools:ignore="TextContrastCheck" />
-                        </com.google.android.material.textfield.TextInputLayout>
 
 
                     </LinearLayout>
@@ -187,6 +172,7 @@
                                 android:autofillHints="apline"
                                 android:background="@color/trasparente"
                                 android:hint="@string/Costo"
+                                android:layout_margin="4dp"
                                 android:inputType="textPersonName"
                                 android:textColor="@color/white"
                                 android:textColorHint="#6D4C41"
@@ -207,34 +193,36 @@
                                 android:autofillHints="usuarioValidus"
                                 android:background="@color/trasparente"
                                 android:hint="@string/Boletos"
-                                android:inputType="textPersonName"
+                                android:inputType="number"
+                                android:layout_margin="4dp"
                                 android:textColor="@color/white"
                                 android:textColorHint="#6D4C41"
                                 android:textSize="16sp"
                                 tools:ignore="TextContrastCheck" />
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:textColorHint="@color/white">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editText_boletos_vendidos"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="4dp"
+                                android:background="@color/trasparente"
+                                android:hint="@string/Vendidos"
+                                android:inputType="number"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"
+                                tools:ignore="TextContrastCheck" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:textColorHint="@color/white">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editText_boletos_vendidos"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="4dp"
-                            android:background="@color/trasparente"
-                            android:hint="@string/BoletosVendidos"
-                            android:inputType="textMultiLine"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            tools:ignore="TextContrastCheck" />
-                    </com.google.android.material.textfield.TextInputLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -251,7 +239,7 @@
                             android:theme="@style/Botones" />
 
                         <ImageView
-                            android:id="@+id/imageView2"
+                            android:id="@+id/imageView_evento"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -286,6 +274,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-
-        android:textColor="#FBFBFB" />
+        android:gravity="center"
+        android:textSize="11sp"
+        android:textColor="#94FBFBFB" />
 </RelativeLayout>

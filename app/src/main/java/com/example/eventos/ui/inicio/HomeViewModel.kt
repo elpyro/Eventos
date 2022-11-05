@@ -1,4 +1,4 @@
-package com.example.eventos.ui.home
+package com.example.eventos.ui.inicio
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ListaEventos">
+    tools:context="com.example.eventos.evento.ListaEventos">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:orientation="vertical">
 
             <SearchView
-                android:id="@+id/searchView_filtro_usuarios"
+                android:id="@+id/searchView_filtro_eventos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/whitetrasparente"
@@ -25,7 +25,7 @@
             </SearchView>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_usuarios"
+                android:id="@+id/recyclerView_eventos"
                 android:layout_width="match_parent"
                 android:layout_height="486dp">
 

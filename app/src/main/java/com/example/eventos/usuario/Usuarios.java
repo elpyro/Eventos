@@ -1,4 +1,4 @@
-package com.example.eventos.pantallas;
+package com.example.eventos.usuario;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -138,6 +138,8 @@ public class Usuarios extends Fragment {
     private boolean validacionDeCampos() {
         editText_correo.setText(editText_correo.getText().toString().toLowerCase(Locale.ROOT).trim());
         boolean datosAceptados=true;
+
+
         if (editText_nombre.getText().toString().length()<3){
             editText_nombre.setError("Requerido");
             datosAceptados=false;
@@ -158,6 +160,7 @@ public class Usuarios extends Fragment {
         }
         return datosAceptados;
     }
+
 
     private boolean validarEmailGmail(String correo) {
         boolean correoGmail=true;
@@ -192,11 +195,10 @@ public class Usuarios extends Fragment {
             });
 
         }
-
-
     }
 
     private void guardarUsuario() {
+
         new Thread(() -> {
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
             Modelo_usuario usuario = new Modelo_usuario();
@@ -218,10 +220,15 @@ public class Usuarios extends Fragment {
             usuario.setEdicion("Editado: " +PantallaPrincipal.nombreUsuario +" "+ fecha );
             myRefe.child("Usuarios").child(usuario.getId()).setValue(usuario);
 
-
+            getActivity().runOnUiThread( new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show();
+                }
+            });
 
         }).start();
-        Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show();
+
         requireActivity().onBackPressed();
     }
 

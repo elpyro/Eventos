@@ -1,10 +1,12 @@
-package com.example.eventos.pantallas;
+package com.example.eventos.usuario;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,19 +29,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+
 import adaptadorRecyclerView.AdaptadorUsuarios;
 
 
 public class Lista_Usuarios extends Fragment {
 
-    SearchView searchView_usuarios;
-    RecyclerView recview;
-    DatabaseReference referencia;
-    ArrayList<Modelo_usuario> lista;
-    View vista;
-    Context context;
-    ValueEventListener oyente;
-    Button boton_nuevo_usuario;
+    private SearchView searchView_usuarios;
+    private RecyclerView recview;
+    private DatabaseReference referencia;
+    private ArrayList<Modelo_usuario> lista;
+    private View vista;
+    private Context context;
+    private ValueEventListener oyente;
+    private Button boton_nuevo_usuario;
 
 
     @Override
@@ -52,7 +56,6 @@ public class Lista_Usuarios extends Fragment {
         
         llenandoRecyclerView();
 
-
         boton_nuevo_usuario.setOnClickListener(view -> Navigation.findNavController(vista).navigate(R.id.usuarios));
 
         return vista;
@@ -63,6 +66,7 @@ public class Lista_Usuarios extends Fragment {
 
         if(referencia!=null){
             oyente= referencia.addValueEventListener(new ValueEventListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()){
@@ -70,6 +74,7 @@ public class Lista_Usuarios extends Fragment {
                         for(DataSnapshot ds:snapshot.getChildren()){
                             lista.add(ds.getValue(Modelo_usuario.class));
                         }
+                        lista.sort(Comparator.comparing(Modelo_usuario::getNombre));
                         AdaptadorUsuarios adapador= new AdaptadorUsuarios(lista);
                         recview.setAdapter(adapador);
                     }
@@ -118,11 +123,10 @@ public class Lista_Usuarios extends Fragment {
         referencia= FirebaseDatabase.getInstance().getReference().child("Usuarios");
     }
 
-
-
     @Override
     public void onDetach() {
         super.onDetach();
+        referencia.removeEventListener(oyente);
         vista=null;
     }
 

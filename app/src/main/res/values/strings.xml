@@ -44,6 +44,15 @@
     <string name="NuevoEvento">Nuevo Evento</string>
     <string name="Evento">Evento</string>
     <string name="ListaDeEventos">Lista de eventos</string>
+    <string name="Vendidos">Vendidos</string>
+    <string name="Proximamente">Proximamente</string>
+    <string name="EditarEvento">Editar Evento</string>
+    <string name="EventoInexistente">Evento Inexistente</string>
+    <string name="Camara">Camara</string>
+    <string name="Galeria">Galeria</string>
+    <string name="Seleccionar_imagen">Seleccionar imagen</string>
+    <string name="Se_requieren_permisos">Se requieren permisos</string>
+    <string name="Se_requieren_permiso_almacenamiento">Se requiere permiso de almacenamiento</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>
