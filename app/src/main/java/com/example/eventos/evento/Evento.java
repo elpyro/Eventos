@@ -1,16 +1,26 @@
 package com.example.eventos.evento;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -34,6 +44,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -54,6 +67,11 @@ public class Evento extends Fragment {
         public static ImageView imageView_evento;
         private String id_evento;
         private TextView textView_fecha, textView_hora;
+    private  static final int CAMERA_REQUEST_CODE = 100;
+    private static final int STORAGE_REQUEST_CODE = 101;
+    private String[] cameraPermissions; // cámara y almacenamiento
+    private String [] storagePermissions;// solo almacenamiento
+    private static final int SELECT_FILE = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,20 +85,108 @@ public class Evento extends Fragment {
         button_imagen.setOnClickListener(view -> seleccionarImagen());
         textView_fecha.setOnClickListener(view -> mostrarSelectorFecha());
         textView_hora.setOnClickListener(view -> mostrarSelectorHora());
+
         return vista;
+    }
+
+    private void incializando() {
+        context=getContext();
+        editText_nombre=vista.findViewById(R.id.editText_nombre);
+        editText_ciudad=vista.findViewById(R.id.editText_ciudad);
+        editText_descripcion=vista.findViewById(R.id.editText_descripcion);
+        editText_direccion=vista.findViewById(R.id.editText_direccion);
+        editText_boletos_vendidos=vista.findViewById(R.id.editText_boletos_vendidos);
+        editText_boletos=vista.findViewById(R.id.editText_boletos);
+        editText_costo=vista.findViewById(R.id.editText_costo);
+        textView_fecha=vista.findViewById(R.id.textView_fecha);
+        textView_hora=vista.findViewById(R.id.textView_hora);
+        button_imagen=vista.findViewById(R.id.button_imagen);
+        button_guardar=vista.findViewById(R.id.button_guardar);
+        textView_titulo=vista.findViewById(R.id.textView_titulo);
+        textView_edicion=vista.findViewById(R.id.textView_edicion);
+        imageView_evento=vista.findViewById(R.id.imageView_evento);
+
     }
 
     private void seleccionarImagen() {
                         // muestra el cuadro de diálogo de selección de imagen
 
                 //ocultar teclado
-                InputMethodManager input = (InputMethodManager) (getActivity().getSystemService(context.INPUT_METHOD_SERVICE));
-                input.hideSoftInputFromWindow(vista.getWindowToken(), 0);
+        InputMethodManager input = (InputMethodManager) (getActivity().getSystemService(context.INPUT_METHOD_SERVICE));
+        input.hideSoftInputFromWindow(vista.getWindowToken(), 0);
 
-//                Intent intent=new Intent(context, SeleccionarImagen.class);
-//                intent.putExtra("nombre_imagen", "Fragment_empresa.imageView_incluir_foto1");
-//                startActivity(intent);
+        //permisos de almacenamiento y camara
+        cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+        if (!checkCameraPermission()){
+            requestCameraPermission();
+        }
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(
+                Intent.createChooser(intent, "Seleccione una imagen"),
+                SELECT_FILE);
     }
+
+
+    private boolean checkCameraPermission(){
+        // verifica si el permiso de la cámara está habilitado o no
+        boolean result = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+        boolean result1 = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return result && result1;
+    }
+
+    private void requestCameraPermission(){
+        // solicita el permiso de la cámara
+        ActivityCompat.requestPermissions(getActivity(), cameraPermissions, CAMERA_REQUEST_CODE);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // resultado del permiso permitido / denegado
+        switch (requestCode){
+            case CAMERA_REQUEST_CODE:{
+                if (grantResults.length>0){
+
+                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                    if(cameraAccepted && storageAccepted){
+
+                    }
+                    else{
+                        Toast.makeText(context, getString(R.string.Se_requieren_permisos), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+            break;
+            case STORAGE_REQUEST_CODE:{
+                if (grantResults.length>0){
+
+                    // si se permite devolver verdadero de lo contrario falso
+                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (storageAccepted){
+                        // permiso de almacenamiento permitido
+
+                    }
+                    else{
+                        Toast.makeText(context, getString(R.string.Se_requieren_permiso_almacenamiento), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+            break;
+        }
+    }
+
 
     private void mostrarSelectorHora() {
         final Calendar getDate = Calendar.getInstance();
@@ -258,21 +364,41 @@ public class Evento extends Fragment {
         requireActivity().onBackPressed();
     }
 
-    private void incializando() {
-        context=getContext();
-        editText_nombre=vista.findViewById(R.id.editText_nombre);
-        editText_ciudad=vista.findViewById(R.id.editText_ciudad);
-        editText_descripcion=vista.findViewById(R.id.editText_descripcion);
-        editText_direccion=vista.findViewById(R.id.editText_direccion);
-        editText_boletos_vendidos=vista.findViewById(R.id.editText_boletos_vendidos);
-        editText_boletos=vista.findViewById(R.id.editText_boletos);
-        editText_costo=vista.findViewById(R.id.editText_costo);
-        textView_fecha=vista.findViewById(R.id.textView_fecha);
-        textView_hora=vista.findViewById(R.id.textView_hora);
-        button_imagen=vista.findViewById(R.id.button_imagen);
-        button_guardar=vista.findViewById(R.id.button_guardar);
-        textView_titulo=vista.findViewById(R.id.textView_titulo);
-        textView_edicion=vista.findViewById(R.id.textView_edicion);
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                    Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        Uri selectedImage;
+
+        switch (requestCode) {
+            case SELECT_FILE:
+                if (resultCode == Activity.RESULT_OK) {
+                    selectedImage = imageReturnedIntent.getData();
+                    String selectedPath=selectedImage.getPath();
+                    if (requestCode == SELECT_FILE) {
+
+                        if (selectedPath != null) {
+                            InputStream imageStream = null;
+                            try {
+                                imageStream = getActivity().getContentResolver().openInputStream(
+                                        selectedImage);
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+
+                            // Transformamos la URI de la imagen a inputStream y este a un Bitmap
+                            Bitmap bmp = BitmapFactory.decodeStream(imageStream);
+
+                            // Ponemos nuestro bitmap en un ImageView que tengamos en la vista
+
+                            imageView_evento.setImageBitmap(bmp);
+
+                        }
+                    }
+                }
+                break;
+        }
     }
+
 }

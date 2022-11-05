@@ -169,10 +169,11 @@
                                 android:id="@+id/editText_costo"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_margin="4dp"
                                 android:autofillHints="apline"
                                 android:background="@color/trasparente"
                                 android:hint="@string/Costo"
-                                android:layout_margin="4dp"
                                 android:inputType="textPersonName"
                                 android:textColor="@color/white"
                                 android:textColorHint="#6D4C41"
@@ -190,11 +191,12 @@
                                 android:id="@+id/editText_boletos"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_margin="4dp"
                                 android:autofillHints="usuarioValidus"
                                 android:background="@color/trasparente"
                                 android:hint="@string/Boletos"
                                 android:inputType="number"
-                                android:layout_margin="4dp"
                                 android:textColor="@color/white"
                                 android:textColorHint="#6D4C41"
                                 android:textSize="16sp"
@@ -211,6 +213,7 @@
                                 android:id="@+id/editText_boletos_vendidos"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:layout_gravity="center"
                                 android:layout_margin="4dp"
                                 android:background="@color/trasparente"
                                 android:hint="@string/Vendidos"
@@ -240,16 +243,19 @@
 
                         <ImageView
                             android:id="@+id/imageView_evento"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
                             android:layout_weight="1"
-                            tools:src="@tools:sample/avatars" />
+                            app:srcCompat="@drawable/logomini"
+                            tools:srcCompat="@drawable/logomini" />
                     </LinearLayout>
 
                 </LinearLayout>
 
 
+
             </androidx.cardview.widget.CardView>
+
 
 
             <Button
