@@ -53,6 +53,7 @@
     <string name="Seleccionar_imagen">Seleccionar imagen</string>
     <string name="Se_requieren_permisos">Se requieren permisos</string>
     <string name="Se_requieren_permiso_almacenamiento">Se requiere permiso de almacenamiento</string>
+    <string name="CambiarImagen">Cambiar imagen</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

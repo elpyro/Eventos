@@ -10,48 +10,46 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
-
 import com.example.eventos.PantallaPrincipal;
 import com.example.eventos.R;
-//import com.example.eventos.SeleccionarImagen;
 import com.example.eventos.modelos.Modelo_evento;
-import com.example.eventos.modelos.Modelo_usuario;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.UUID;
 
 
@@ -64,13 +62,11 @@ public class Evento extends Fragment {
                 editText_costo;
         private Button button_imagen, button_guardar;
         private TextView textView_titulo, textView_edicion;
-        public static ImageView imageView_evento;
-        private String id_evento;
+        private ImageView imageView_evento;
         private TextView textView_fecha, textView_hora;
-    private  static final int CAMERA_REQUEST_CODE = 100;
-    private static final int STORAGE_REQUEST_CODE = 101;
-    private String[] cameraPermissions; // cámara y almacenamiento
-    private String [] storagePermissions;// solo almacenamiento
+        private  static final int CAMERA_REQUEST_CODE = 100;
+        private static final int STORAGE_REQUEST_CODE = 101;
+        private String[] cameraPermissions; // cámara y almacenamiento
     private static final int SELECT_FILE = 1;
 
     @Override
@@ -112,38 +108,37 @@ public class Evento extends Fragment {
                         // muestra el cuadro de diálogo de selección de imagen
 
                 //ocultar teclado
-        InputMethodManager input = (InputMethodManager) (getActivity().getSystemService(context.INPUT_METHOD_SERVICE));
+        InputMethodManager input = (InputMethodManager) (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
         input.hideSoftInputFromWindow(vista.getWindowToken(), 0);
 
-        //permisos de almacenamiento y camara
-        cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        //permisos de almacenamiento
+        cameraPermissions = new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        // solo almacenamiento
 
         if (!checkCameraPermission()){
             requestCameraPermission();
+        }else{
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(
+                    Intent.createChooser(intent, "Seleccione una imagen"),
+                    SELECT_FILE);
         }
 
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(
-                Intent.createChooser(intent, "Seleccione una imagen"),
-                SELECT_FILE);
+
     }
 
 
     private boolean checkCameraPermission(){
         // verifica si el permiso de la cámara está habilitado o no
-        boolean result = ContextCompat.checkSelfPermission(context,
-                Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
-        boolean result1 = ContextCompat.checkSelfPermission(context,
+        return ContextCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-        return result && result1;
     }
 
     private void requestCameraPermission(){
         // solicita el permiso de la cámara
-        ActivityCompat.requestPermissions(getActivity(), cameraPermissions, CAMERA_REQUEST_CODE);
+        ActivityCompat.requestPermissions(requireActivity(), cameraPermissions, CAMERA_REQUEST_CODE);
     }
 
 
@@ -158,14 +153,10 @@ public class Evento extends Fragment {
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
 
-                    if(cameraAccepted && storageAccepted){
-
-                    }
-                    else{
+                    if(!cameraAccepted && !storageAccepted){
                         Toast.makeText(context, getString(R.string.Se_requieren_permisos), Toast.LENGTH_LONG).show();
                     }
                 }
-
             }
             break;
             case STORAGE_REQUEST_CODE:{
@@ -173,11 +164,7 @@ public class Evento extends Fragment {
 
                     // si se permite devolver verdadero de lo contrario falso
                     boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (storageAccepted){
-                        // permiso de almacenamiento permitido
-
-                    }
-                    else{
+                    if (!storageAccepted){
                         Toast.makeText(context, getString(R.string.Se_requieren_permiso_almacenamiento), Toast.LENGTH_LONG).show();
                     }
                 }
@@ -190,15 +177,12 @@ public class Evento extends Fragment {
 
     private void mostrarSelectorHora() {
         final Calendar getDate = Calendar.getInstance();
-        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                getDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                getDate.set(Calendar.MINUTE, minute);
-                SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm a");
-                String formatedDate = timeformat.format(getDate.getTime());
-                textView_hora.setText(formatedDate);
-            }
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), (view, hourOfDay, minute) -> {
+            getDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            getDate.set(Calendar.MINUTE, minute);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm a");
+            String formatedDate = timeformat.format(getDate.getTime());
+            textView_hora.setText(formatedDate);
         }, getDate.get(Calendar.HOUR_OF_DAY), getDate.get(Calendar.MINUTE), false);
 
         timePickerDialog.show();
@@ -210,19 +194,16 @@ public class Evento extends Fragment {
         int mes = c.get(Calendar.MONTH);
         int ano=c.get(Calendar.YEAR);
 
-        DatePickerDialog datepickerDialogo = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month=month+1;
-                String fecha_desde;
+        DatePickerDialog datepickerDialogo = new DatePickerDialog(getContext(), (view, year, month, dayOfMonth) -> {
+            month=month+1;
+            String fecha_desde;
 
-                if(dayOfMonth<10){
-                    fecha_desde=year+"-"+month+"-"+"0"+dayOfMonth;
-                }else{
-                    fecha_desde=year+"-"+month+"-"+dayOfMonth;
-                }
-                textView_fecha.setText(fecha_desde);
+            if(dayOfMonth<10){
+                fecha_desde=year+"-"+month+"-"+"0"+dayOfMonth;
+            }else{
+                fecha_desde=year+"-"+month+"-"+dayOfMonth;
             }
+            textView_fecha.setText(fecha_desde);
         },ano,mes,dia);
         datepickerDialogo.show();
     }
@@ -231,7 +212,7 @@ public class Evento extends Fragment {
         //si hay argumentos el evento va a ser editado
         if (getArguments() != null) {
             textView_titulo.setText(getString(R.string.EditarEvento));
-            id_evento =getArguments().getString("id_evento");
+            String id_evento = getArguments().getString("id_evento");
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
             Query dataQuery = myRefe.child("Eventos").orderByChild("id").equalTo(id_evento).limitToFirst(1);
             dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -254,6 +235,10 @@ public class Evento extends Fragment {
 
                             textView_edicion.setText(evento.getEdicion());
 
+                            try {
+                                Picasso.with(context).load(evento.getUrlImagen()).into(imageView_evento);
+                            }catch (Exception ignored){
+                            }
                         }
                     } else {
                         Toast.makeText(context,getString(R.string.EventoInexistente) , Toast.LENGTH_SHORT).show();
@@ -305,14 +290,15 @@ public class Evento extends Fragment {
     private boolean verificarFecha() {
 
         boolean fechaCorrecta=true;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        String fechaActual= new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        @SuppressLint("SimpleDateFormat") String fechaActual= new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-        Date fechaSeleccionada = null;
+        Date fechaSeleccionada;
         try {
             fechaSeleccionada = dateFormat.parse(textView_fecha.getText().toString());
             Date fechaActualf=dateFormat.parse(fechaActual);
+            assert fechaSeleccionada != null;
             if (fechaSeleccionada.compareTo(fechaActualf)<0 ){
                 fechaCorrecta=false;
                 Toast.makeText(context, "Fecha incorrecta", Toast.LENGTH_SHORT).show();
@@ -329,6 +315,7 @@ public class Evento extends Fragment {
         if (!validarDatos())return;
 
         new Thread(() -> {
+
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
             Modelo_evento evento = new Modelo_evento();
 
@@ -338,27 +325,67 @@ public class Evento extends Fragment {
             }else{
                 evento.setId(UUID.randomUUID().toString());
             }
-            @SuppressLint("SimpleDateFormat") String fecha= new SimpleDateFormat("hh:mm aa dd-MM-yy").format(new Date());
 
-            evento.setNombre(editText_nombre.getText().toString().trim());
-            evento.setDescripcion(editText_descripcion.getText().toString().trim());
-            evento.setCiudad(editText_ciudad.getText().toString().trim());
-            evento.setDireccion(editText_direccion.getText().toString().trim());
-            evento.setFecha(textView_fecha.getText().toString().trim());
-            evento.setHora(textView_hora.getText().toString().trim());
-            evento.setCosto(editText_costo.getText().toString().trim());
-            evento.setBoletos(editText_boletos.getText().toString().trim());
-            evento.setBoletosVendidos(editText_boletos_vendidos.getText().toString().trim());
-            evento.setEstado(getString(R.string.Proximamente));
-            evento.setEdicion("Editado: " + PantallaPrincipal.nombreUsuario +" "+ fecha );
-            myRefe.child("Eventos").child(evento.getId()).setValue(evento);
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            // Create a storage reference from our app
+            StorageReference storageRef = storage.getReference();
 
-            getActivity().runOnUiThread( new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show();
-                }
-            });
+            // Create a reference to "mountains.jpg"
+            StorageReference mountainsRef = storageRef.child("imagen_eventos/" + evento.getId());
+
+
+            // [START upload_memory]
+            // Get the data from an ImageView as bytes
+
+            imageView_evento.setDrawingCacheEnabled(true);
+            imageView_evento.buildDrawingCache();
+            byte[] data;
+            try {
+                Bitmap bitmap = ((BitmapDrawable) imageView_evento.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream(4);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
+                data = baos.toByteArray();
+
+
+                UploadTask uploadTask = mountainsRef.putBytes(data);
+                uploadTask.addOnFailureListener(exception -> Toast.makeText(context, "Problemas de conexion", Toast.LENGTH_SHORT).show()).addOnSuccessListener(taskSnapshot -> {
+
+                    //guardando la url para la imagen
+                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uriTask.isSuccessful()) ;
+
+                    Uri descargaUri = uriTask.getResult();
+
+                    @SuppressLint("SimpleDateFormat") String fecha= new SimpleDateFormat("hh:mm aa dd-MM-yy").format(new Date());
+
+                    evento.setNombre(editText_nombre.getText().toString().trim());
+                    evento.setDescripcion(editText_descripcion.getText().toString().trim());
+                    evento.setCiudad(editText_ciudad.getText().toString().trim());
+                    evento.setDireccion(editText_direccion.getText().toString().trim());
+                    evento.setFecha(textView_fecha.getText().toString().trim());
+                    evento.setHora(textView_hora.getText().toString().trim());
+                    evento.setCosto(editText_costo.getText().toString().trim());
+                    evento.setBoletos(editText_boletos.getText().toString().trim());
+                    evento.setBoletosVendidos(editText_boletos_vendidos.getText().toString().trim());
+                    evento.setEstado("Proximamente");
+                    evento.setEdicion("Editado: " + PantallaPrincipal.nombreUsuario +" "+ fecha );
+                    evento.setUrlImagen(descargaUri.toString());
+                    myRefe.child("Eventos").child(evento.getId()).setValue(evento);
+                    Toast.makeText(context, "Evento Guardado", Toast.LENGTH_SHORT).show();
+                });
+            } catch (Exception e) {
+            try {
+                requireActivity().runOnUiThread(() -> {
+                    try {
+                        Toast.makeText(context, "Problemas de conexion", Toast.LENGTH_SHORT).show();
+                    }catch (Exception ignored){ }
+
+                });
+            }catch (Exception er){
+                Toast.makeText(context, "Problemas de conexion", Toast.LENGTH_SHORT).show();
+            }
+            }
+
 
         }).start();
         requireActivity().onBackPressed();
@@ -371,34 +398,37 @@ public class Evento extends Fragment {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         Uri selectedImage;
 
-        switch (requestCode) {
-            case SELECT_FILE:
-                if (resultCode == Activity.RESULT_OK) {
-                    selectedImage = imageReturnedIntent.getData();
-                    String selectedPath=selectedImage.getPath();
-                    if (requestCode == SELECT_FILE) {
+        if (requestCode == SELECT_FILE) {
+            if (resultCode == Activity.RESULT_OK) {
+                selectedImage = imageReturnedIntent.getData();
+                String selectedPath = selectedImage.getPath();
 
-                        if (selectedPath != null) {
-                            InputStream imageStream = null;
-                            try {
-                                imageStream = getActivity().getContentResolver().openInputStream(
-                                        selectedImage);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
-
-                            // Transformamos la URI de la imagen a inputStream y este a un Bitmap
-                            Bitmap bmp = BitmapFactory.decodeStream(imageStream);
-
-                            // Ponemos nuestro bitmap en un ImageView que tengamos en la vista
-
-                            imageView_evento.setImageBitmap(bmp);
-
-                        }
+                if (selectedPath != null) {
+                    InputStream imageStream = null;
+                    try {
+                        imageStream = requireActivity().getContentResolver().openInputStream(
+                                selectedImage);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
                     }
+
+                    // Transformamos la URI de la imagen a inputStream y este a un Bitmap
+                    Bitmap bmp = BitmapFactory.decodeStream(imageStream);
+
+                    // Ponemos nuestro bitmap en un ImageView que tengamos en la vista
+
+                    imageView_evento.setImageBitmap(bmp);
+
                 }
-                break;
+            }
         }
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        InputMethodManager input = (InputMethodManager) (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
+        input.hideSoftInputFromWindow(vista.getWindowToken(), 0);
+        vista=null;
+    }
 }

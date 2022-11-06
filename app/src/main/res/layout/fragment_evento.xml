@@ -98,6 +98,7 @@
                             android:textSize="16sp"
                             tools:ignore="TextContrastCheck" />
                     </com.google.android.material.textfield.TextInputLayout>
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -141,13 +142,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="32dp"
                             android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:gravity="center"
                             android:layout_margin="4dp"
-                            android:text="@string/Hora"
+                            android:layout_weight="1"
                             android:background="@color/amarilloFondo"
+                            android:gravity="center"
+                            android:text="@string/Hora"
                             android:theme="@style/texto_sub_titulo" />
-
 
 
                     </LinearLayout>
@@ -232,30 +232,30 @@
 
                         <Button
                             android:id="@+id/button_imagen"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="110dp"
+                            android:layout_height="60dp"
                             android:layout_gravity="center_vertical"
                             android:background="@drawable/boton"
                             android:gravity="center"
-                            android:text="@string/Imagen"
+                            android:textSize="12sp"
+                            android:text="@string/CambiarImagen"
                             android:textColor="@color/black"
                             android:theme="@style/Botones" />
 
                         <ImageView
                             android:id="@+id/imageView_evento"
-                            android:layout_width="80dp"
+                            android:layout_width="0dp"
                             android:layout_height="80dp"
                             android:layout_weight="1"
-                            app:srcCompat="@drawable/logomini"
-                            tools:srcCompat="@drawable/logomini" />
+                            app:srcCompat="@drawable/seleccion_imagen"
+                            tools:srcCompat="@drawable/seleccion_imagen"
+                            android:contentDescription="@string/Imagen" />
                     </LinearLayout>
 
                 </LinearLayout>
 
 
-
             </androidx.cardview.widget.CardView>
-
 
 
             <Button
@@ -268,7 +268,6 @@
                 android:text="@string/Guardar"
                 android:textColor="@color/black"
                 android:theme="@style/Botones" />
-
 
 
         </LinearLayout>

@@ -1,7 +1,7 @@
 package com.example.eventos.modelos;
 
 public class Modelo_evento {
-    String id, nombre, direccion, fecha,hora, estado, descripcion, tipo, boletos, lugar, ciudad, costo, boletosVendidos, edicion;
+    String id, nombre, direccion, fecha,hora, estado, descripcion, tipo, boletos, lugar, ciudad, costo, boletosVendidos, edicion, urlImagen;
 
     public Modelo_evento() {
     }
@@ -116,5 +116,13 @@ public class Modelo_evento {
 
     public void setEdicion(String edicion) {
         this.edicion = edicion;
+    }
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
     }
 }
