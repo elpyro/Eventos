@@ -53,14 +53,17 @@ public class Lista_Usuarios extends Fragment {
         vista = inflater.inflate(R.layout.fragment_lista__usuarios, container, false);
 
         inicializando();
-        
-        llenandoRecyclerView();
 
         boton_nuevo_usuario.setOnClickListener(view -> Navigation.findNavController(vista).navigate(R.id.usuarios));
 
         return vista;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        llenandoRecyclerView();
+    }
 
     private void llenandoRecyclerView() {
 

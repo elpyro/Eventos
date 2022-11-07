@@ -54,6 +54,9 @@
     <string name="Se_requieren_permisos">Se requieren permisos</string>
     <string name="Se_requieren_permiso_almacenamiento">Se requiere permiso de almacenamiento</string>
     <string name="CambiarImagen">Cambiar imagen</string>
+    <string name="banner">Banner</string>
+    <string name="ProximosEventos">Proximos Eventos</string>
+    <string name="Invitados">Invitados</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

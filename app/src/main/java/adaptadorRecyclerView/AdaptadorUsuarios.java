@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.eventos.R;
@@ -31,7 +31,7 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.My
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         context = parent.getContext();
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_usuarios, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lista, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -50,16 +50,16 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.My
     static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textView_nombre, textView_id_invisible;
 
-        CardView cardView_usuario;
+        LinearLayout linearLayout_usuario;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             textView_nombre = itemView.findViewById(R.id.textView_nombre);
             textView_id_invisible=itemView.findViewById(R.id.textView_id);
-            cardView_usuario= itemView.findViewById(R.id.carView_usuario);
+            linearLayout_usuario = itemView.findViewById(R.id.linerarLayout_tarjeta);
 
-            cardView_usuario.setOnClickListener(view -> {
+            linearLayout_usuario.setOnClickListener(view -> {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("id_usuario", textView_id_invisible.getText().toString().trim());

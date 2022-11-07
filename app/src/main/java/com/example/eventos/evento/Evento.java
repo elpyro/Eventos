@@ -367,6 +367,7 @@ public class Evento extends Fragment {
                     evento.setCosto(editText_costo.getText().toString().trim());
                     evento.setBoletos(editText_boletos.getText().toString().trim());
                     evento.setBoletosVendidos(editText_boletos_vendidos.getText().toString().trim());
+                    //TODO colocar r.string
                     evento.setEstado("Proximamente");
                     evento.setEdicion("Editado: " + PantallaPrincipal.nombreUsuario +" "+ fecha );
                     evento.setUrlImagen(descargaUri.toString());

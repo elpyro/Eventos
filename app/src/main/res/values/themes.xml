@@ -55,4 +55,7 @@
         <item name="colorPrimaryVariant">@color/amarillo</item>
         <item name="colorPrimary">@color/amarillo</item>
     </style>
+    <style name="cardViewinvitados" parent="Theme.Eventos">
+        <item name="background">@style/cardViewinvitados</item>
+    </style>
 </resources>

@@ -48,10 +48,10 @@ public class ListaEventos extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        context=getContext();
         vista= inflater.inflate(R.layout.fragment_lista_eventos, container, false);
 
         inicializando();
-        llenandoRecyclerView();
 
         button_nuevo_evento.setOnClickListener(view -> Navigation.findNavController(vista).navigate(R.id.evento));
 
@@ -117,6 +117,12 @@ public class ListaEventos extends Fragment {
         recview.setLayoutManager(new LinearLayoutManager(context));
         searchView_eventos =vista.findViewById(R.id.searchView_filtro_eventos);
         referencia= FirebaseDatabase.getInstance().getReference().child("Eventos");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        llenandoRecyclerView();
     }
 
     @Override
