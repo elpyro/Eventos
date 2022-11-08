@@ -59,6 +59,11 @@
     <string name="Invitados">Invitados</string>
     <string name="Terminado">Terminado</string>
     <string name="DetatlleEvento">Detalle del evento</string>
+    <string name="CrearInvitacion">Crear invitación</string>
+    <string name="ConfirmarAsitencia">Confirmar asistencia</string>
+    <string name="Firmar">Firmar</string>
+    <string name="Asistencia">Asistencia</string>
+    <string name="Disponibles">Disponibles</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

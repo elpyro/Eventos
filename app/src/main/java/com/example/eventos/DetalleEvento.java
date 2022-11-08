@@ -1,64 +1,107 @@
 package com.example.eventos;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DetalleEvento#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.eventos.modelos.Modelo_evento;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+
 public class DetalleEvento extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public DetalleEvento() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DetalleEvento.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DetalleEvento newInstance(String param1, String param2) {
-        DetalleEvento fragment = new DetalleEvento();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private ImageView imageView_imagen_evento;
+    private TextView textView_nombre_evento,textView_descripcion,textView_fecha, textView_boletos,textView_disponibles,textView_costo,textView_ciudad,textView_direccion;
+    private Context context;
+    private View vista;
+    String id_evento;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detalle_evento, container, false);
+        context=getContext();
+        vista= inflater.inflate(R.layout.fragment_detalle_evento, container, false);
+
+        incicializando();
+
+        Bundle bundle = getArguments();
+        if (getArguments() != null) {
+            Modelo_evento evento;
+            evento =(Modelo_evento) bundle.getSerializable("evento");
+            cargarEvento(evento.getId());
+        }
+        return vista;
+    }
+
+    private void cargarEvento(String id) {
+        id_evento = id;
+        DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
+        Query dataQuery = myRefe.child("Eventos").orderByChild("id").equalTo(id_evento).limitToFirst(1);
+        dataQuery.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                        Modelo_evento evento = userSnapshot.getValue(Modelo_evento.class);
+                        assert evento != null;
+
+                        textView_nombre_evento.setText(evento.getNombre());
+                        textView_descripcion.setText(evento.getDescripcion());
+                        textView_ciudad.setText(evento.getCiudad());
+                        textView_direccion.setText(evento.getDireccion());
+                        String fecha=evento.getFecha();
+                        textView_fecha.setText(fecha);
+                        textView_costo.setText(evento.getCosto());
+                        textView_boletos.setText(evento.getBoletos());
+                        int boletosDisponibles= Integer.parseInt(evento.getBoletos())-Integer.parseInt(evento.getBoletosVendidos());
+                        textView_disponibles.setText(boletosDisponibles+"");
+
+
+
+                        try {
+                            Picasso.with(context).load(evento.getUrlImagen()).into(imageView_imagen_evento);
+                        }catch (Exception ignored){
+                        }
+                    }
+                } else {
+                    Toast.makeText(context,getString(R.string.EventoInexistente) , Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, getString(R.string.problemasConexion), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void incicializando() {
+
+        imageView_imagen_evento=vista.findViewById(R.id.imageView_imagen_evento);
+        textView_nombre_evento=vista.findViewById(R.id.textView_nombre_evento);
+        textView_descripcion=vista.findViewById(R.id.textView_descripcion);
+        textView_fecha=vista.findViewById(R.id.textView_fecha);
+        textView_costo=vista.findViewById(R.id.textView_costo);
+        textView_ciudad=vista.findViewById(R.id.textView_ciudad);
+        textView_direccion=vista.findViewById(R.id.textView_direccion);
+        textView_boletos=vista.findViewById(R.id.textView_boletos);
+        textView_disponibles=vista.findViewById(R.id.textView_disponibles);
+
     }
 }

@@ -24,15 +24,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 //https://www.youtube.com/watch?v=M8sKwoVjqU0&ab_channel=Foxandroid firebase con recyclerview
-public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProximosEventos.MyViewHolder> {
+public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProximosEventos.MyViewHolder> implements View.OnClickListener {
+
+    private View.OnClickListener listener;
     Context context;
-    ArrayList<Modelo_evento> list;
+    View vista;
+    public ArrayList<Modelo_evento> list;
     @SuppressLint("SimpleDateFormat") String  fechaActualSinFormato= new SimpleDateFormat("HH:mm aa dd-MM-yyyy").format(new Date());
     @SuppressLint("SimpleDateFormat") SimpleDateFormat formatoFecha = new SimpleDateFormat("HH:mm aa dd-MM-yyyy");
 
@@ -45,8 +49,9 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         context = parent.getContext();
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_proximos_eventos, parent, false);
-        return new MyViewHolder(view);
+        vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_proximos_eventos, parent, false);
+        vista.setOnClickListener(this);
+        return new MyViewHolder(vista);
     }
 
     @Override
@@ -57,11 +62,22 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
         holder.textView_ciudad.setText(list.get(position).getCiudad());
         crearCuentaRegresiva(position, holder);
 
+
         try {
             Picasso.with(context).load(list.get(position).getUrlImagen()).into(holder.imageView_evento);
         }catch (Exception ignored){}
 
+//        holder.linerarLayout_tarjeta.setOnLongClickListener(view -> seleccion(position));
+
     }
+//
+//    private boolean seleccion(int position) {
+//        Modelo_evento eventoSeleccionado= list.get(position);
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable("id_evento", (Serializable) eventoSeleccionado);
+//        Navigation.findNavController().navigate(R.id.evento,bundle);
+//        return false;
+//    }
 
     private String  crearCuentaRegresiva(int position, MyViewHolder holder) {
         String cuenta="";
@@ -109,6 +125,17 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
         return list.size();
     }
 
+    public void setOnClickListener(View.OnClickListener listener){
+        this.listener=listener;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(listener!=null){
+            listener.onClick(view);
+        }
+    }
+
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textView_nombre, textView_boletos,textView_invitados,textView_ciudad,textView_cuenta_regresiva, textView_cuenta_regresiva_pequena;
@@ -128,13 +155,7 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
             linerarLayout_tarjeta=itemView.findViewById(R.id.linerarLayout_tarjeta);
 
 
-            linerarLayout_tarjeta.setOnClickListener(view -> {
 
-//                Bundle bundle = new Bundle();
-//                bundle.putString("id_evento", textView_id_invisible.getText().toString().trim());
-                Navigation.findNavController(view).navigate(R.id.detalleEvento);
-
-            });
         }
     }
 }

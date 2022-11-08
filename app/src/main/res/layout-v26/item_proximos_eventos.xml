@@ -57,7 +57,7 @@
                     android:autoSizeTextType="uniform"
                     android:layout_marginStart="5dp"
                     android:text="@string/Hora"
-                    android:layout_gravity="center|left"
+                    android:layout_gravity="center|start"
                     android:textColor="#FFFFFF"
                     android:textSize="12sp" />
 

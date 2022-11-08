@@ -1,14 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".DetalleEvento">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
 
-</FrameLayout>
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/boton"
+            android:gravity="center"
+            android:text="@string/CrearInvitacion"
+            android:textColor="@color/black"
+            android:theme="@style/Botones" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/cardview_evento"
+        app:cardCornerRadius="10dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/boton"
+            android:gravity="center"
+            android:text="@string/Asistencia"
+            android:textColor="@color/black"
+            android:theme="@style/Botones" />
+
+        <Button
+            android:layout_width="144dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/boton"
+            android:gravity="center"
+
+            android:text="@string/Firmar"
+            android:textColor="@color/black"
+            android:theme="@style/Botones" />
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView_imagen_evento"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_weight="1"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:src="@drawable/seleccion_imagen" />
+
+        <TextView
+            android:id="@+id/textView_nombre_evento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/texto_titulo"
+            android:text="@string/Evento" />
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="1dp"
+            app:cardBackgroundColor="@color/fondo_cardView"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/textView_descripcion"
+                    android:layout_margin="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/texto_sencillo"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/descripcion"></TextView>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/texto_sub_titulo"
+                        android:text="@string/Fecha" />
+
+                    <TextView
+                        android:id="@+id/textView_fecha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/texto_sencillo"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/Fecha" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/texto_sub_titulo"
+                        android:text="@string/Boletos" />
+
+                    <TextView
+                        android:id="@+id/textView_boletos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/texto_sencillo"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/Boletos" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:theme="@style/texto_sub_titulo"
+                        android:text="@string/Disponibles" />
+
+                    <TextView
+                        android:id="@+id/textView_disponibles"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/texto_sencillo"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/Boletos" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/texto_sub_titulo"
+                        android:text="@string/Costo" />
+
+                    <TextView
+                        android:id="@+id/textView_costo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/texto_sencillo"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/Costo" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/texto_sub_titulo"
+                        android:text="@string/Ciudad" />
+
+                    <TextView
+                        android:id="@+id/textView_ciudad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:theme="@style/texto_sencillo"
+                        android:text="@string/Ciudad" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/texto_sub_titulo"
+                        android:text="@string/Direccion" />
+
+                    <TextView
+                        android:id="@+id/textView_direccion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:theme="@style/texto_sencillo"
+                        android:text="@string/Direccion" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:theme="@style/texto_sub_titulo"
+            android:text="@string/Asistencia"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_asistencia"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
+
+
+
+</ScrollView>

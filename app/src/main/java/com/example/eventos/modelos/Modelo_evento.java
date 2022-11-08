@@ -1,9 +1,10 @@
 package com.example.eventos.modelos;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Modelo_evento {
-    String id, nombre, direccion, fecha,hora, estado, descripcion, tipo, boletos, lugar, ciudad, costo, boletosVendidos, edicion, urlImagen;
+public class Modelo_evento implements Serializable {
+    String id, nombre, direccion, fecha,hora, estado, descripcion,  boletos,  ciudad, costo, boletosVendidos, edicion, urlImagen;
     Date fechaHora;
     public Modelo_evento() {
     }
@@ -72,13 +73,6 @@ public class Modelo_evento {
         this.descripcion = descripcion;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
 
     public String getBoletos() {
         return boletos;
@@ -88,13 +82,6 @@ public class Modelo_evento {
         this.boletos = boletos;
     }
 
-    public String getLugar() {
-        return lugar;
-    }
-
-    public void setLugar(String lugar) {
-        this.lugar = lugar;
-    }
 
     public String getCiudad() {
         return ciudad;

@@ -47,6 +47,12 @@
         <item name="android:layout_margin">5sp</item>
         <item name="fontFamily">sans-serif-black</item>
     </style>
+    <style name="texto_sencillo" parent="Theme.Eventos">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_margin">5sp</item>
+        <item name="fontFamily">cursive</item>
+    </style>
     <style name="Botones"    parent="Theme.AppCompat.Light.NoActionBar">
     <item name="android:background">@drawable/boton</item>
         <item name="android:textStyle">bold</item>

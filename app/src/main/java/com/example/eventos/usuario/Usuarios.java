@@ -37,13 +37,14 @@ import java.util.regex.Pattern;
 
 public class Usuarios extends Fragment {
 
-    String id_exitente="", correoExistente, id_usuario;
-    View vista;
-    Context context;
-    Spinner spinner_tipo_usuario;
-    Button boton_guardar;
-    EditText editText_nombre, editText_telefono,editText_correo,editText_direccion, editText_apline, editText_usuarioValidus;
-    TextView textView_titulo,textView_edicion;
+    private String id_exitente="";
+    private String correoExistente;
+    private View vista;
+    private Context context;
+    private Spinner spinner_tipo_usuario;
+    private Button boton_guardar;
+    private EditText editText_nombre, editText_telefono,editText_correo,editText_direccion, editText_apline, editText_usuarioValidus;
+    private TextView textView_titulo,textView_edicion;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,7 +65,7 @@ public class Usuarios extends Fragment {
         //si hay argumentos el usuario va a ser editado
         if (getArguments() != null) {
             textView_titulo.setText(getString(R.string.EditarUsuario));
-            id_usuario =getArguments().getString("id_usuario");
+            String id_usuario = getArguments().getString("id_usuario");
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
             Query dataQuery = myRefe.child("Usuarios").orderByChild("id").equalTo(id_usuario).limitToFirst(1);
             dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -220,12 +221,7 @@ public class Usuarios extends Fragment {
             usuario.setEdicion("Editado: " +PantallaPrincipal.nombreUsuario +" "+ fecha );
             myRefe.child("Usuarios").child(usuario.getId()).setValue(usuario);
 
-            getActivity().runOnUiThread( new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show();
-                }
-            });
+            requireActivity().runOnUiThread(() -> Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show());
 
         }).start();
 

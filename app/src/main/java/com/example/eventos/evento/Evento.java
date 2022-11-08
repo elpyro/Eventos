@@ -379,7 +379,7 @@ public class Evento extends Fragment {
                     }
                     evento.setFechaHora(fecha_evento);
                     evento.setBoletos(editText_boletos.getText().toString().trim());
-                    if (editText_boletos.getText().equals("")){
+                    if (editText_boletos_vendidos.getText().toString().trim().equals("")){
                         evento.setBoletosVendidos("0");
                     }else{
                         evento.setBoletosVendidos(editText_boletos_vendidos.getText().toString().trim());
