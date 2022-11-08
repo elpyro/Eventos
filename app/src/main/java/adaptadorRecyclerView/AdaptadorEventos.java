@@ -2,6 +2,7 @@ package adaptadorRecyclerView;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ public class AdaptadorEventos extends RecyclerView.Adapter<AdaptadorEventos.MyVi
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.textView_nombre.setText(list.get(position).getNombre());
         holder.textView_id_invisible.setText(list.get(position).getId());
+        if (list.get(position).getEstado().equals("Terminado"))holder.textView_nombre.setTextColor(Color.parseColor("#FFB039"));
     }
 
     @Override

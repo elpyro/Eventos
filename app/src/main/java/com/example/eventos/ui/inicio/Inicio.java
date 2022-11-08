@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class Inicio extends Fragment {
 
     private  SearchView searchView_eventos;
     private RecyclerView recview;
-    private DatabaseReference referencia;
+    private Query referencia;
     private   ArrayList<Modelo_evento> lista;
     private   ValueEventListener oyente;
 
@@ -57,7 +58,7 @@ public class Inicio extends Fragment {
         recview=vista.findViewById(R.id.recyclerView_proximosEventos);
         recview.setHasFixedSize(true);
         recview.setLayoutManager(new LinearLayoutManager(context));
-        referencia= FirebaseDatabase.getInstance().getReference().child("Eventos");
+        referencia= FirebaseDatabase.getInstance().getReference().child("Eventos").orderByChild("estado").equalTo("Proximamente");
     }
 
     @Override
@@ -79,7 +80,7 @@ public class Inicio extends Fragment {
                         for(DataSnapshot ds:snapshot.getChildren()){
                             lista.add(ds.getValue(Modelo_evento.class));
                         }
-                        lista.sort(Comparator.comparing(Modelo_evento::getNombre));
+                        lista.sort(Comparator.comparing(Modelo_evento::getFechaHora));
                         AdaptadorProximosEventos adapador= new AdaptadorProximosEventos(lista);
                         recview.setAdapter(adapador);
                     }

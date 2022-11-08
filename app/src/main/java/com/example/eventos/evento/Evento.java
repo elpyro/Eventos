@@ -199,9 +199,9 @@ public class Evento extends Fragment {
             String fecha_desde;
 
             if(dayOfMonth<10){
-                fecha_desde=year+"-"+month+"-"+"0"+dayOfMonth;
+                fecha_desde= "0"+dayOfMonth+"-"+month+"-"+ year;
             }else{
-                fecha_desde=year+"-"+month+"-"+dayOfMonth;
+                fecha_desde=dayOfMonth+"-"+month+"-"+ year;
             }
             textView_fecha.setText(fecha_desde);
         },ano,mes,dia);
@@ -211,7 +211,7 @@ public class Evento extends Fragment {
     private void recibirArgumentos() {
         //si hay argumentos el evento va a ser editado
         if (getArguments() != null) {
-            textView_titulo.setText(getString(R.string.EditarEvento));
+
             String id_evento = getArguments().getString("id_evento");
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
             Query dataQuery = myRefe.child("Eventos").orderByChild("id").equalTo(id_evento).limitToFirst(1);
@@ -227,14 +227,19 @@ public class Evento extends Fragment {
                             editText_descripcion.setText(evento.getDescripcion());
                             editText_ciudad.setText(evento.getCiudad());
                             editText_direccion.setText(evento.getDireccion());
-                            textView_fecha.setText(evento.getFecha());
+                            String fecha=evento.getFecha();
+                            textView_fecha.setText(fecha.substring(fecha.length() - 10));
                             textView_hora.setText(evento.getHora());
                             editText_costo.setText(evento.getCosto());
                             editText_boletos.setText(evento.getBoletos());
                             editText_boletos_vendidos.setText(evento.getBoletosVendidos());
-
                             textView_edicion.setText(evento.getEdicion());
-
+                            String estado=evento.getEstado().trim();
+                            textView_titulo.setText(estado);
+                            //TODO ESTE IF NO RECONOCE R.STRIN.TERMINADO
+                            if(estado.equals("Terminado")){
+                                button_guardar.setEnabled(false);
+                            }
                             try {
                                 Picasso.with(context).load(evento.getUrlImagen()).into(imageView_evento);
                             }catch (Exception ignored){
@@ -267,11 +272,11 @@ public class Evento extends Fragment {
             datosAceptados=false;
         }
 
-        if (editText_costo.getText().toString().length()<3){
+        if (editText_costo.getText().toString().length()==0){
             editText_costo.setError("Requerido");
             datosAceptados=false;
         }
-        if (editText_boletos.getText().toString().length()<1){
+        if (editText_boletos.getText().toString().length()==0){
             editText_boletos.setError("Requerido");
             datosAceptados=false;
         }
@@ -290,9 +295,9 @@ public class Evento extends Fragment {
     private boolean verificarFecha() {
 
         boolean fechaCorrecta=true;
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-        @SuppressLint("SimpleDateFormat") String fechaActual= new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        @SuppressLint("SimpleDateFormat") String fechaActual= new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 
         Date fechaSeleccionada;
         try {
@@ -362,11 +367,23 @@ public class Evento extends Fragment {
                     evento.setDescripcion(editText_descripcion.getText().toString().trim());
                     evento.setCiudad(editText_ciudad.getText().toString().trim());
                     evento.setDireccion(editText_direccion.getText().toString().trim());
-                    evento.setFecha(textView_fecha.getText().toString().trim());
+                    evento.setFecha(textView_hora.getText().toString().trim() +" " +textView_fecha.getText().toString().trim());
                     evento.setHora(textView_hora.getText().toString().trim());
                     evento.setCosto(editText_costo.getText().toString().trim());
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat formatoFecha = new SimpleDateFormat("HH:mm aa dd-MM-yyyy");
+                    Date fecha_evento = null;
+                    try {
+                         fecha_evento= formatoFecha.parse((textView_hora.getText().toString().trim() +" " +textView_fecha.getText().toString().trim()));
+                    } catch (ParseException exception) {
+                        exception.printStackTrace();
+                    }
+                    evento.setFechaHora(fecha_evento);
                     evento.setBoletos(editText_boletos.getText().toString().trim());
-                    evento.setBoletosVendidos(editText_boletos_vendidos.getText().toString().trim());
+                    if (editText_boletos.getText().equals("")){
+                        evento.setBoletosVendidos("0");
+                    }else{
+                        evento.setBoletosVendidos(editText_boletos_vendidos.getText().toString().trim());
+                    }
                     //TODO colocar r.string
                     evento.setEstado("Proximamente");
                     evento.setEdicion("Editado: " + PantallaPrincipal.nombreUsuario +" "+ fecha );

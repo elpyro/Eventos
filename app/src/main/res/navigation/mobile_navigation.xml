@@ -49,5 +49,10 @@
         android:name="com.example.eventos.evento.ListaEventos"
         android:label="@string/ListaDeEventos"
         tools:layout="@layout/fragment_lista_eventos" />
+    <fragment
+        android:id="@+id/detalleEvento"
+        android:name="com.example.eventos.DetalleEvento"
+        android:label="@string/DetatlleEvento"
+        tools:layout="@layout/fragment_detalle_evento" />
 
 </navigation>

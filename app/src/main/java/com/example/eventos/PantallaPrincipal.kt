@@ -111,7 +111,7 @@ class PantallaPrincipal : AppCompatActivity() {
                             }
                             return
                         } else {
-                            Toast.makeText(applicationContext, "no resgistrado", Toast.LENGTH_SHORT)
+                            Toast.makeText(applicationContext, "Usuario no registrado", Toast.LENGTH_SHORT)
                                 .show()
                             binding.appBarMain.toolbar.setTitle("Usuario no registrado")
                         }

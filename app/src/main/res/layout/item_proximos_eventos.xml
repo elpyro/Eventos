@@ -39,21 +39,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-
                 app:srcCompat="@drawable/icono_reloj"
                 tools:ignore="ContentDescription" />
 
-            <TextView
-                android:id="@+id/textView_cuenta_regresiva"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="5dp"
-                android:text="@string/Hora"
                 android:layout_weight="1"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/textView_cuenta_regresiva"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/Hora"
+                    android:layout_gravity="center|left"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textView_cuenta_regresiva_pequena"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:text="@string/Hora"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
 
             <LinearLayout

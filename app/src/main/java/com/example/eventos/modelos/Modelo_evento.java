@@ -1,13 +1,23 @@
 package com.example.eventos.modelos;
 
+import java.util.Date;
+
 public class Modelo_evento {
     String id, nombre, direccion, fecha,hora, estado, descripcion, tipo, boletos, lugar, ciudad, costo, boletosVendidos, edicion, urlImagen;
-
+    Date fechaHora;
     public Modelo_evento() {
     }
 
     public String getId() {
         return id;
+    }
+
+    public Date getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(Date fechaHora) {
+        this.fechaHora = fechaHora;
     }
 
     public void setId(String id) {

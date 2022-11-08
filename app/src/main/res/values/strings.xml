@@ -57,6 +57,8 @@
     <string name="banner">Banner</string>
     <string name="ProximosEventos">Proximos Eventos</string>
     <string name="Invitados">Invitados</string>
+    <string name="Terminado">Terminado</string>
+    <string name="DetatlleEvento">Detalle del evento</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>
