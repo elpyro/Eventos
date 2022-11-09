@@ -54,5 +54,20 @@
         android:name="com.example.eventos.DetalleEvento"
         android:label="@string/DetatlleEvento"
         tools:layout="@layout/fragment_detalle_evento" />
+    <fragment
+        android:id="@+id/crearInvitacion"
+        android:name="com.example.eventos.CrearInvitacion"
+        android:label="@string/CrearInvitacion"
+        tools:layout="@layout/fragment_crear_invitacion" />
+    <fragment
+        android:id="@+id/mostrarInvitacion"
+        android:name="com.example.eventos.MostrarInvitacion"
+        android:label="@string/Invitacion"
+        tools:layout="@layout/fragment_mostrar_invitacion" />
+    <fragment
+        android:id="@+id/habeasData"
+        android:name="com.example.eventos.HabeasData"
+        android:label="fragment_habeas_data"
+        tools:layout="@layout/fragment_habeas_data" />
 
 </navigation>

@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/button_crearInvitacion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -31,6 +31,7 @@
         app:cardCornerRadius="10dp">
 
         <Button
+            android:id="@+id/bottom_asistencia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -44,6 +45,7 @@
             android:theme="@style/Botones" />
 
         <Button
+            android:id="@+id/button_firmar"
             android:layout_width="144dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -51,7 +53,6 @@
             android:layout_marginRight="5dp"
             android:background="@drawable/boton"
             android:gravity="center"
-
             android:text="@string/Firmar"
             android:textColor="@color/black"
             android:theme="@style/Botones" />
@@ -78,7 +79,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="1dp"
@@ -96,7 +97,7 @@
                     android:layout_margin="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/texto_sencillo"
+                    android:theme="@style/texto_cursiva"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="@string/descripcion"></TextView>
@@ -117,7 +118,7 @@
                         android:id="@+id/textView_fecha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:theme="@style/texto_sencillo"
+                        android:theme="@style/texto_cursiva"
                         android:layout_marginStart="10dp"
                         android:text="@string/Fecha" />
                 </LinearLayout>
@@ -139,7 +140,7 @@
                         android:id="@+id/textView_boletos"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:theme="@style/texto_sencillo"
+                        android:theme="@style/texto_cursiva"
                         android:layout_marginStart="10dp"
                         android:text="@string/Boletos" />
 
@@ -154,7 +155,7 @@
                         android:id="@+id/textView_disponibles"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:theme="@style/texto_sencillo"
+                        android:theme="@style/texto_cursiva"
                         android:layout_marginStart="10dp"
                         android:text="@string/Boletos" />
                 </LinearLayout>
@@ -176,7 +177,7 @@
                         android:id="@+id/textView_costo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:theme="@style/texto_sencillo"
+                        android:theme="@style/texto_cursiva"
                         android:layout_marginStart="10dp"
                         android:text="@string/Costo" />
                 </LinearLayout>
@@ -198,7 +199,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:theme="@style/texto_sencillo"
+                        android:theme="@style/texto_cursiva"
                         android:text="@string/Ciudad" />
                 </LinearLayout>
                 <LinearLayout
@@ -219,7 +220,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:theme="@style/texto_sencillo"
+                        android:theme="@style/texto_cursiva"
                         android:text="@string/Direccion" />
                 </LinearLayout>
             </LinearLayout>

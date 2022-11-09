@@ -19,12 +19,15 @@
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/cardview_invitados.xml" value="0.28888888888888886" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/content_main.xml" value="0.28888888888888886" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_cerrar_sesion.xml" value="0.2" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_crear_invitacion.xml" value="0.28888888888888886" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_detalle_evento.xml" value="0.25" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_evento.xml" value="0.25" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_fragmento_usuario.xml" value="0.28888888888888886" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_habeas_data.xml" value="0.16979166666666667" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_home.xml" value="0.28888888888888886" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_lista__usuarios.xml" value="0.28888888888888886" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_lista_eventos.xml" value="0.16875" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_mostrar_invitacion.xml" value="0.33" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_usuarios.xml" value="0.28888888888888886" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/item_lista.xml" value="0.28888888888888886" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/item_proximos_eventos.xml" value="0.5" />

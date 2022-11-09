@@ -64,6 +64,18 @@
     <string name="Firmar">Firmar</string>
     <string name="Asistencia">Asistencia</string>
     <string name="Disponibles">Disponibles</string>
+    <string name="Correo">Correo</string>
+    <string name="YoInvito">Yo invito a:</string>
+    <string name="ManejoInformacion">Autorización para manejo de información</string>
+    <string name="HabeasData">Habeas data</string>
+    <string name="Invitar">Invitar</string>
+    <string name="Felicidades">¡Felicidades!</string>
+    <string name="Compartir">Compartir</string>
+    <string name="Ficha">Ficha</string>
+    <string name="InvitacionNoEncontrada">Invitacion no encontrada</string>
+    <string name="Estado">Estado</string>
+    <string name="tienesInvitacion">"tienes una invitación para:"</string>
+    <string name="Invitacion">Invitación</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

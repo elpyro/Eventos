@@ -6,10 +6,12 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +33,8 @@ public class DetalleEvento extends Fragment {
     private Context context;
     private View vista;
     String id_evento;
-
+    private Button button_firmar, bottom_asistencia,button_crearInvitacion;
+    private Modelo_evento evento;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,11 +45,18 @@ public class DetalleEvento extends Fragment {
 
         Bundle bundle = getArguments();
         if (getArguments() != null) {
-            Modelo_evento evento;
+
             evento =(Modelo_evento) bundle.getSerializable("evento");
             cargarEvento(evento.getId());
         }
+        button_crearInvitacion.setOnClickListener(view -> abrirCrearInvitacion());
         return vista;
+    }
+
+    private void abrirCrearInvitacion() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("evento",evento);
+        Navigation.findNavController(vista).navigate(R.id.crearInvitacion,bundle);
     }
 
     private void cargarEvento(String id) {
@@ -102,6 +112,9 @@ public class DetalleEvento extends Fragment {
         textView_direccion=vista.findViewById(R.id.textView_direccion);
         textView_boletos=vista.findViewById(R.id.textView_boletos);
         textView_disponibles=vista.findViewById(R.id.textView_disponibles);
+        button_firmar=vista.findViewById(R.id.button_firmar);
+        button_crearInvitacion=vista.findViewById(R.id.button_crearInvitacion);
+        bottom_asistencia=vista.findViewById(R.id.bottom_asistencia);
 
     }
 }
