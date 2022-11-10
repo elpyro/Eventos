@@ -10,16 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <TextView
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:theme="@style/texto_titulo"
-        android:text="@string/Felicidades" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_invitacion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -33,16 +27,32 @@
             android:layout_margin="20dp"
             android:orientation="vertical">
 
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:theme="@style/texto_titulo"
+                android:text="@string/Felicidades" />
 
             <TextView
-                android:id="@+id/textView_descripcion"
+                android:id="@+id/textView_nombreEnInvitacion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:text="@string/descripcion"
+                android:text="@string/Nombre"
 
+                android:theme="@style/texto_sub_titulo" />
+            <TextView
+                android:id="@+id/textView_descripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/EstasInvitado"
                 android:theme="@style/texto_sub_titulo" />
 
             <TextView
@@ -50,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:text="@string/Nombre"
@@ -99,6 +110,14 @@
                     android:theme="@style/texto_cursiva"
                     android:layout_marginStart="10dp"
                     android:text="@string/Costo" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_marginStart="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/texto_cursiva"
+                    android:text="@string/Valido" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -144,11 +163,13 @@
             </LinearLayout>
 
             <ImageView
+                android:layout_marginTop="10dp"
                 android:id="@+id/imageView_qr"
                 android:layout_width="match_parent"
                 android:layout_height="167dp"
                 android:src="@drawable/icono_qr"
                 android:contentDescription="@string/Imagen" />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
@@ -277,6 +298,16 @@
                     android:text="@string/Estado"
                     android:theme="@style/texto_plano" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/button_editar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:theme="@style/Botones"
+                android:textColor="@color/black"
+                android:text="@string/Editar" />
 
         </LinearLayout>
 

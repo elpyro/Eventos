@@ -33,7 +33,8 @@ public class DetalleEvento extends Fragment {
     private Context context;
     private View vista;
     String id_evento;
-    private Button button_firmar, bottom_asistencia,button_crearInvitacion;
+    private Button bottom_asistencia;
+    private Button button_crearInvitacion;
     private Modelo_evento evento;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -112,7 +113,7 @@ public class DetalleEvento extends Fragment {
         textView_direccion=vista.findViewById(R.id.textView_direccion);
         textView_boletos=vista.findViewById(R.id.textView_boletos);
         textView_disponibles=vista.findViewById(R.id.textView_disponibles);
-        button_firmar=vista.findViewById(R.id.button_firmar);
+        Button button_firmar = vista.findViewById(R.id.button_firmar);
         button_crearInvitacion=vista.findViewById(R.id.button_crearInvitacion);
         bottom_asistencia=vista.findViewById(R.id.bottom_asistencia);
 

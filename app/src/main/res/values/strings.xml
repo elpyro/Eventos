@@ -74,8 +74,11 @@
     <string name="Ficha">Ficha</string>
     <string name="InvitacionNoEncontrada">Invitacion no encontrada</string>
     <string name="Estado">Estado</string>
-    <string name="tienesInvitacion">"tienes una invitación para:"</string>
     <string name="Invitacion">Invitación</string>
+    <string name="Valido">Valido para 1 persona</string>
+    <string name="WhatsApp_no_instalado">WhatsApp no instalado</string>
+    <string name="Editar">Editar</string>
+    <string name="EstasInvitado">Tienes una invitación para:</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import com.example.eventos.modelos.Modelo_evento;
 import com.example.eventos.modelos.Modelo_invitacion;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.UUID;
 
 public class CrearInvitacion extends Fragment {
@@ -28,6 +26,7 @@ public class CrearInvitacion extends Fragment {
     private EditText editText_telefono, editText_correo, editText_nombre;
     private Modelo_evento evento;
     private CheckBox checkBox_habeasData;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,9 +37,7 @@ public class CrearInvitacion extends Fragment {
 
         Bundle bundle = getArguments();
         if (getArguments() != null) {
-
             evento =(Modelo_evento) bundle.getSerializable("evento");
-
         }
 
         button_invitar.setOnClickListener(view -> guardarInvitacion());
@@ -54,10 +51,10 @@ public class CrearInvitacion extends Fragment {
 
 
     private void guardarInvitacion() {
+
         if (!validarDatos()) return;
 
             button_invitar.setEnabled(false);
-
 
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
             Modelo_invitacion invitacion = new Modelo_invitacion();
@@ -72,12 +69,10 @@ public class CrearInvitacion extends Fragment {
             invitacion.setId_evento(evento.getId());
             invitacion.setNombre_evento(evento.getNombre());
             invitacion.setFecha(evento.getFecha());
-            invitacion.setCiudad(evento.getCosto());
-            invitacion.setCosto(evento.getCiudad());
+            invitacion.setCiudad(evento.getCiudad());
+            invitacion.setCosto(evento.getCosto());
             invitacion.setDireccion(evento.getDireccion());
             myRefe.child("Invitaciones").child(invitacion.getId()).setValue(invitacion);
-
-            Toast.makeText(context, "Inviacion creada", Toast.LENGTH_LONG).show();
 
             editText_nombre.setText("");
             editText_telefono.setText("");

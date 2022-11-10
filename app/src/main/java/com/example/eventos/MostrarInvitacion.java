@@ -1,11 +1,13 @@
 package com.example.eventos;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.eventos.modelos.Modelo_evento;
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import com.example.eventos.modelos.Modelo_invitacion;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,16 +29,28 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
+import com.google.zxing.BarcodeFormat;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+import java.io.File;
+import java.io.FileOutputStream;
 
 
 public class MostrarInvitacion extends Fragment {
     private Context context;
     private View vista;
-    private TextView textView_estado,textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado,
-            textView_direccion,textView_ciudad,textView_costo,textView_fecha,textView_descripcion,textView_nombre_evento;
-    private Button button_compartir;
+    private TextView textView_estado;
+    private TextView textView_direccion;
+    private TextView textView_ciudad;
+    private TextView textView_costo;
+    private TextView textView_fecha;
+    private TextView textView_nombre_evento;
+    @SuppressLint("StaticFieldLeak")
+    public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion;
+    private Button button_compartir, button_editar;
     private ImageView imageView_qr;
+    private CardView cardView_invitacion;
+    public String id_invitacion;
+    Modelo_invitacion invitacion;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,7 +59,99 @@ public class MostrarInvitacion extends Fragment {
         vista= inflater.inflate(R.layout.fragment_mostrar_invitacion, container, false);
         inicializar();
         recibirArgumentos();
+        crearCodigoQr();
+
+        button_compartir.setOnClickListener(view -> prepararInvitacion());
+        button_editar.setOnClickListener(view -> editarInvitado());
         return vista;
+    }
+
+    private void editarInvitado() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("invitacion",invitacion);
+        Navigation.findNavController(vista).navigate(R.id.editarInvitado,bundle);
+    }
+
+    private void prepararInvitacion() {
+        crearImagenInvitacion();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        compartirInvitacionWhatsapp();
+    }
+
+    private void compartirInvitacionWhatsapp() {
+
+            String smsNumber = "57"+ textView_telefono_invitado.getText().toString().trim();
+            smsNumber= smsNumber.replace(" ", "");
+            boolean isWhatsappInstalled = whatsappInstalledOrNot();
+            if (isWhatsappInstalled) {
+                try { Intent sendIntent = new Intent("android.intent.action.MAIN");
+                    sendIntent.setAction(Intent.ACTION_SEND); sendIntent.setType("text/application/pdf");
+
+                    File file = new File(Environment.getExternalStorageDirectory().toString() + "/invitacion.jpg");
+                    Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
+
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                    sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
+                    //phone number without "+" prefix sendIntent.setPackage("com.whatsapp");
+                    startActivity(sendIntent); } catch(Exception e)
+                { Toast.makeText(getContext(), "Error/n" + e, Toast.LENGTH_SHORT).show(); } } else
+            { Uri uri = Uri.parse("market://details?id=com.whatsapp");
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                Toast.makeText(getContext(), getString(R.string.WhatsApp_no_instalado), Toast.LENGTH_SHORT).show();
+                this.startActivity(goToMarket); }
+
+    }
+
+    private boolean whatsappInstalledOrNot(){
+        PackageManager pm = requireContext().getPackageManager();
+        boolean app_installed;
+        try {
+            pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES); app_installed = true;
+        } catch (PackageManager.NameNotFoundException e)
+        { app_installed = false; } return app_installed;
+    }
+
+
+    private void crearImagenInvitacion() {
+        try {
+            cardView_invitacion.setBackgroundResource(R.drawable.fondo_cardview);
+
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + "invitacion" + ".jpg";
+
+            // create bitmap screen capture
+            View v1 = requireActivity().getWindow().getDecorView().getRootView().findViewById(R.id.cardView_invitacion);
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+        } catch (Throwable e) {
+            Toast.makeText(context, "Error al crear la invitacion", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
+    private void crearCodigoQr() {
+        try {
+            BarcodeEncoder barcodeEncoder=new BarcodeEncoder();
+            Bitmap bitmap= barcodeEncoder.encodeBitmap(textView_nombre_evento.getText().toString(), BarcodeFormat.QR_CODE,1000, 1000);
+            imageView_qr.setImageBitmap(bitmap);
+
+        }catch (Exception ignored){}
+
     }
 
     private void inicializar() {
@@ -52,18 +163,18 @@ public class MostrarInvitacion extends Fragment {
         textView_costo=vista.findViewById(R.id.textView_costo);
         textView_ciudad=vista.findViewById(R.id.textView_ciudad);
         textView_fecha=vista.findViewById(R.id.textView_fecha);
-        textView_descripcion=vista.findViewById(R.id.textView_descripcion);
         button_compartir=vista.findViewById(R.id.button_compartir);
+        button_editar=vista.findViewById(R.id.button_editar);
         imageView_qr=vista.findViewById(R.id.imageView_qr);
         textView_nombre_evento=vista.findViewById(R.id.textView_nombre_evento);
-
+        cardView_invitacion=vista.findViewById(R.id.cardView_invitacion);
+        textView_nombreEnInvitacion=vista.findViewById(R.id.textView_nombreEnInvitacion);
     }
 
     private void recibirArgumentos() {
         if (getArguments() != null) {
 
-            String id_invitacion = getArguments().getString("id_invitacion");
-
+            id_invitacion = getArguments().getString("id_invitacion");
 
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
             Query dataQuery = myRefe.child("Invitaciones").orderByChild("id").equalTo(id_invitacion).limitToFirst(1);
@@ -72,10 +183,10 @@ public class MostrarInvitacion extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
-                            Modelo_invitacion invitacion = userSnapshot.getValue(Modelo_invitacion.class);
+                            invitacion = userSnapshot.getValue(Modelo_invitacion.class);
                             assert invitacion != null;
 
-                            textView_descripcion.setText(invitacion.getNombre()+" "+getString(R.string.tienesInvitacion));
+                            textView_nombreEnInvitacion.setText(invitacion.getNombre());
                             textView_nombre_evento.setText(invitacion.getNombre_evento());
                             textView_fecha.setText(invitacion.getFecha());
                             textView_costo.setText(invitacion.getCosto());
@@ -85,10 +196,7 @@ public class MostrarInvitacion extends Fragment {
                             textView_telefono_invitado.setText(invitacion.getTelefono());
                             textView_correo_invitado.setText(invitacion.getCorreo());
                             textView_estado.setText(invitacion.getEstado());
-
-
-
-
+                            
                         }
                     } else {
                         Toast.makeText(context,getString(R.string.InvitacionNoEncontrada) , Toast.LENGTH_SHORT).show();

@@ -46,7 +46,7 @@
 
         <Button
             android:id="@+id/button_firmar"
-            android:layout_width="144dp"
+            android:layout_width="125dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"

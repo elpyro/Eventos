@@ -69,5 +69,10 @@
         android:name="com.example.eventos.HabeasData"
         android:label="fragment_habeas_data"
         tools:layout="@layout/fragment_habeas_data" />
+    <fragment
+        android:id="@+id/editarInvitado"
+        android:name="com.example.eventos.EditarInvitado"
+        android:label="fragment_editar_invitado"
+        tools:layout="@layout/fragment_editar_invitado" />
 
 </navigation>
