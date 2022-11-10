@@ -185,13 +185,7 @@
         android:textColor="@color/black"
         android:text="@string/Compartir" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/Ficha"
-            android:theme="@style/texto_titulo" />
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -211,6 +205,14 @@
             android:layout_marginLeft="10dp"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="@string/Ficha"
+                android:theme="@style/texto_sub_titulo" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -298,7 +300,27 @@
                     android:text="@string/Estado"
                     android:theme="@style/texto_plano" />
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/InvitadoPor"
+                    android:theme="@style/texto_sub_titulo" />
+
+                <TextView
+                    android:id="@+id/textView_invitado_por"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/Estado"
+                    android:theme="@style/texto_plano" />
+            </LinearLayout>
             <Button
                 android:id="@+id/button_editar"
                 android:layout_width="wrap_content"

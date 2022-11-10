@@ -45,7 +45,7 @@ public class MostrarInvitacion extends Fragment {
     private TextView textView_fecha;
     private TextView textView_nombre_evento;
     @SuppressLint("StaticFieldLeak")
-    public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion;
+    public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion, textView_invitado_por;
     private Button button_compartir, button_editar;
     private ImageView imageView_qr;
     private CardView cardView_invitacion;
@@ -57,6 +57,7 @@ public class MostrarInvitacion extends Fragment {
                              Bundle savedInstanceState) {
         context=getContext();
         vista= inflater.inflate(R.layout.fragment_mostrar_invitacion, container, false);
+
         inicializar();
         recibirArgumentos();
         crearCodigoQr();
@@ -169,6 +170,7 @@ public class MostrarInvitacion extends Fragment {
         textView_nombre_evento=vista.findViewById(R.id.textView_nombre_evento);
         cardView_invitacion=vista.findViewById(R.id.cardView_invitacion);
         textView_nombreEnInvitacion=vista.findViewById(R.id.textView_nombreEnInvitacion);
+        textView_invitado_por=vista.findViewById(R.id.textView_invitado_por);
     }
 
     private void recibirArgumentos() {
@@ -196,6 +198,8 @@ public class MostrarInvitacion extends Fragment {
                             textView_telefono_invitado.setText(invitacion.getTelefono());
                             textView_correo_invitado.setText(invitacion.getCorreo());
                             textView_estado.setText(invitacion.getEstado());
+                            textView_invitado_por.setText(invitacion.getNombre_referido());
+
                             
                         }
                     } else {

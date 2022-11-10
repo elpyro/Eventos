@@ -71,6 +71,9 @@ public class Inicio extends Fragment {
                         }
                         lista.sort(Comparator.comparing(Modelo_evento::getFechaHora));
                         AdaptadorProximosEventos adapador= new AdaptadorProximosEventos(lista);
+                        recview.setAdapter(adapador);
+
+                        //Oyente de la seleccion
                         adapador.setOnClickListener(view -> {
                             Modelo_evento evento = lista.get(recview.getChildAdapterPosition(view));
                             Bundle bundle = new Bundle();
@@ -78,7 +81,8 @@ public class Inicio extends Fragment {
                             Navigation.findNavController(vista).navigate(R.id.detalleEvento,bundle);
 
                         });
-                        recview.setAdapter(adapador);
+
+
                     }
                 }
                 @Override

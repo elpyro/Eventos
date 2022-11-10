@@ -2,21 +2,27 @@ package com.example.eventos;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.eventos.modelos.Modelo_evento;
+import com.example.eventos.modelos.Modelo_invitacion;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,17 +31,29 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+
+import adaptadorRecyclerView.AdaptadorAsistencia;
+
 
 public class DetalleEvento extends Fragment {
 
     private ImageView imageView_imagen_evento;
-    private TextView textView_nombre_evento,textView_descripcion,textView_fecha, textView_boletos,textView_disponibles,textView_costo,textView_ciudad,textView_direccion;
+    private TextView textView_nombre_evento,textView_descripcion,textView_fecha, textView_boletos,textView_disponibles,textView_costo,textView_ciudad,textView_direccion,textView_cuenta;
     private Context context;
     private View vista;
     String id_evento;
     private Button bottom_asistencia;
     private Button button_crearInvitacion;
     private Modelo_evento evento;
+
+    private SearchView search_invitados;
+    private RecyclerView recview;
+    private  DatabaseReference referencia;
+    private ArrayList<Modelo_invitacion> listaInvitados;
+    private   ValueEventListener oyente;
+    AdaptadorAsistencia adaptador=null;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,12 +64,76 @@ public class DetalleEvento extends Fragment {
 
         Bundle bundle = getArguments();
         if (getArguments() != null) {
-
             evento =(Modelo_evento) bundle.getSerializable("evento");
             cargarEvento(evento.getId());
+            cargarAsistencia(evento.getId());
         }
         button_crearInvitacion.setOnClickListener(view -> abrirCrearInvitacion());
         return vista;
+    }
+
+    private void cargarAsistencia(String id) {
+        if(referencia!=null){
+            oyente= referencia.addValueEventListener(new ValueEventListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        int asistencia=0;
+                        int pendientes=0;
+                        listaInvitados=new ArrayList<>();
+                        for(DataSnapshot ds:snapshot.getChildren()){
+                            listaInvitados.add(ds.getValue(Modelo_invitacion.class));
+                            if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Asistio")){
+                                asistencia=asistencia+1;
+                            }else{
+                                pendientes=pendientes+1;
+                            }
+                        }
+                        textView_cuenta.setText(asistencia+" / "+ pendientes);
+                        listaInvitados.sort(Comparator.comparing(Modelo_invitacion::getEstado));
+                        adaptador= new AdaptadorAsistencia(listaInvitados);
+                        recview.setAdapter(adaptador);
+
+
+
+
+
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(context, "Error en conexion", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        if (search_invitados!=null){
+            search_invitados.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    filtro(newText);
+                    return true;
+                }
+            });
+        }
+    }
+
+    private void filtro(String valor) {
+        ArrayList<Modelo_invitacion> filtro =new ArrayList<>();
+        for(Modelo_invitacion objeto:listaInvitados){
+            if(objeto.getNombre().toLowerCase().contains(valor.toLowerCase())){
+                filtro.add(objeto);
+            }
+        }
+        adaptador = new AdaptadorAsistencia(filtro);
+        recview.setAdapter(adaptador);
+
+
     }
 
     private void abrirCrearInvitacion() {
@@ -116,6 +198,12 @@ public class DetalleEvento extends Fragment {
         Button button_firmar = vista.findViewById(R.id.button_firmar);
         button_crearInvitacion=vista.findViewById(R.id.button_crearInvitacion);
         bottom_asistencia=vista.findViewById(R.id.bottom_asistencia);
+        textView_cuenta=vista.findViewById(R.id.textView_cuenta);
 
+        recview= vista.findViewById(R.id.recyclerView_asistencia);
+        recview.setHasFixedSize(true);
+        recview.setLayoutManager(new LinearLayoutManager(context));
+        search_invitados =vista.findViewById(R.id.search_invitados);
+        referencia= FirebaseDatabase.getInstance().getReference().child("Invitaciones");
     }
 }
