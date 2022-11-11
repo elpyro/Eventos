@@ -46,6 +46,7 @@ public class DetalleEvento extends Fragment {
     String id_evento;
     private Button bottom_asistencia;
     private Button button_crearInvitacion;
+    private Button button_firma;
     private Modelo_evento evento;
 
     private SearchView search_invitados;
@@ -61,16 +62,28 @@ public class DetalleEvento extends Fragment {
         vista= inflater.inflate(R.layout.fragment_detalle_evento, container, false);
 
         incicializando();
+        recibirArgumentos();
 
+        button_crearInvitacion.setOnClickListener(view -> abrirCrearInvitacion());
+        bottom_asistencia.setOnClickListener(view -> abrirConfirmarAsistencia());
+        button_firma.setOnClickListener(view -> abrirConfirmarFirma());
+
+        return vista;
+    }
+
+    private void abrirConfirmarFirma() {
+        Bundle bundle = new Bundle();
+        bundle.putString("evento",evento.getId());
+        Navigation.findNavController(vista).navigate(R.id.confirmarFirma,bundle);
+    }
+
+    private void recibirArgumentos() {
         Bundle bundle = getArguments();
         if (getArguments() != null) {
             evento =(Modelo_evento) bundle.getSerializable("evento");
             cargarEvento(evento.getId());
             cargarAsistencia(evento.getId());
         }
-        button_crearInvitacion.setOnClickListener(view -> abrirCrearInvitacion());
-        bottom_asistencia.setOnClickListener(view -> abrirConfirmarAsistencia());
-        return vista;
     }
 
     private void abrirConfirmarAsistencia() {
@@ -89,20 +102,18 @@ public class DetalleEvento extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()){
                         int asistencia=0;
-                        int pendientes=0;
+                        int asistenciaTotal=0;
                         listaInvitados=new ArrayList<>();
                         for(DataSnapshot ds:snapshot.getChildren()){
                             if (ds.getValue(Modelo_invitacion.class).getId_usuario_referido().equals(PantallaPrincipal.idUsuario)){
                                 listaInvitados.add(ds.getValue(Modelo_invitacion.class));
-                                if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Asistido")){
-                                    asistencia=asistencia+1;
-                                }else{
-                                    pendientes=pendientes+1;
-                                }
+                                if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Asistido"))asistencia=asistencia+1;
+                                asistenciaTotal=asistenciaTotal+1;
+
                             }
 
                         }
-                        textView_cuenta.setText(asistencia+" / "+ pendientes);
+                        textView_cuenta.setText(asistencia+" / "+ asistenciaTotal);
                         listaInvitados.sort(Comparator.comparing(Modelo_invitacion::getEstado));
                         adaptador= new AdaptadorAsistencia(listaInvitados);
                         recview.setAdapter(adaptador);
@@ -203,7 +214,7 @@ public class DetalleEvento extends Fragment {
         textView_direccion=vista.findViewById(R.id.textView_direccion);
         textView_boletos=vista.findViewById(R.id.textView_boletos);
         textView_disponibles=vista.findViewById(R.id.textView_disponibles);
-        Button button_firmar = vista.findViewById(R.id.button_firmar);
+        button_firma = vista.findViewById(R.id.button_firmar);
         button_crearInvitacion=vista.findViewById(R.id.button_crearInvitacion);
         bottom_asistencia=vista.findViewById(R.id.bottom_asistencia);
         textView_cuenta=vista.findViewById(R.id.textView_cuenta);

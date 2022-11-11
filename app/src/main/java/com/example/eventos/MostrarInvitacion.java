@@ -45,7 +45,7 @@ public class MostrarInvitacion extends Fragment {
     private TextView textView_fecha;
     private TextView textView_nombre_evento;
     @SuppressLint("StaticFieldLeak")
-    public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion, textView_invitado_por;
+    public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion, textView_invitado_por, textView_apline, textView_validus_referido, textView_telefono_referido;
     private Button button_compartir, button_editar;
     private ImageView imageView_qr;
     private CardView cardView_invitacion;
@@ -164,6 +164,9 @@ public class MostrarInvitacion extends Fragment {
         textView_costo=vista.findViewById(R.id.textView_costo);
         textView_ciudad=vista.findViewById(R.id.textView_ciudad);
         textView_fecha=vista.findViewById(R.id.textView_fecha);
+        textView_telefono_referido=vista.findViewById(R.id.textView_telefono_referido);
+        textView_apline=vista.findViewById(R.id.textView_apline);
+        textView_validus_referido=vista.findViewById(R.id.textView_validus);
         button_compartir=vista.findViewById(R.id.button_compartir);
         button_editar=vista.findViewById(R.id.button_editar);
         imageView_qr=vista.findViewById(R.id.imageView_qr);
@@ -199,7 +202,9 @@ public class MostrarInvitacion extends Fragment {
                             textView_correo_invitado.setText(invitacion.getCorreo());
                             textView_estado.setText(invitacion.getEstado());
                             textView_invitado_por.setText(invitacion.getNombre_referido());
-
+                            textView_telefono_referido.setText(invitacion.getTelefono_referido());
+                            textView_validus_referido.setText(invitacion.getUsuario_validus_referido());
+                            textView_apline.setText(invitacion.getApline_referido());
                             
                         }
                     } else {

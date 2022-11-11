@@ -25,10 +25,12 @@
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/content_main.xml" value="0.28888888888888886" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_cerrar_sesion.xml" value="0.2" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_confirmar_asistencia.xml" value="0.28888888888888886" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_confirmar_firma.xml" value="0.16875" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_crear_invitacion.xml" value="0.28888888888888886" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_detalle_evento.xml" value="0.25" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_editar_invitado.xml" value="0.28888888888888886" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_evento.xml" value="0.25" />
+        <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_firmar_cliente.xml" value="0.28888888888888886" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_fragmento_usuario.xml" value="0.28888888888888886" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_habeas_data.xml" value="0.16979166666666667" />
         <entry key="..\:/Users/eloy_/AndroidStudioProjects/Eventos/app/src/main/res/layout/fragment_home.xml" value="0.28888888888888886" />

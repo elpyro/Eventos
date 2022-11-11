@@ -27,6 +27,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 import adaptadorRecyclerView.AdaptadorConfirmarAsistencia;
@@ -51,11 +52,15 @@ public class ConfirmarAsistencia extends Fragment {
         context=getContext();
         vista= inflater.inflate(R.layout.fragment_confirmar_asistencia, container, false);
         inicializando();
+        recibirArgumentos();
+        return vista;
+    }
+
+    private void recibirArgumentos() {
         Bundle bundle = getArguments();
         if (getArguments() != null) {
             id_evento= bundle.getString("evento");
         }
-        return vista;
     }
 
     @Override
@@ -87,18 +92,17 @@ public class ConfirmarAsistencia extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()){
                         int asistencia=0;
-                        int pendientes=0;
+                        int asistenciaTotal=0;
                         listaInvitados=new ArrayList<>();
                         for(DataSnapshot ds:snapshot.getChildren()){
                             listaInvitados.add(ds.getValue(Modelo_invitacion.class));
-                            if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Asistido")){
-                                asistencia=asistencia+1;
-                            }else{
-                                pendientes=pendientes+1;
-                            }
+                            if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Asistido")||ds.getValue(Modelo_invitacion.class).getEstado().equals("Firmado")) asistencia=asistencia+1;
+                            asistenciaTotal=asistenciaTotal+1;
+
                         }
-                        textView_cuenta.setText(asistencia+" / "+ pendientes);
+                        textView_cuenta.setText(asistencia+" / "+ asistenciaTotal);
                         listaInvitados.sort(Comparator.comparing(Modelo_invitacion::getEstado));
+                        Collections.reverse(listaInvitados);
                         adaptador= new AdaptadorConfirmarAsistencia(listaInvitados);
                         recview.setAdapter(adaptador);
 

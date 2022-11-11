@@ -3,9 +3,33 @@ package com.example.eventos.modelos;
 import java.io.Serializable;
 
 public class Modelo_invitacion implements Serializable {
-    String id, id_evento,id_usuario_referido,nombre_evento, nombre_referido, nombre, telefono, correo, estado, nuevo_usuario_validus, nuevo_codigo_validus, fecha, costo, ciudad, direccion;
+    String id, id_evento,id_usuario_referido,nombre_evento, nombre_referido, nombre, telefono, correo, estado, apline_referido, usuario_validus_referido, telefono_referido, nuevo_usuario_validus, nuevo_codigo_validus, fecha, costo, ciudad, direccion;
 
     public Modelo_invitacion() {
+    }
+
+    public String getTelefono_referido() {
+        return telefono_referido;
+    }
+
+    public void setTelefono_referido(String telefono_referido) {
+        this.telefono_referido = telefono_referido;
+    }
+
+    public String getApline_referido() {
+        return apline_referido;
+    }
+
+    public void setApline_referido(String apline_referido) {
+        this.apline_referido = apline_referido;
+    }
+
+    public String getUsuario_validus_referido() {
+        return usuario_validus_referido;
+    }
+
+    public void setUsuario_validus_referido(String usuario_validus_referido) {
+        this.usuario_validus_referido = usuario_validus_referido;
     }
 
     public String getId() {

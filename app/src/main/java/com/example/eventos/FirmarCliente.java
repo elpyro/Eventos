@@ -1,0 +1,103 @@
+package com.example.eventos;
+
+import android.content.Context;
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.eventos.modelos.Modelo_invitacion;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+public class FirmarCliente extends Fragment {
+
+    private Context context;
+    private View vista;
+    private Modelo_invitacion invitacion;
+    private Button button_firmar;
+    private TextView textView_titulo,textView_validus_referido,textView_apline,textView_telefono_referido,textView_invitado_por,edittext_clave_validus,editText_usuarioValidus,editText_correo,editText_telefono,editText_nombre;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        context=getContext();
+        vista= inflater.inflate(R.layout.fragment_firmar_cliente, container, false);
+        inicializando();
+        recibirArgumentos();
+        button_firmar.setOnClickListener(view -> firmarInvitado());
+        return vista;
+    }
+
+    private void firmarInvitado() {
+        if (!validarDatos()) return;
+        DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
+        invitacion.setNombre(editText_nombre.getText().toString().trim());
+        invitacion.setTelefono(editText_telefono.getText().toString().trim());
+        invitacion.setCorreo(editText_correo.getText().toString().trim());
+        invitacion.setNuevo_usuario_validus(editText_usuarioValidus.getText().toString().trim());
+        invitacion.setNuevo_codigo_validus(edittext_clave_validus.getText().toString().trim());
+        invitacion.setEstado("Firmado");
+        myRefe.child("Invitaciones").child(invitacion.getId()).setValue(invitacion);
+
+        Toast.makeText(context, "Usuario firmado", Toast.LENGTH_SHORT).show();
+
+        Navigation.findNavController(vista).navigateUp();
+
+
+    }
+
+    private boolean validarDatos() {
+
+        boolean datosAceptados=true;
+        if (editText_nombre.getText().toString().length()<3){
+            editText_nombre.setError("Requerido");
+            datosAceptados=false;
+        }
+        if (editText_telefono.getText().toString().length()<3){
+            editText_telefono.setError("Requerido");
+            datosAceptados=false;
+        }
+
+        return datosAceptados;
+    }
+
+    private void inicializando() {
+        button_firmar=vista.findViewById(R.id.button_firmar);
+        textView_validus_referido =vista.findViewById(R.id.textView_validus);
+        textView_apline=vista.findViewById(R.id.textView_apline);
+        textView_telefono_referido=vista.findViewById(R.id.textView_telefono_referido);
+        textView_invitado_por=vista.findViewById(R.id.textView_invitado_por);
+        edittext_clave_validus=vista.findViewById(R.id.edittext_clave_validus);
+        editText_usuarioValidus=vista.findViewById(R.id.editText_usuarioValidus);
+        editText_correo=vista.findViewById(R.id.editText_correo);
+        editText_telefono=vista.findViewById(R.id.editText_telefono);
+        editText_nombre=vista.findViewById(R.id.editText_nombre);
+        textView_titulo=vista.findViewById(R.id.textView_titulo);
+    }
+
+    private void recibirArgumentos() {
+        Bundle bundle = getArguments();
+        if (getArguments() != null) {
+            invitacion =(Modelo_invitacion) bundle.getSerializable("invitacion");
+
+            editText_nombre.setText(invitacion.getNombre());
+            editText_telefono.setText(invitacion.getTelefono());
+            editText_correo.setText(invitacion.getCorreo());
+            editText_usuarioValidus.setText(invitacion.getNuevo_usuario_validus());
+            edittext_clave_validus.setText(invitacion.getNuevo_codigo_validus());
+            textView_invitado_por.setText(invitacion.getNombre_referido());
+            textView_telefono_referido.setText(invitacion.getTelefono_referido());
+            textView_apline.setText(invitacion.getApline_referido());
+            textView_validus_referido.setText(invitacion.getUsuario_validus_referido());
+            if(invitacion.getEstado().equals("Firmado"))textView_titulo.setText("Invitado firmado");
+
+        }
+    }
+}

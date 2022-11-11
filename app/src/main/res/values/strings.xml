@@ -83,6 +83,10 @@
     <string name="cuenta">Cuenta</string>
     <string name="Invitado">Invitado</string>
     <string name="EscanearQr">Escanear QR</string>
+    <string name="ConfirmarFirma">Confirmar firma</string>
+    <string name="FirmarCliente">Firmar cliente</string>
+    <string name="ClaveValidus">Clave Validus</string>
+    <string name="DatosDeCuenta">Datos para VALIDUS</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

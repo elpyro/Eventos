@@ -36,6 +36,10 @@ class PantallaPrincipal : AppCompatActivity() {
         lateinit var nombreUsuario: String
         lateinit var perfilUsaurio: String
         lateinit var idUsuario: String
+        lateinit var apline_usuario : String
+        lateinit var usuario_validus_referido: String
+        lateinit var usuario_telefono: String
+
     }
 
     //https://www.youtube.com/watch?v=IwdjCApjIzA&t=442s autenticacion
@@ -106,7 +110,9 @@ class PantallaPrincipal : AppCompatActivity() {
                                 perfilUsaurio = usuario?.perfil.toString()
                                 idUsuario = usuario?.id.toString()
                                 binding.appBarMain.toolbar.setTitle("Hola $nombreUsuario")
-
+                                usuario_validus_referido=usuario?.validusUsuario.toString()
+                                apline_usuario=usuario?.apline.toString();
+                                usuario_telefono= usuario?.telefono.toString()
 
                             }
                             return

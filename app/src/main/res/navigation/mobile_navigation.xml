@@ -79,5 +79,15 @@
         android:name="com.example.eventos.ConfirmarAsistencia"
         android:label="@string/ConfirmarAsitencia"
         tools:layout="@layout/fragment_confirmar_asistencia" />
+    <fragment
+        android:id="@+id/confirmarFirma"
+        android:name="com.example.eventos.ConfirmarFirma"
+        android:label="@string/ConfirmarFirma"
+        tools:layout="@layout/fragment_confirmar_firma" />
+    <fragment
+        android:id="@+id/firmarCliente"
+        android:name="com.example.eventos.FirmarCliente"
+        android:label="@string/FirmarCliente"
+        tools:layout="@layout/fragment_firmar_cliente" />
 
 </navigation>
