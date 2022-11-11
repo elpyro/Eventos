@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linerarLayout_tarjeta"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
@@ -32,16 +33,14 @@
         android:visibility="gone"
         android:theme="@style/texto_sub_titulo" />
 
-    <Switch
-        android:id="@+id/switch_asistencia"
-        android:layout_marginTop="10dp"
-        android:enabled="false"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
+
+    <ImageView
+        android:id="@+id/imageView_cheked"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        />
-
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        app:srcCompat="@drawable/icono_cheked"></ImageView>
 </LinearLayout>

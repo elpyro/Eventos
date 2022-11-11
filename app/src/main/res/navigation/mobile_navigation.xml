@@ -72,7 +72,12 @@
     <fragment
         android:id="@+id/editarInvitado"
         android:name="com.example.eventos.EditarInvitado"
-        android:label="fragment_editar_invitado"
+        android:label="@string/Invitado"
         tools:layout="@layout/fragment_editar_invitado" />
+    <fragment
+        android:id="@+id/confirmarAsistencia"
+        android:name="com.example.eventos.ConfirmarAsistencia"
+        android:label="@string/ConfirmarAsitencia"
+        tools:layout="@layout/fragment_confirmar_asistencia" />
 
 </navigation>

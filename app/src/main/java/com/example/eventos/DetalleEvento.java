@@ -50,7 +50,7 @@ public class DetalleEvento extends Fragment {
 
     private SearchView search_invitados;
     private RecyclerView recview;
-    private  DatabaseReference referencia;
+    private Query referencia;
     private ArrayList<Modelo_invitacion> listaInvitados;
     private   ValueEventListener oyente;
     AdaptadorAsistencia adaptador=null;
@@ -69,10 +69,19 @@ public class DetalleEvento extends Fragment {
             cargarAsistencia(evento.getId());
         }
         button_crearInvitacion.setOnClickListener(view -> abrirCrearInvitacion());
+        bottom_asistencia.setOnClickListener(view -> abrirConfirmarAsistencia());
         return vista;
     }
 
-    private void cargarAsistencia(String id) {
+    private void abrirConfirmarAsistencia() {
+        Bundle bundle = new Bundle();
+        bundle.putString("evento",evento.getId());
+        Navigation.findNavController(vista).navigate(R.id.confirmarAsistencia,bundle);
+    }
+
+    private void cargarAsistencia(String id_evento) {
+        referencia= FirebaseDatabase.getInstance().getReference().child("Invitaciones").orderByChild("id_evento").equalTo(id_evento);
+
         if(referencia!=null){
             oyente= referencia.addValueEventListener(new ValueEventListener() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -83,21 +92,20 @@ public class DetalleEvento extends Fragment {
                         int pendientes=0;
                         listaInvitados=new ArrayList<>();
                         for(DataSnapshot ds:snapshot.getChildren()){
-                            listaInvitados.add(ds.getValue(Modelo_invitacion.class));
-                            if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Asistio")){
-                                asistencia=asistencia+1;
-                            }else{
-                                pendientes=pendientes+1;
+                            if (ds.getValue(Modelo_invitacion.class).getId_usuario_referido().equals(PantallaPrincipal.idUsuario)){
+                                listaInvitados.add(ds.getValue(Modelo_invitacion.class));
+                                if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Asistido")){
+                                    asistencia=asistencia+1;
+                                }else{
+                                    pendientes=pendientes+1;
+                                }
                             }
+
                         }
                         textView_cuenta.setText(asistencia+" / "+ pendientes);
                         listaInvitados.sort(Comparator.comparing(Modelo_invitacion::getEstado));
                         adaptador= new AdaptadorAsistencia(listaInvitados);
                         recview.setAdapter(adaptador);
-
-
-
-
 
                     }
                 }
@@ -166,12 +174,12 @@ public class DetalleEvento extends Fragment {
                         int boletosDisponibles= Integer.parseInt(evento.getBoletos())-Integer.parseInt(evento.getBoletosVendidos());
                         textView_disponibles.setText(boletosDisponibles+"");
 
-
-
                         try {
                             Picasso.with(context).load(evento.getUrlImagen()).into(imageView_imagen_evento);
                         }catch (Exception ignored){
                         }
+
+
                     }
                 } else {
                     Toast.makeText(context,getString(R.string.EventoInexistente) , Toast.LENGTH_SHORT).show();
@@ -204,6 +212,6 @@ public class DetalleEvento extends Fragment {
         recview.setHasFixedSize(true);
         recview.setLayoutManager(new LinearLayoutManager(context));
         search_invitados =vista.findViewById(R.id.search_invitados);
-        referencia= FirebaseDatabase.getInstance().getReference().child("Invitaciones");
+
     }
 }

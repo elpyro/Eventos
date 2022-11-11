@@ -60,6 +60,7 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
         holder.textView_invitados.setText(list.get(position).getBoletosVendidos());
         holder.textView_boletos.setText(list.get(position).getBoletos());
         holder.textView_ciudad.setText(list.get(position).getCiudad());
+        holder.textView_cuenta_regresiva.setTextColor(Color.parseColor("#FFFFFF"));
         crearCuentaRegresiva(position, holder);
 
 
@@ -67,17 +68,9 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
             Picasso.with(context).load(list.get(position).getUrlImagen()).into(holder.imageView_evento);
         }catch (Exception ignored){}
 
-//        holder.linerarLayout_tarjeta.setOnLongClickListener(view -> seleccion(position));
+
 
     }
-//
-//    private boolean seleccion(int position) {
-//        Modelo_evento eventoSeleccionado= list.get(position);
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable("id_evento", (Serializable) eventoSeleccionado);
-//        Navigation.findNavController().navigate(R.id.evento,bundle);
-//        return false;
-//    }
 
     private String  crearCuentaRegresiva(int position, MyViewHolder holder) {
         String cuenta="";

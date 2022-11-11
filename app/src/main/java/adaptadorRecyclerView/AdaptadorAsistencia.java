@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -42,7 +43,10 @@ public class AdaptadorAsistencia extends RecyclerView.Adapter<AdaptadorAsistenci
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.textView_nombre.setText(list.get(position).getNombre());
         holder.textView_id_invisible.setText(list.get(position).getId());
-        if (list.get(position).getEstado().equals("Asistio"))holder.switch_asitencia.setChecked(true);
+
+
+        holder.imageView_cheked.setVisibility(View.GONE);
+        if (list.get(position).getEstado().equals("Asistido"))holder.imageView_cheked.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -54,7 +58,7 @@ public class AdaptadorAsistencia extends RecyclerView.Adapter<AdaptadorAsistenci
     static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textView_nombre, textView_id_invisible;
         @SuppressLint("UseSwitchCompatOrMaterialCode")
-        Switch switch_asitencia;
+        ImageView imageView_cheked;
         LinearLayout linerarLayout_tarjeta;
        
 
@@ -63,7 +67,7 @@ public class AdaptadorAsistencia extends RecyclerView.Adapter<AdaptadorAsistenci
 
             textView_nombre = itemView.findViewById(R.id.textView_nombre);
             textView_id_invisible=itemView.findViewById(R.id.textView_invisible);
-            switch_asitencia = itemView.findViewById(R.id.switch_asistencia);
+            imageView_cheked = itemView.findViewById(R.id.imageView_cheked);
             linerarLayout_tarjeta=itemView.findViewById(R.id.linerarLayout_tarjeta);
 
             linerarLayout_tarjeta.setOnClickListener(view -> {

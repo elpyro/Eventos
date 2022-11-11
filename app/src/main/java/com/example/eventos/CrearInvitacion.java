@@ -3,6 +3,7 @@ package com.example.eventos;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
@@ -15,8 +16,14 @@ import android.widget.Toast;
 
 import com.example.eventos.modelos.Modelo_evento;
 import com.example.eventos.modelos.Modelo_invitacion;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
 import java.util.UUID;
 
 public class CrearInvitacion extends Fragment {
@@ -82,8 +89,39 @@ public class CrearInvitacion extends Fragment {
             bundle.putString("id_invitacion",id_invitacion);
             Navigation.findNavController(vista).navigate(R.id.mostrarInvitacion,bundle);
 
+            restarBoletoEvento(evento.getId());
 
 
+    }
+
+    private void restarBoletoEvento(String id_evento) {
+        DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
+        Query dataQuery = myRefe.child("Eventos").orderByChild("id").equalTo(id_evento).limitToFirst(1);
+        dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        Modelo_evento evento = userSnapshot.getValue(Modelo_evento.class);
+                        assert evento != null;
+
+                        int boletos_vendidos = Integer.parseInt(evento.getBoletosVendidos());
+                        boletos_vendidos = boletos_vendidos + 1;
+                        evento.setBoletosVendidos(boletos_vendidos + "");
+
+                        DatabaseReference GuardarReferencia = FirebaseDatabase.getInstance().getReference();
+                        GuardarReferencia.child("Eventos").child(evento.getId()).setValue(evento);
+                    }
+                } else {
+                    Toast.makeText(context, getString(R.string.EventoInexistente), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, getString(R.string.problemasConexion), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

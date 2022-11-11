@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 import adaptadorRecyclerView.AdaptadorEventos;
@@ -71,6 +72,7 @@ public class ListaEventos extends Fragment {
                             lista.add(ds.getValue(Modelo_evento.class));
                         }
                         lista.sort(Comparator.comparing(Modelo_evento::getFechaHora));
+                        Collections.reverse(lista);
                         AdaptadorEventos adapador= new AdaptadorEventos(lista);
                         recview.setAdapter(adapador);
                     }
