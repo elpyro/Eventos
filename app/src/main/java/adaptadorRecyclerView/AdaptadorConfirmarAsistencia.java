@@ -38,7 +38,7 @@ public class AdaptadorConfirmarAsistencia extends RecyclerView.Adapter<Adaptador
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         context = parent.getContext();
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_confirmar_asistencia, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_asistencia, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -47,32 +47,30 @@ public class AdaptadorConfirmarAsistencia extends RecyclerView.Adapter<Adaptador
         holder.textView_nombre.setText(list.get(position).getNombre());
         holder.textView_id_invisible.setText(list.get(position).getId());
 
-        holder.switch_confirmar.setEnabled(true);
-        holder.switch_confirmar.setChecked(false);
-        if (list.get(position).getEstado().equals("Asistido")) holder.switch_confirmar.setChecked(true);
-        if (list.get(position).getEstado().equals("Firmado")) {
-            holder.switch_confirmar.setChecked(true);
-            holder.switch_confirmar.setEnabled(false);
-        }
-        holder.switch_confirmar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Modelo_invitacion cambioEstadoInvitacion= list.get(holder.getAdapterPosition());
-                if (!list.get(position).getEstado().equals("Firmado")){
-                    if (holder.switch_confirmar.isChecked()){
-                        cambioEstadoInvitacion.setEstado("Asistido");
-                    }else{
-                        cambioEstadoInvitacion.setEstado("Pendiente");
-                    }
-                }else {
-                    Toast.makeText(context, "El clientte ya ha firmado", Toast.LENGTH_SHORT).show();
-                }
+        holder.imageView_cheked_asistido.setVisibility(View.GONE);
+        holder.imageView_cheked_firmado.setVisibility(View.GONE);
+        if (list.get(position).getEstado().equals("Asistido")) holder.imageView_cheked_asistido.setVisibility(View.VISIBLE);
+        if (list.get(position).getEstado().equals("Firmado")) holder.imageView_cheked_firmado.setVisibility(View.VISIBLE);
 
-
-                DatabaseReference CambiarEstado = FirebaseDatabase.getInstance().getReference();
-                CambiarEstado.child("Invitaciones").child(list.get(holder.getAdapterPosition()).getId()).setValue(cambioEstadoInvitacion);
-            }
-        });
+//        holder.switch_confirmar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Modelo_invitacion cambioEstadoInvitacion= list.get(holder.getAdapterPosition());
+//                if (!list.get(position).getEstado().equals("Firmado")){
+//                    if (holder.switch_confirmar.isChecked()){
+//                        cambioEstadoInvitacion.setEstado("Asistido");
+//                    }else{
+//                        cambioEstadoInvitacion.setEstado("Pendiente");
+//                    }
+//                }else {
+//                    Toast.makeText(context, "El clientte ya ha firmado", Toast.LENGTH_SHORT).show();
+//                }
+//
+//
+//                DatabaseReference CambiarEstado = FirebaseDatabase.getInstance().getReference();
+//                CambiarEstado.child("Invitaciones").child(list.get(holder.getAdapterPosition()).getId()).setValue(cambioEstadoInvitacion);
+//            }
+//        });
     }
 
     @Override
@@ -83,9 +81,9 @@ public class AdaptadorConfirmarAsistencia extends RecyclerView.Adapter<Adaptador
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView textView_nombre, textView_id_invisible;
-        private Switch switch_confirmar;
 
-        LinearLayout linerarLayout_tarjeta;
+        private ImageView imageView_cheked_firmado, imageView_cheked_asistido;
+        private LinearLayout linerarLayout_tarjeta;
        
 
         public MyViewHolder(@NonNull View itemView) {
@@ -93,10 +91,11 @@ public class AdaptadorConfirmarAsistencia extends RecyclerView.Adapter<Adaptador
 
             textView_nombre = itemView.findViewById(R.id.textView_nombre);
             textView_id_invisible=itemView.findViewById(R.id.textView_invisible);
-            switch_confirmar = itemView.findViewById(R.id.switch_confirmar);
+            imageView_cheked_firmado=itemView.findViewById(R.id.imageView_cheked_firmado);
+            imageView_cheked_asistido=itemView.findViewById(R.id.imageView_cheked);
             linerarLayout_tarjeta=itemView.findViewById(R.id.linerarLayout_tarjeta);
 
-            textView_nombre.setOnClickListener(view -> {
+            linerarLayout_tarjeta.setOnClickListener(view -> {
                 Bundle bundle = new Bundle();
                 bundle.putString("id_invitacion", textView_id_invisible.getText().toString().trim());
                 Navigation.findNavController(view).navigate(R.id.mostrarInvitacion,bundle);

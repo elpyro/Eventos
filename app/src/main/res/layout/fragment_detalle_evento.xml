@@ -250,13 +250,12 @@
                     android:id="@+id/textView_cuenta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:layout_margin="10dp"
                     android:layout_gravity="center"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
                     android:theme="@style/texto_sub_titulo"
-                    android:text="@string/cuenta" />
+                    />
             </SearchView>
 
 

@@ -87,6 +87,7 @@
     <string name="FirmarCliente">Firmar cliente</string>
     <string name="ClaveValidus">Clave Validus</string>
     <string name="DatosDeCuenta">Datos para VALIDUS</string>
+    <string name="Firmados">Firmados</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

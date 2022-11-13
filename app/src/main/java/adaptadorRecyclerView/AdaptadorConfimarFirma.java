@@ -45,7 +45,8 @@ public class AdaptadorConfimarFirma extends RecyclerView.Adapter<AdaptadorConfim
 
 
         holder.imageView_cheked.setVisibility(View.GONE);
-        if (list.get(position).getEstado().equals("Firmado"))holder.imageView_cheked.setVisibility(View.VISIBLE);
+        holder.imageView_cheked_firmado.setVisibility(View.GONE);
+        if (list.get(position).getEstado().equals("Firmado"))holder.imageView_cheked_firmado.setVisibility(View.VISIBLE);
 
         holder.linerarLayout_tarjeta.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
@@ -65,7 +66,7 @@ public class AdaptadorConfimarFirma extends RecyclerView.Adapter<AdaptadorConfim
     static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textView_nombre, textView_id_invisible;
         @SuppressLint("UseSwitchCompatOrMaterialCode")
-        ImageView imageView_cheked;
+        ImageView imageView_cheked, imageView_cheked_firmado;
         LinearLayout linerarLayout_tarjeta;
        
 
@@ -75,6 +76,7 @@ public class AdaptadorConfimarFirma extends RecyclerView.Adapter<AdaptadorConfim
             textView_nombre = itemView.findViewById(R.id.textView_nombre);
             textView_id_invisible=itemView.findViewById(R.id.textView_invisible);
             imageView_cheked = itemView.findViewById(R.id.imageView_cheked);
+            imageView_cheked_firmado=itemView.findViewById(R.id.imageView_cheked_firmado);
             linerarLayout_tarjeta=itemView.findViewById(R.id.linerarLayout_tarjeta);
 
 

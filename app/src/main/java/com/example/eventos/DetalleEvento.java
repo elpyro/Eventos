@@ -108,6 +108,7 @@ public class DetalleEvento extends Fragment {
                             if (ds.getValue(Modelo_invitacion.class).getId_usuario_referido().equals(PantallaPrincipal.idUsuario)){
                                 listaInvitados.add(ds.getValue(Modelo_invitacion.class));
                                 if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Asistido"))asistencia=asistencia+1;
+                                if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Firmado"))asistencia=asistencia+1;
                                 asistenciaTotal=asistenciaTotal+1;
 
                             }

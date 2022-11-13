@@ -42,5 +42,14 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="10dp"
+        app:srcCompat="@drawable/icono_checke_asistido"></ImageView>
+    <ImageView
+        android:id="@+id/imageView_cheked_firmado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
         app:srcCompat="@drawable/icono_cheked"></ImageView>
 </LinearLayout>
