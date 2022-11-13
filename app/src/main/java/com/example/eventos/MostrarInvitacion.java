@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class MostrarInvitacion extends Fragment {
     private TextView textView_costo;
     private TextView textView_fecha;
     private TextView textView_nombre_evento;
+    private Switch switch_asistencia;
     @SuppressLint("StaticFieldLeak")
     public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion, textView_invitado_por, textView_apline, textView_validus_referido, textView_telefono_referido;
     private Button button_compartir, button_editar;
@@ -64,7 +66,23 @@ public class MostrarInvitacion extends Fragment {
 
         button_compartir.setOnClickListener(view -> prepararInvitacion());
         button_editar.setOnClickListener(view -> editarInvitado());
+        switch_asistencia.setOnClickListener(view -> cambiarEstado());
         return vista;
+    }
+
+    private void cambiarEstado() {
+                Modelo_invitacion cambioEstadoInvitacion= invitacion;
+                if ( cambioEstadoInvitacion.getEstado().equals("Pendiente")){
+                    cambioEstadoInvitacion.setEstado("Asistido");
+                    switch_asistencia.setChecked(true);
+                }else if (cambioEstadoInvitacion.getEstado().equals("Asistido")) {
+                    cambioEstadoInvitacion.setEstado("Pendiente");
+                    switch_asistencia.setChecked(false);
+                }
+
+
+                DatabaseReference CambiarEstado = FirebaseDatabase.getInstance().getReference();
+                CambiarEstado.child("Invitaciones").child(cambioEstadoInvitacion.getId()).setValue(cambioEstadoInvitacion);
     }
 
     private void editarInvitado() {
@@ -121,7 +139,7 @@ public class MostrarInvitacion extends Fragment {
 
     private void crearImagenInvitacion() {
         try {
-            cardView_invitacion.setBackgroundResource(R.drawable.fondo_cardview);
+            cardView_invitacion.setBackgroundResource(R.drawable.fondo_tarjeta_invitacion);
 
             String mPath = Environment.getExternalStorageDirectory().toString() + "/" + "invitacion" + ".jpg";
 
@@ -174,6 +192,7 @@ public class MostrarInvitacion extends Fragment {
         cardView_invitacion=vista.findViewById(R.id.cardView_invitacion);
         textView_nombreEnInvitacion=vista.findViewById(R.id.textView_nombreEnInvitacion);
         textView_invitado_por=vista.findViewById(R.id.textView_invitado_por);
+        switch_asistencia=vista.findViewById(R.id.switch_asistencia);
     }
 
     private void recibirArgumentos() {
@@ -205,6 +224,17 @@ public class MostrarInvitacion extends Fragment {
                             textView_telefono_referido.setText(invitacion.getTelefono_referido());
                             textView_validus_referido.setText(invitacion.getUsuario_validus_referido());
                             textView_apline.setText(invitacion.getApline_referido());
+                            if (PantallaPrincipal.perfilUsaurio.equals("Promotor")){
+                                switch_asistencia.setVisibility(View.GONE);
+                            }
+                            if(invitacion.getEstado().equals("Pendiente")){
+                                switch_asistencia.setChecked(false);
+                            } else if (invitacion.getEstado().equals("Asistido")){
+                                switch_asistencia.setChecked(true);
+                            } else if (invitacion.getEstado().equals("Firmado")){
+                                switch_asistencia.setChecked(true);
+                                switch_asistencia.setEnabled(false);
+                            }
                             
                         }
                     } else {

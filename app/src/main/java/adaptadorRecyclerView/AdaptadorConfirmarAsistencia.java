@@ -52,25 +52,6 @@ public class AdaptadorConfirmarAsistencia extends RecyclerView.Adapter<Adaptador
         if (list.get(position).getEstado().equals("Asistido")) holder.imageView_cheked_asistido.setVisibility(View.VISIBLE);
         if (list.get(position).getEstado().equals("Firmado")) holder.imageView_cheked_firmado.setVisibility(View.VISIBLE);
 
-//        holder.switch_confirmar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Modelo_invitacion cambioEstadoInvitacion= list.get(holder.getAdapterPosition());
-//                if (!list.get(position).getEstado().equals("Firmado")){
-//                    if (holder.switch_confirmar.isChecked()){
-//                        cambioEstadoInvitacion.setEstado("Asistido");
-//                    }else{
-//                        cambioEstadoInvitacion.setEstado("Pendiente");
-//                    }
-//                }else {
-//                    Toast.makeText(context, "El clientte ya ha firmado", Toast.LENGTH_SHORT).show();
-//                }
-//
-//
-//                DatabaseReference CambiarEstado = FirebaseDatabase.getInstance().getReference();
-//                CambiarEstado.child("Invitaciones").child(list.get(holder.getAdapterPosition()).getId()).setValue(cambioEstadoInvitacion);
-//            }
-//        });
     }
 
     @Override
