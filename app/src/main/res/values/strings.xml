@@ -85,10 +85,11 @@
     <string name="EscanearQr">Escanear QR</string>
     <string name="ConfirmarFirma">Confirmar firma</string>
     <string name="FirmarCliente">Firmar cliente</string>
-    <string name="ClaveValidus">Clave Validus</string>
+    <string name="ClaveValidus">Password</string>
     <string name="DatosDeCuenta">Datos para VALIDUS</string>
     <string name="Firmados">Firmados</string>
     <string name="EventosTerminados">Eventos terminados</string>
+    <string name="DireccionWebValidus">https://teamvalidus.com/</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

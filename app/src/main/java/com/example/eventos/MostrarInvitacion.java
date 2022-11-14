@@ -47,7 +47,7 @@ public class MostrarInvitacion extends Fragment {
     private TextView textView_nombre_evento;
     private Switch switch_asistencia;
     @SuppressLint("StaticFieldLeak")
-    public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion, textView_invitado_por, textView_apline, textView_validus_referido, textView_telefono_referido;
+    public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion, textView_invitado_por, textView_apline, textView_validus_referido, textView_telefono_referido,textView_hora;
     private Button button_compartir, button_editar;
     private ImageView imageView_qr;
     private CardView cardView_invitacion;
@@ -201,6 +201,8 @@ public class MostrarInvitacion extends Fragment {
         textView_nombreEnInvitacion=vista.findViewById(R.id.textView_nombreEnInvitacion);
         textView_invitado_por=vista.findViewById(R.id.textView_invitado_por);
         switch_asistencia=vista.findViewById(R.id.switch_asistencia);
+        textView_hora=vista.findViewById(R.id.textView_hora);
+
     }
 
     private void recibirArgumentos() {
@@ -222,7 +224,9 @@ public class MostrarInvitacion extends Fragment {
 
                             textView_nombreEnInvitacion.setText(invitacion.getNombre());
                             textView_nombre_evento.setText(invitacion.getNombre_evento());
-                            textView_fecha.setText(invitacion.getFecha());
+                            String fecha=invitacion.getFecha();
+                            textView_fecha.setText(fecha.substring(fecha.length() - 10));
+                            textView_hora.setText(fecha.substring(0,10));
                             textView_costo.setText(invitacion.getCosto());
                             textView_ciudad.setText(invitacion.getCiudad());
                             textView_direccion.setText(invitacion.getDireccion());

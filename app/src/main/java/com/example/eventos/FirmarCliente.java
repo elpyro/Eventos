@@ -1,11 +1,18 @@
 package com.example.eventos;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +24,17 @@ import com.example.eventos.modelos.Modelo_invitacion;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 public class FirmarCliente extends Fragment {
 
     private Context context;
     private View vista;
     private Modelo_invitacion invitacion;
     private Button button_firmar;
-    private TextView textView_titulo,textView_validus_referido,textView_apline,textView_telefono_referido,textView_invitado_por,edittext_clave_validus,editText_usuarioValidus,editText_correo,editText_telefono,editText_nombre;
+    private CardView cardView_tarjeta_registro;
+    private TextView textView_titulo,textView_validus_referido,textView_apline,textView_telefono_referido,textView_invitado_por,edittext_clave_validus,editText_usuarioValidus,editText_correo,editText_telefono,editText_nombre,textView_password,textView_nombre_firmado,textView_Usuario_validus;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,7 +47,17 @@ public class FirmarCliente extends Fragment {
     }
 
     private void firmarInvitado() {
+
+
+
         if (!validarDatos()) return;
+        textView_nombre_firmado.setText(editText_nombre.getText().toString());
+        textView_password.setText(edittext_clave_validus.getText().toString());
+        textView_Usuario_validus.setText(textView_Usuario_validus.getText().toString());
+        textView_password.setText(invitacion.getNuevo_codigo_validus());
+        textView_Usuario_validus.setText(invitacion.getNuevo_usuario_validus());
+        textView_password.setText(invitacion.getNuevo_codigo_validus());
+        textView_Usuario_validus.setText(invitacion.getNuevo_usuario_validus());
         DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
         invitacion.setNombre(editText_nombre.getText().toString().trim());
         invitacion.setTelefono(editText_telefono.getText().toString().trim());
@@ -48,9 +69,85 @@ public class FirmarCliente extends Fragment {
 
         Toast.makeText(context, "Usuario firmado", Toast.LENGTH_SHORT).show();
 
+        compartirTarjeta();
         Navigation.findNavController(vista).navigateUp();
 
 
+    }
+
+    private void compartirTarjeta() {
+
+            crearImagenTarjeta();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            compartirInvitacionWhatsapp();
+        }
+
+
+    private void crearImagenTarjeta() {
+        try {
+
+
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + "bienvenida" + ".jpg";
+
+            // create bitmap screen capture
+            View v1 = requireActivity().getWindow().getDecorView().getRootView().findViewById(R.id.cardView_tarjeta_registro);
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+            cardView_tarjeta_registro.setVisibility(View.GONE);
+        } catch (Throwable e) {
+            Toast.makeText(context, "Error al crear la invitacion"+e, Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
+
+    private void compartirInvitacionWhatsapp() {
+
+        String smsNumber = "57"+ editText_telefono.getText().toString().trim();
+        smsNumber= smsNumber.replace(" ", "");
+        boolean isWhatsappInstalled = whatsappInstalledOrNot();
+        if (isWhatsappInstalled) {
+            try { Intent sendIntent = new Intent("android.intent.action.MAIN");
+                sendIntent.setAction(Intent.ACTION_SEND); sendIntent.setType("text/application/pdf");
+
+                File file = new File(Environment.getExternalStorageDirectory().toString() + "/bienvenida.jpg");
+                Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
+
+                sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
+                //phone number without "+" prefix sendIntent.setPackage("com.whatsapp");
+                startActivity(sendIntent); } catch(Exception e)
+            { Toast.makeText(getContext(), "Error/n" + e, Toast.LENGTH_SHORT).show(); } } else
+        { Uri uri = Uri.parse("market://details?id=com.whatsapp");
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            Toast.makeText(getContext(), getString(R.string.WhatsApp_no_instalado), Toast.LENGTH_SHORT).show();
+            this.startActivity(goToMarket); }
+
+    }
+
+    private boolean whatsappInstalledOrNot(){
+        PackageManager pm = requireContext().getPackageManager();
+        boolean app_installed;
+        try {
+            pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES); app_installed = true;
+        } catch (PackageManager.NameNotFoundException e)
+        { app_installed = false; } return app_installed;
     }
 
     private boolean validarDatos() {
@@ -80,6 +177,13 @@ public class FirmarCliente extends Fragment {
         editText_telefono=vista.findViewById(R.id.editText_telefono);
         editText_nombre=vista.findViewById(R.id.editText_nombre);
         textView_titulo=vista.findViewById(R.id.textView_titulo);
+        textView_password=vista.findViewById(R.id.textView_password);
+        textView_nombre_firmado=vista.findViewById(R.id.textView_nombre_firmado);
+        textView_Usuario_validus=vista.findViewById(R.id.textView_Usuario_validus);
+        cardView_tarjeta_registro=vista.findViewById(R.id.cardView_tarjeta_registro);
+        cardView_tarjeta_registro.setBackgroundResource(R.drawable.fondo_firma);
+
+
     }
 
     private void recibirArgumentos() {
@@ -96,7 +200,15 @@ public class FirmarCliente extends Fragment {
             textView_telefono_referido.setText(invitacion.getTelefono_referido());
             textView_apline.setText(invitacion.getApline_referido());
             textView_validus_referido.setText(invitacion.getUsuario_validus_referido());
-            if(invitacion.getEstado().equals("Firmado"))textView_titulo.setText("Invitado firmado");
+
+            textView_nombre_firmado.setText(invitacion.getNombre());
+            textView_password.setText(invitacion.getNuevo_codigo_validus());
+            textView_Usuario_validus.setText(invitacion.getNuevo_usuario_validus());
+
+            if(invitacion.getEstado().equals("Firmado")){
+                textView_titulo.setText("Invitado firmado");
+                button_firmar.setText("Compartir");
+            }
 
         }
     }

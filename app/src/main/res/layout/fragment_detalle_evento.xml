@@ -131,6 +131,20 @@
                         android:theme="@style/texto_cursiva"
                         android:layout_marginStart="10dp"
                         android:text="@string/Fecha" />
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/texto_sub_titulo"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/Hora"></TextView>
+                    <TextView
+                        android:id="@+id/textView_hora"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/texto_cursiva"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/Hora" />
                 </LinearLayout>
 
                 <LinearLayout

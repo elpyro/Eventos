@@ -55,7 +55,7 @@
                             android:layout_margin="4dp"
                             android:background="@color/trasparente"
                             android:hint="@string/Nombre"
-                            android:inputType="textPersonName"
+                            android:inputType="text|textCapSentences"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             tools:ignore="TextContrastCheck" />
@@ -74,7 +74,7 @@
                             android:layout_margin="4dp"
                             android:background="@color/trasparente"
                             android:hint="@string/descripcion"
-                            android:inputType="textMultiLine"
+                            android:inputType="text|textMultiLine|textCapSentences"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             tools:ignore="TextContrastCheck" />
@@ -93,7 +93,7 @@
                             android:layout_margin="4dp"
                             android:background="@color/trasparente"
                             android:hint="@string/Ciudad"
-                            android:inputType="textAutoComplete"
+                            android:inputType="text|textAutoComplete|textCapWords"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             tools:ignore="TextContrastCheck" />
@@ -112,7 +112,7 @@
                             android:layout_margin="4dp"
                             android:background="@color/trasparente"
                             android:hint="@string/Direccion"
-                            android:inputType="textMultiLine"
+                            android:inputType="text|textMultiLine|textCapSentences"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             tools:ignore="TextContrastCheck" />
@@ -174,7 +174,7 @@
                                 android:autofillHints="apline"
                                 android:background="@color/trasparente"
                                 android:hint="@string/Costo"
-                                android:inputType="textPersonName"
+                                android:inputType="text|textAutoComplete|textCapSentences"
                                 android:textColor="@color/white"
                                 android:textColorHint="#6D4C41"
                                 android:textSize="16sp"

@@ -42,7 +42,7 @@ public class DetalleEvento extends Fragment {
 
     public static String estado_evento;
     private ImageView imageView_imagen_evento;
-    private TextView textView_nombre_evento,textView_descripcion,textView_fecha, textView_boletos,textView_disponibles,textView_costo,textView_ciudad,textView_direccion,textView_cuenta;
+    private TextView textView_nombre_evento,textView_descripcion,textView_fecha, textView_boletos,textView_disponibles,textView_costo,textView_ciudad,textView_direccion,textView_cuenta, textView_hora;
     private Context context;
     private View vista;
     String id_evento;
@@ -190,7 +190,8 @@ public class DetalleEvento extends Fragment {
                         textView_ciudad.setText(evento.getCiudad());
                         textView_direccion.setText(evento.getDireccion());
                         String fecha=evento.getFecha();
-                        textView_fecha.setText(fecha);
+                        textView_fecha.setText(fecha.substring(fecha.length() - 10));
+                        textView_hora.setText(fecha.substring(0,10));
                         textView_costo.setText(evento.getCosto());
                         textView_boletos.setText(evento.getBoletos());
                         estado_evento=evento.getEstado();
@@ -231,6 +232,7 @@ public class DetalleEvento extends Fragment {
         button_crearInvitacion=vista.findViewById(R.id.button_crearInvitacion);
         bottom_asistencia=vista.findViewById(R.id.bottom_asistencia);
         textView_cuenta=vista.findViewById(R.id.textView_cuenta);
+        textView_hora=vista.findViewById(R.id.textView_hora);
         linearLayout_botones_todos=vista.findViewById(R.id.linearLayout_botones_todos);
         linearLayout_botones_administradores_auditores =vista.findViewById(R.id.linearLayout_botones_administradores_auditores);
 
