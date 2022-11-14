@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ import adaptadorRecyclerView.AdaptadorAsistencia;
 
 public class DetalleEvento extends Fragment {
 
+    public static String estado_evento;
     private ImageView imageView_imagen_evento;
     private TextView textView_nombre_evento,textView_descripcion,textView_fecha, textView_boletos,textView_disponibles,textView_costo,textView_ciudad,textView_direccion,textView_cuenta;
     private Context context;
@@ -47,6 +49,7 @@ public class DetalleEvento extends Fragment {
     private Button bottom_asistencia;
     private Button button_crearInvitacion;
     private Button button_firma;
+    private LinearLayout linearLayout_botones_todos, linearLayout_botones_administradores_auditores;
     private Modelo_evento evento;
 
     private SearchView search_invitados;
@@ -67,8 +70,14 @@ public class DetalleEvento extends Fragment {
         button_crearInvitacion.setOnClickListener(view -> abrirCrearInvitacion());
         bottom_asistencia.setOnClickListener(view -> abrirConfirmarAsistencia());
         button_firma.setOnClickListener(view -> abrirConfirmarFirma());
-
+        imageView_imagen_evento.setOnClickListener(view -> MostrarImagenGrande());
         return vista;
+    }
+
+    private void MostrarImagenGrande() {
+        Bundle bundle = new Bundle();
+        bundle.putString("url_imagen",evento.getUrlImagen());
+        Navigation.findNavController(vista).navigate(R.id.mostrarImagenAmpliada,bundle);
     }
 
     private void abrirConfirmarFirma() {
@@ -144,15 +153,16 @@ public class DetalleEvento extends Fragment {
     }
 
     private void filtro(String valor) {
-        ArrayList<Modelo_invitacion> filtro =new ArrayList<>();
-        for(Modelo_invitacion objeto:listaInvitados){
-            if(objeto.getNombre().toLowerCase().contains(valor.toLowerCase())){
-                filtro.add(objeto);
+        try {
+            ArrayList<Modelo_invitacion> filtro =new ArrayList<>();
+            for(Modelo_invitacion objeto:listaInvitados){
+                if(objeto.getNombre().toLowerCase().contains(valor.toLowerCase())){
+                    filtro.add(objeto);
+                }
             }
-        }
-        adaptador = new AdaptadorAsistencia(filtro);
-        recview.setAdapter(adaptador);
-
+            adaptador = new AdaptadorAsistencia(filtro);
+            recview.setAdapter(adaptador);
+        }catch (Exception exception){}
 
     }
 
@@ -183,9 +193,11 @@ public class DetalleEvento extends Fragment {
                         textView_fecha.setText(fecha);
                         textView_costo.setText(evento.getCosto());
                         textView_boletos.setText(evento.getBoletos());
+                        estado_evento=evento.getEstado();
                         int boletosDisponibles= Integer.parseInt(evento.getBoletos())-Integer.parseInt(evento.getBoletosVendidos());
                         textView_disponibles.setText(boletosDisponibles+"");
-
+                        if (!evento.getEstado().equals("Terminado"))linearLayout_botones_todos.setVisibility(View.VISIBLE);
+                        if (!PantallaPrincipal.perfilUsaurio.equals("Promotor")) linearLayout_botones_administradores_auditores.setVisibility(View.VISIBLE);
                         try {
                             Picasso.with(context).load(evento.getUrlImagen()).into(imageView_imagen_evento);
                         }catch (Exception ignored){
@@ -219,6 +231,8 @@ public class DetalleEvento extends Fragment {
         button_crearInvitacion=vista.findViewById(R.id.button_crearInvitacion);
         bottom_asistencia=vista.findViewById(R.id.bottom_asistencia);
         textView_cuenta=vista.findViewById(R.id.textView_cuenta);
+        linearLayout_botones_todos=vista.findViewById(R.id.linearLayout_botones_todos);
+        linearLayout_botones_administradores_auditores =vista.findViewById(R.id.linearLayout_botones_administradores_auditores);
 
         recview= vista.findViewById(R.id.recyclerView_asistencia);
         recview.setHasFixedSize(true);

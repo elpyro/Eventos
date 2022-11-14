@@ -88,6 +88,7 @@
     <string name="ClaveValidus">Clave Validus</string>
     <string name="DatosDeCuenta">Datos para VALIDUS</string>
     <string name="Firmados">Firmados</string>
+    <string name="EventosTerminados">Eventos terminados</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

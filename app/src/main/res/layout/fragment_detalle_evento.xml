@@ -11,56 +11,66 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/button_crearInvitacion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:background="@drawable/boton"
-            android:gravity="center"
-            android:text="@string/CrearInvitacion"
-            android:textColor="@color/black"
-            android:theme="@style/Botones" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/cardview_evento"
-        app:cardCornerRadius="10dp">
-
-        <Button
-            android:id="@+id/bottom_asistencia"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/boton"
-            android:gravity="center"
-            android:text="@string/Asistencia"
-            android:textColor="@color/black"
-            android:theme="@style/Botones" />
-
-        <Button
-            android:id="@+id/button_firmar"
-            android:layout_width="125dp"
+        <LinearLayout
+            android:id="@+id/linearLayout_botones_todos"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/boton"
-            android:gravity="center"
-            android:text="@string/Firmar"
-            android:textColor="@color/black"
-            android:theme="@style/Botones" />
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_crearInvitacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@drawable/boton"
+                android:gravity="center"
+                android:text="@string/CrearInvitacion"
+                android:textColor="@color/black"
+                android:theme="@style/Botones" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout_botones_administradores_auditores"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:background="@drawable/cardview_evento"
+                app:cardCornerRadius="10dp">
+
+                <Button
+                    android:id="@+id/bottom_asistencia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/boton"
+                    android:gravity="center"
+                    android:text="@string/Asistencia"
+                    android:textColor="@color/black"
+                    android:theme="@style/Botones" />
+
+                <Button
+                    android:id="@+id/button_firmar"
+                    android:layout_width="125dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/boton"
+                    android:gravity="center"
+                    android:text="@string/Firmar"
+                    android:textColor="@color/black"
+                    android:theme="@style/Botones" />
 
 
-    </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
 
-    <ImageView
+        <ImageView
         android:id="@+id/imageView_imagen_evento"
         android:layout_width="300dp"
         android:layout_height="200dp"

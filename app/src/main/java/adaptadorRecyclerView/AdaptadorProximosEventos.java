@@ -147,8 +147,6 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
             textView_cuenta_regresiva_pequena=itemView.findViewById(R.id.textView_cuenta_regresiva_pequena);
             linerarLayout_tarjeta=itemView.findViewById(R.id.linerarLayout_tarjeta);
 
-
-
         }
     }
 }

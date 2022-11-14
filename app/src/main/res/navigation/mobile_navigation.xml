@@ -89,5 +89,15 @@
         android:name="com.example.eventos.FirmarCliente"
         android:label="@string/FirmarCliente"
         tools:layout="@layout/fragment_firmar_cliente" />
+    <fragment
+        android:id="@+id/mostrarImagenAmpliada"
+        android:name="com.example.eventos.MostrarImagenAmpliada"
+        android:label="@string/Imagen"
+        tools:layout="@layout/fragment_mostrar_imagen_ampliada" />
+    <fragment
+        android:id="@+id/eventosTerminados"
+        android:name="com.example.eventos.EventosTerminados"
+        android:label="@string/EventosTerminados"
+        tools:layout="@layout/fragment_eventos_terminados" />
 
 </navigation>

@@ -64,6 +64,7 @@ public class Evento extends Fragment {
         private TextView textView_titulo, textView_edicion;
         private ImageView imageView_evento;
         private TextView textView_fecha, textView_hora;
+        private Modelo_evento evento;
         private  static final int CAMERA_REQUEST_CODE = 100;
         private static final int STORAGE_REQUEST_CODE = 101;
         private String[] cameraPermissions; // cámara y almacenamiento
@@ -84,6 +85,8 @@ public class Evento extends Fragment {
 
         return vista;
     }
+
+
 
     private void incializando() {
         context=getContext();
@@ -220,7 +223,7 @@ public class Evento extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
-                            Modelo_evento evento = userSnapshot.getValue(Modelo_evento.class);
+                           evento = userSnapshot.getValue(Modelo_evento.class);
                             assert evento != null;
                             id_exitente=evento.getId();
                             editText_nombre.setText(evento.getNombre());

@@ -72,14 +72,15 @@ public class MostrarInvitacion extends Fragment {
 
     private void cambiarEstado() {
                 Modelo_invitacion cambioEstadoInvitacion= invitacion;
-                if ( cambioEstadoInvitacion.getEstado().equals("Pendiente")){
+                if ( cambioEstadoInvitacion.getEstado().equals("Invitado")){
                     cambioEstadoInvitacion.setEstado("Asistido");
+                    textView_estado.setText("Asistido");
                     switch_asistencia.setChecked(true);
                 }else if (cambioEstadoInvitacion.getEstado().equals("Asistido")) {
-                    cambioEstadoInvitacion.setEstado("Pendiente");
+                    cambioEstadoInvitacion.setEstado("Invitado");
+                    textView_estado.setText("Invitado");
                     switch_asistencia.setChecked(false);
                 }
-
 
                 DatabaseReference CambiarEstado = FirebaseDatabase.getInstance().getReference();
                 CambiarEstado.child("Invitaciones").child(cambioEstadoInvitacion.getId()).setValue(cambioEstadoInvitacion);
@@ -157,6 +158,7 @@ public class MostrarInvitacion extends Fragment {
             outputStream.flush();
             outputStream.close();
 
+            cardView_invitacion.setBackgroundResource(R.drawable.fondo_cardview);
         } catch (Throwable e) {
             Toast.makeText(context, "Error al crear la invitacion", Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -166,10 +168,16 @@ public class MostrarInvitacion extends Fragment {
     private void crearCodigoQr() {
         try {
             BarcodeEncoder barcodeEncoder=new BarcodeEncoder();
+            String mensaje="!No olvides tu cita! Inf: "+textView_validus_referido.getText().toString()+" "+ textView_telefono_referido.getText().toString()+" "+ id_invitacion;
             Bitmap bitmap= barcodeEncoder.encodeBitmap(textView_nombre_evento.getText().toString(), BarcodeFormat.QR_CODE,1000, 1000);
             imageView_qr.setImageBitmap(bitmap);
 
-        }catch (Exception ignored){}
+        }catch (Exception er){
+            Toast.makeText(context, "No se pudo generar el codigo Qr "+er, Toast.LENGTH_SHORT).show();
+        }
+
+
+
 
     }
 
@@ -197,6 +205,8 @@ public class MostrarInvitacion extends Fragment {
 
     private void recibirArgumentos() {
         if (getArguments() != null) {
+
+            if (DetalleEvento.estado_evento.equals("Terminado")) switch_asistencia.setVisibility(View.GONE);
 
             id_invitacion = getArguments().getString("id_invitacion");
 
@@ -227,7 +237,7 @@ public class MostrarInvitacion extends Fragment {
                             if (PantallaPrincipal.perfilUsaurio.equals("Promotor")){
                                 switch_asistencia.setVisibility(View.GONE);
                             }
-                            if(invitacion.getEstado().equals("Pendiente")){
+                            if(invitacion.getEstado().equals("Invitado")){
                                 switch_asistencia.setChecked(false);
                             } else if (invitacion.getEstado().equals("Asistido")){
                                 switch_asistencia.setChecked(true);

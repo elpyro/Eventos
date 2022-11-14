@@ -33,7 +33,7 @@ public class AdaptadorEventos extends RecyclerView.Adapter<AdaptadorEventos.MyVi
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         context = parent.getContext();
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lista, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lista_todos_los_eventos, parent, false);
         return new MyViewHolder(view);
     }
 
