@@ -65,7 +65,7 @@ public class CrearInvitacion extends Fragment {
 
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
             Modelo_invitacion invitacion = new Modelo_invitacion();
-            String id_invitacion=(UUID.randomUUID().toString()).substring(0,6);
+            String id_invitacion=(UUID.randomUUID().toString()).substring(0,7);
             invitacion.setId(id_invitacion);
             invitacion.setNombre(editText_nombre.getText().toString().trim());
             invitacion.setTelefono(editText_telefono.getText().toString().trim());

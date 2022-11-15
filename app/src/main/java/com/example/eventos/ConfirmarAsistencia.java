@@ -1,15 +1,18 @@
 package com.example.eventos;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +37,9 @@ import adaptadorRecyclerView.AdaptadorConfirmarAsistencia;
 
 public class ConfirmarAsistencia extends Fragment {
 
+    public static Modelo_invitacion codigoEncontrado;
     private Context context;
-    private View vista;
+    public static View vista;
     private Button button_escanear;
 
     private SearchView search_invitados;
@@ -44,7 +48,7 @@ public class ConfirmarAsistencia extends Fragment {
     private Query referencia;
     private RecyclerView recview;
     private   ValueEventListener oyente;
-    private ArrayList<Modelo_invitacion> listaInvitados;
+    public static ArrayList<Modelo_invitacion> listaInvitados;
     AdaptadorConfirmarAsistencia adaptador=null;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +57,19 @@ public class ConfirmarAsistencia extends Fragment {
         vista= inflater.inflate(R.layout.fragment_confirmar_asistencia, container, false);
         inicializando();
         recibirArgumentos();
+        button_escanear.setOnClickListener(view -> abrirScanner());
         return vista;
+    }
+
+    private void abrirScanner() {
+
+        Intent  intent = new Intent(getContext(),LectorDeCodigosQr.class);
+        intent.putExtra("desdeFragmento" , "ConfirmarAsistencia" );
+        startActivity(intent);
+
+    }
+    public void mostrarInvitacion(String id_invitacion){
+
     }
 
     private void recibirArgumentos() {

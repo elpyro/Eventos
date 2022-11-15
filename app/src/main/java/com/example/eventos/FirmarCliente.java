@@ -182,8 +182,6 @@ public class FirmarCliente extends Fragment {
         textView_Usuario_validus=vista.findViewById(R.id.textView_Usuario_validus);
         cardView_tarjeta_registro=vista.findViewById(R.id.cardView_tarjeta_registro);
         cardView_tarjeta_registro.setBackgroundResource(R.drawable.fondo_firma);
-
-
     }
 
     private void recibirArgumentos() {

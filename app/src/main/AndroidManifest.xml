@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Permisos a la camara, lectura y escritura en medios externos -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name=" android.permission.BIND_AUTOFILL_SERVICE" />
 
     <application
@@ -22,7 +22,17 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.Eventos">
-        <!-- <activity -->
+        <activity
+            android:name=".ActivityOrientacionScanner"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".LectorDeCodigosQr"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            tools:replace="android:screenOrientation" /> <!-- <activity -->
         <!-- android:name=".SeleccionarImagen" -->
         <!-- android:screenOrientation="portrait" -->
         <!-- android:exported="false" /> -->
@@ -37,6 +47,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <activity
             android:name=".PantallaPrincipal"
             android:exported="true"

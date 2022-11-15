@@ -62,7 +62,6 @@ public class MostrarInvitacion extends Fragment {
 
         inicializar();
         recibirArgumentos();
-        crearCodigoQr();
 
         button_compartir.setOnClickListener(view -> prepararInvitacion());
         button_editar.setOnClickListener(view -> editarInvitado());
@@ -168,8 +167,8 @@ public class MostrarInvitacion extends Fragment {
     private void crearCodigoQr() {
         try {
             BarcodeEncoder barcodeEncoder=new BarcodeEncoder();
-            String mensaje="!No olvides tu cita! Inf: "+textView_validus_referido.getText().toString()+" "+ textView_telefono_referido.getText().toString()+" "+ id_invitacion;
-            Bitmap bitmap= barcodeEncoder.encodeBitmap(textView_nombre_evento.getText().toString(), BarcodeFormat.QR_CODE,1000, 1000);
+            String mensaje="!No olvides tu cita! \n"+"Inf: "+textView_invitado_por.getText().toString()+" "+ textView_telefono_referido.getText().toString()+"\n"+ id_invitacion;
+            Bitmap bitmap= barcodeEncoder.encodeBitmap(mensaje, BarcodeFormat.QR_CODE,1000, 1000);
             imageView_qr.setImageBitmap(bitmap);
 
         }catch (Exception er){
@@ -249,7 +248,9 @@ public class MostrarInvitacion extends Fragment {
                                 switch_asistencia.setChecked(true);
                                 switch_asistencia.setEnabled(false);
                             }
-                            
+
+                            crearCodigoQr();
+
                         }
                     } else {
                         Toast.makeText(context,getString(R.string.InvitacionNoEncontrada) , Toast.LENGTH_SHORT).show();

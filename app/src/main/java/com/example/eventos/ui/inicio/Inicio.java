@@ -1,6 +1,7 @@
 package com.example.eventos.ui.inicio;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.eventos.LectorDeCodigosQr;
 import com.example.eventos.R;
 import com.example.eventos.modelos.Modelo_evento;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +42,7 @@ public class Inicio extends Fragment {
         context = getContext();
         vista = inflater.inflate(R.layout.fragment_home, container, false);
         inicializando();
+
         return vista;
     }
 

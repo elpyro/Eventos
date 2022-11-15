@@ -1,12 +1,14 @@
 package com.example.eventos;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,7 +35,7 @@ import adaptadorRecyclerView.AdaptadorConfimarFirma;
 
 public class ConfirmarFirma extends Fragment {
 
-    private View vista;
+    public View vista;
     private Context context;
     private SearchView search_invitados;
     private TextView textView_cuenta;
@@ -41,17 +43,26 @@ public class ConfirmarFirma extends Fragment {
     private Query referencia;
     private RecyclerView recview;
     private   ValueEventListener oyente;
-    private ArrayList<Modelo_invitacion> listaInvitados;
+    public static ArrayList<Modelo_invitacion> listaAsistidos;
+    public static Modelo_invitacion codigoEncontrado;
     AdaptadorConfimarFirma adaptador=null;
     private Button button_escanear;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        context=getContext();
         vista= inflater.inflate(R.layout.fragment_confirmar_firma, container, false);
         inicializando();
         recibirArgumentos();
+        button_escanear.setOnClickListener(view -> abrirEscaner());
         return vista;
+    }
+
+    private void abrirEscaner() {
+        Intent intent = new Intent(getContext(),LectorDeCodigosQr.class);
+
+        intent.putExtra("desdeFragmento" , "ConfirmarFirma" );
+        startActivity(intent);
     }
 
     private void recibirArgumentos() {
@@ -64,7 +75,15 @@ public class ConfirmarFirma extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        cargarAsistencia(id_evento);
+        if (codigoEncontrado!=null){
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("invitacion",codigoEncontrado);
+            codigoEncontrado=null;
+            Navigation.findNavController(vista).navigate(R.id.firmarCliente,bundle);
+        }else{
+            cargarAsistencia(id_evento);
+        }
+
     }
 
     private void inicializando() {
@@ -91,23 +110,23 @@ public class ConfirmarFirma extends Fragment {
                     if (snapshot.exists()){
                         int firmados=0;
                         int asistenciaTotal=0;
-                        listaInvitados=new ArrayList<>();
+                        listaAsistidos =new ArrayList<>();
                         for(DataSnapshot ds:snapshot.getChildren()){
 
                             if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Asistido")) {
-                                listaInvitados.add(ds.getValue(Modelo_invitacion.class));
+                                listaAsistidos.add(ds.getValue(Modelo_invitacion.class));
                                 asistenciaTotal=asistenciaTotal+1;
 
                             } else if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Firmado")) {
                                 firmados=firmados+1;
-                                listaInvitados.add(ds.getValue(Modelo_invitacion.class));
+                                listaAsistidos.add(ds.getValue(Modelo_invitacion.class));
                             }
 
 
                         }
                         textView_cuenta.setText(firmados+" / "+ asistenciaTotal);
-                        listaInvitados.sort(Comparator.comparing(Modelo_invitacion::getEstado));
-                        adaptador= new AdaptadorConfimarFirma(listaInvitados);
+                        listaAsistidos.sort(Comparator.comparing(Modelo_invitacion::getEstado));
+                        adaptador= new AdaptadorConfimarFirma(listaAsistidos);
                         recview.setAdapter(adaptador);
 
                     }
@@ -135,7 +154,7 @@ public class ConfirmarFirma extends Fragment {
     }
     private void filtro(String valor) {
         ArrayList<Modelo_invitacion> filtro =new ArrayList<>();
-        for(Modelo_invitacion objeto:listaInvitados){
+        for(Modelo_invitacion objeto: listaAsistidos){
             if(objeto.getNombre().toLowerCase().contains(valor.toLowerCase())){
                 filtro.add(objeto);
             }
@@ -146,4 +165,10 @@ public class ConfirmarFirma extends Fragment {
 
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        codigoEncontrado=null;
+        vista=null;
+    }
 }
