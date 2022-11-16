@@ -91,6 +91,7 @@
     <string name="EventosTerminados">Eventos terminados</string>
     <string name="DireccionWebValidus">https://teamvalidus.com/</string>
     <string name="CrearReporte">Crear Reporte</string>
+    <string name="NombreEmpresa">Community 24-7</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.eventos">
+    package="com.example.eventos" >
 
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
@@ -21,7 +21,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Eventos">
+        android:theme="@style/Theme.Eventos" >
+        <activity
+            android:name=".MostarReporte"
+            android:exported="false" />
+        <activity
+            android:name=".MostarReporte"
+            android:exported="false" />
         <activity
             android:name=".ActivityOrientacionScanner"
             android:screenOrientation="portrait"
@@ -42,7 +48,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.eventos.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true" >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
@@ -53,7 +59,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/splah_screem">
+            android:theme="@style/splah_screem" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
