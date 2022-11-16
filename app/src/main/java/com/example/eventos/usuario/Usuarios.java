@@ -29,6 +29,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -122,6 +123,7 @@ public class Usuarios extends Fragment {
         textView_edicion=vista.findViewById(R.id.textView_edicion);
 
         String [] opciones= {"Promotor","Auditor","Administrador"};
+
         ArrayAdapter<String> adapter= new ArrayAdapter<>(context, R.layout.spinner_item, opciones);
         spinner_tipo_usuario.setAdapter(adapter);
     }
