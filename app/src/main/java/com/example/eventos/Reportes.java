@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.eventos.modelos.Modelo_evento;
+import com.example.eventos.modelos.Modelo_invitacion;
 import com.example.eventos.modelos.Modelo_spinner_recuperarId;
 import com.example.eventos.modelos.Modelo_usuario;
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +34,7 @@ import java.util.Objects;
 
 public class Reportes extends Fragment {
     public static Modelo_evento evento;
+    public static ArrayList<Modelo_invitacion> invitaciones=new ArrayList<>();
     private Context context;
     private View vista;
     private Spinner spinner_estado, spinner_evento, spinner_referido;
@@ -73,7 +75,7 @@ public class Reportes extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 estadoSeleccionado =adapterView.getSelectedItem().toString();
-
+                Toast.makeText(context, estadoSeleccionado, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -97,14 +99,54 @@ public class Reportes extends Fragment {
                        evento = userSnapshot.getValue(Modelo_evento.class);
                         assert evento != null;
 
-                        Intent intent = new Intent(context, MostarReporte.class);
-                        intent.putExtra("datosEvento", evento);
-                        startActivity(intent);
+                        buscarInvitacionesDelEvento();
+
+
                     }
                 } else {
                     Toast.makeText(context,getString(R.string.EventoInexistente) , Toast.LENGTH_SHORT).show();
                 }
             }
+
+            private void buscarInvitacionesDelEvento() {
+                DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
+                Query dataQuery = myRefe.child("Invitaciones").orderByChild("id_evento").equalTo(idEventoSeleccionado);
+                dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            invitaciones.clear();
+                            for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                                boolean registrarInvitacion=false;
+                                if (id_referidoSeleccionado.equals("Todos")) {
+                                    if(estadoSeleccionado.equals("Todos"))registrarInvitacion=true;
+                                    if(estadoSeleccionado.equals(userSnapshot.getValue(Modelo_invitacion.class).getEstado()))registrarInvitacion=true;
+                                }
+                                if (id_referidoSeleccionado.equals( userSnapshot.getValue(Modelo_invitacion.class).getId_usuario_referido())) {
+                                    if(estadoSeleccionado.equals("Todos"))registrarInvitacion=true;
+                                    if(estadoSeleccionado.equals(userSnapshot.getValue(Modelo_invitacion.class).getEstado()))registrarInvitacion=true;
+                                }
+
+
+
+                                if(registrarInvitacion==true)    invitaciones.add( userSnapshot.getValue(Modelo_invitacion.class));
+
+
+                            }
+                            Intent intent = new Intent(context, MostarReporte.class);
+                            intent.putExtra("datosEvento", evento);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(context,getString(R.string.EventoInexistente) , Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(context, getString(R.string.problemasConexion), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(context, getString(R.string.problemasConexion), Toast.LENGTH_SHORT).show();
@@ -123,7 +165,7 @@ public class Reportes extends Fragment {
     }
 
     private void llenandoSpinnerEstado() {
-        String [] estados= {"Invitado","Asistido","Firmado"};
+        String [] estados= {"Todos","Invitado","Asistido","Firmado"};
 
         ArrayAdapter<String> adapter= new ArrayAdapter<>(context, R.layout.spinner_item, estados);
         spinner_estado.setAdapter(adapter);
@@ -136,9 +178,10 @@ public class Reportes extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 if (snapshot.exists()){
                    nombreReferido = new ArrayList<>();
-
+                    nombreReferido.add(new Modelo_spinner_recuperarId("0", "Todos"));
                     for(DataSnapshot ds:snapshot.getChildren()){
                         nombreReferido.add(new Modelo_spinner_recuperarId(Objects.requireNonNull(ds.getValue(Modelo_usuario.class)).getId(), Objects.requireNonNull(ds.getValue(Modelo_usuario.class)).getNombre()));
                     }

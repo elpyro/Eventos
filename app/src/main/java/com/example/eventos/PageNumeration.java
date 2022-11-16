@@ -33,8 +33,8 @@ final class PageNumeration extends PdfPageEventHelper
             table.setWidths(new float[]{3,1});
 
             //1st Column
-            Anchor anchor = new Anchor(new Phrase("iText Pdf Sample Project", FONT_FOOTER));
-            anchor.setReference( "http://mywebsite.com/");
+            Anchor anchor = new Anchor(new Phrase("Community24-7", FONT_FOOTER));
+            anchor.setReference("");
             cell = new PdfPCell(anchor);
 
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -45,7 +45,7 @@ final class PageNumeration extends PdfPageEventHelper
             table.writeSelectedRows(0,-1,document.leftMargin(),document.bottomMargin()-5,writer.getDirectContent());
 
             //2nd Column
-            cell = new PdfPCell(new Phrase("Page - ".concat(String.valueOf(writer.getPageNumber())), FONT_FOOTER));
+            cell = new PdfPCell(new Phrase("Pagina - ".concat(String.valueOf(writer.getPageNumber())), FONT_FOOTER));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             cell.setBorder(0);
             cell.setPadding(2f);
