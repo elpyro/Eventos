@@ -53,50 +53,59 @@ final class PDFUtility
         {
             throw new NullPointerException("PDF ha resultado vacio");
         }
-
         File file = new File(filePath);
+        new Thread(() -> {
 
-        if(file.exists())
-        {
-            file.delete();
-            Thread.sleep(50);
-        }
+
+
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
 
         Document document = new Document();
         document.setMargins(24f,24f,32f,32f);
         document.setPageSize(isPortrait? PageSize.A4:PageSize.A4.rotate());
+            PdfWriter pdfWriter = null;
+            try{
 
-        PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(filePath));
+         pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(filePath));
         pdfWriter.setFullCompression();
         pdfWriter.setPageEvent(new PageNumeration());
+            }catch (Exception e){}
 
         document.open();
 
         setMetaData(document);
+        try{
 
         addHeader(mContext,document);
         addEmptyLine(document, 3);
 
         document.add(createDataTable());
+        }catch (Exception e){}
 
 //        addEmptyLine(document,2);
 //        document.add(createSignBox());
 
         document.close();
 
-        try
-        {
-            pdfWriter.close();
-        }
-        catch (Exception ex)
-        {
-            Log.e(TAG,"Error While Closing pdfWriter : "+ex.toString());
-        }
+            try
+            {
+                pdfWriter.close();
+            }
+            catch (Exception ex)
+            {
+                Log.e(TAG,"Error While Closing pdfWriter : "+ex.toString());
+            }
+        }).start();
+            if(mCallback!=null)
+            {
+                mCallback.onPDFDocumentClose(file);
+            }
 
-        if(mCallback!=null)
-        {
-            mCallback.onPDFDocumentClose(file);
-        }
     }
 
     private static  void addEmptyLine(Document document, int number) throws DocumentException

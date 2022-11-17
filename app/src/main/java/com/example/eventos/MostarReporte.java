@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -76,9 +77,7 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
     @Override
     public void onPDFDocumentClose(File file)
     {
-        Toast.makeText(this,"Sample Pdf Created",Toast.LENGTH_SHORT).show();
         MostrarPdf();
-
     }
 
     private void MostrarPdf() {
@@ -95,7 +94,9 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
                 .enableAntialiasing(true)
                 .load();
 
-//        compartirPDF();
+
+        Reportes.textView_informacion.setText("Reportes");
+        Reportes.progress_bar_creadonPDF.setVisibility(View.GONE);
 
     }
 

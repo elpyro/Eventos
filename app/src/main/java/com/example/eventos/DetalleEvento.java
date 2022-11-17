@@ -71,10 +71,6 @@ public class DetalleEvento extends Fragment {
         button_firma.setOnClickListener(view -> abrirConfirmarFirma());
         imageView_imagen_evento.setOnClickListener(view -> MostrarImagenGrande());
 
-
-
-
-
         return vista;
     }
 

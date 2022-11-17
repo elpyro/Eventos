@@ -10,15 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <ImageView
-        android:id="@+id/imageView_banner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/banner"
-        app:srcCompat="@drawable/banner"
-        tools:src="@drawable/banner"
-        tools:srcCompat="@drawable/banner" />
+
+        <ImageView
+            android:id="@+id/imagenView_banner"
+            android:layout_width="match_parent"
+            android:layout_height="124dp"
+            android:layout_margin="10dp"
+            android:contentDescription="@string/banner"
+            android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/textView_titulo"

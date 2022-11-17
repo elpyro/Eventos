@@ -67,7 +67,7 @@
     <fragment
         android:id="@+id/habeasData"
         android:name="com.example.eventos.HabeasData"
-        android:label="fragment_habeas_data"
+        android:label="@string/HabeasData"
         tools:layout="@layout/fragment_habeas_data" />
     <fragment
         android:id="@+id/editarInvitado"
@@ -104,5 +104,10 @@
         android:name="com.example.eventos.Reportes"
         android:label="@string/Reportes"
         tools:layout="@layout/fragment_reportes" />
+    <fragment
+        android:id="@+id/configuracion"
+        android:name="com.example.eventos.Configuracion"
+        android:label="@string/Configuracion"
+        tools:layout="@layout/fragment_configuracion" />
 
 </navigation>

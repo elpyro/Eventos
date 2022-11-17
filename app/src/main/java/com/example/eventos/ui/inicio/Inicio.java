@@ -1,13 +1,14 @@
 package com.example.eventos.ui.inicio;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -15,16 +16,19 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eventos.LectorDeCodigosQr;
 import com.example.eventos.R;
 import com.example.eventos.modelos.Modelo_evento;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.Comparator;
+
 import adaptadorRecyclerView.AdaptadorProximosEventos;
 
 public class Inicio extends Fragment {
@@ -33,6 +37,7 @@ public class Inicio extends Fragment {
 
     private RecyclerView recview;
     private Query referencia;
+    private ImageView imagenView_banner;
     private   ArrayList<Modelo_evento> lista;
     ValueEventListener oyente;
 
@@ -42,12 +47,38 @@ public class Inicio extends Fragment {
         context = getContext();
         vista = inflater.inflate(R.layout.fragment_home, container, false);
         inicializando();
-
+        cargarBanner();
         return vista;
     }
 
+    private void cargarBanner() {
+
+            DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
+            Query dataQuery = myRefe.child("Banner").orderByChild("Url");
+            dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()){
+                        for(DataSnapshot ds:dataSnapshot.getChildren()) {
+                            try {
+                                Picasso.with(context).load(dataSnapshot.child("Url").getValue(String.class)).into(imagenView_banner);
+
+                            }catch (Exception ignored){
+                            }
+
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
+
+
 
     private void inicializando() {
+        imagenView_banner=vista.findViewById(R.id.imagenView_banner);
         recview=vista.findViewById(R.id.recyclerView_proximosEventos);
         recview.setHasFixedSize(true);
         recview.setLayoutManager(new LinearLayoutManager(context));

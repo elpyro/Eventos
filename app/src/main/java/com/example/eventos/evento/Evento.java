@@ -72,7 +72,7 @@ public class Evento extends Fragment {
         private  static final int CAMERA_REQUEST_CODE = 100;
         private static final int STORAGE_REQUEST_CODE = 101;
         private String[] cameraPermissions; // cámara y almacenamiento
-    private static final int SELECT_FILE = 1;
+        private static final int SELECT_FILE = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

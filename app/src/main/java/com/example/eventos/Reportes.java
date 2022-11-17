@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,8 +35,10 @@ import java.util.Objects;
 
 
 public class Reportes extends Fragment {
+    public static ProgressBar progress_bar_creadonPDF;
     public static Modelo_evento evento;
     public static ArrayList<Modelo_invitacion> invitaciones=new ArrayList<>();
+    public static TextView textView_informacion;
     private Context context;
     private View vista;
     private Spinner spinner_estado, spinner_evento, spinner_referido;
@@ -94,7 +98,8 @@ public class Reportes extends Fragment {
     }
 
     private void crearReporte() {
-
+        textView_informacion.setText("Creando PDF...");
+        progress_bar_creadonPDF.setVisibility(View.VISIBLE);
         button_crearReporte.setEnabled(false);
         DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
         Query dataQuery = myRefe.child("Eventos").orderByChild("id").equalTo(idEventoSeleccionado).limitToFirst(1);
@@ -233,9 +238,11 @@ public class Reportes extends Fragment {
     }
 
     private void inicializando() {
+        textView_informacion=vista.findViewById(R.id.textView_informacion);
         spinner_estado=vista.findViewById(R.id.spinner_estado);
         spinner_evento=vista.findViewById(R.id.spinner_evento);
         spinner_referido=vista.findViewById(R.id.spinner_referido);
         button_crearReporte=vista.findViewById(R.id.button_crearReporte);
+        progress_bar_creadonPDF=vista.findViewById(R.id.progress_bar_creadonPDF);
     }
 }

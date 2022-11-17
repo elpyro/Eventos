@@ -30,7 +30,7 @@
             android:title="@string/Reportes" />
 
         <item
-            android:id="@+id/nav_configuracion"
+            android:id="@+id/configuracion"
             android:icon="@drawable/icono_configuracion"
             android:title="@string/Configuracion" />
 
