@@ -2,6 +2,7 @@ package com.example.eventos;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,83 +11,44 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.text.TextUtils;
-import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ShareCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.example.eventos.modelos.Modelo_evento;
+import com.github.barteksc.pdfviewer.PDFView;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 final public class MostarReporte extends AppCompatActivity implements PDFUtility.OnDocumentClose
 {
     private static final String TAG = MostarReporte.class.getSimpleName();
-    private AppCompatEditText rowCount;
+
     private Context context;
+    private PDFView pdfView;
+    private Button button_compartir;
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mostrar_reporte);
-        rowCount = findViewById(R.id.rowCount);
+
+        button_compartir=findViewById(R.id.button_compartirPdf);
         context=this;
-        Modelo_evento evento=(Modelo_evento) getIntent().getExtras().getSerializable("datosEvento");
+//        Modelo_evento evento=(Modelo_evento) getIntent().getExtras().getSerializable("datosEvento");
 
-        AppCompatButton button1 = findViewById(R.id.button1);
+        pdfView=(PDFView)findViewById(R.id.vista_pdf);
 
-
-
-        button1.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-
-                String path = Environment.getExternalStorageDirectory().toString() + "/reporte.pdf";
-                try
-                {
-                    PDFUtility.createPdf(v.getContext(), MostarReporte.this,getSampleData(),path,true);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    Toast.makeText(v.getContext(),"Error Creating Pdf "+e,Toast.LENGTH_SHORT).show();
-                }
-                compartirPDF();
-            }
-
-            private void compsartirPDF() {
+        crearPdf();
 
 
-
-                // Así va correctamente la dirección
-
-
-
-
-
-//                ntent sendIntent = new Intent("android.intent.action.MAIN");
-//                sendIntent.setAction(Intent.ACTION_SEND); sendIntent.setType("text/application/pdf");
-//
-
-//
-//
-//                sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-//                sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
-//                //phone number without "+" prefix sendIntent.setPackage("com.whatsapp");
-//                startActivity(sendIntent); } catch(Exception e)
-
-            }
-        });
+        button_compartir.setOnClickListener(view -> compartirPDF());
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
         {
@@ -97,12 +59,46 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
         }
     }
 
+    private void crearPdf() {
+        String path = Environment.getExternalStorageDirectory().toString() + "/reporte.pdf";
+        try
+        {
+            PDFUtility.createPdf(this, MostarReporte.this,path,true);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            Toast.makeText(this,"Error Creating Pdf "+e,Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     @Override
     public void onPDFDocumentClose(File file)
     {
         Toast.makeText(this,"Sample Pdf Created",Toast.LENGTH_SHORT).show();
+        MostrarPdf();
 
     }
+
+    private void MostrarPdf() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        File file = new File(Environment.getExternalStorageDirectory().toString() + "/reporte.pdf");
+        pdfView.fromFile(file)
+                .enableSwipe(true)
+                .swipeHorizontal(false)
+                .enableDoubletap(true)
+                .enableAntialiasing(true)
+                .load();
+
+//        compartirPDF();
+
+    }
+
 
     private void compartirPDF(){
 
@@ -121,19 +117,9 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
     }
 
 
+
     private List<String[]> getSampleData()
     {
-        int count = 20;
-        if(!TextUtils.isEmpty(rowCount.getText()))
-        {
-            count = Integer.parseInt(rowCount.getText().toString());
-        }
-
-        List<String[]> temp = new ArrayList<>();
-        for (int i = 0; i < count; i++)
-        {
-            temp.add(new String[] {"C1-R"+ (i+1),"C2-R"+ (i+1)});
-        }
-        return  temp;
+        return null;
     }
 }

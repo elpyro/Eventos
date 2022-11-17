@@ -1,4 +1,5 @@
 package com.example.eventos;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,7 +32,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.List;
 
 final class PDFUtility
 {
@@ -47,7 +47,7 @@ final class PDFUtility
         void onPDFDocumentClose(File file);
     }
 
-    static void createPdf(@NonNull Context mContext, OnDocumentClose mCallback, List<String[]> items, @NonNull String filePath, boolean isPortrait) throws Exception
+    static void createPdf(@NonNull Context mContext, OnDocumentClose mCallback, @NonNull String filePath, boolean isPortrait) throws Exception
     {
         if(filePath.equals(""))
         {
@@ -77,7 +77,7 @@ final class PDFUtility
         addHeader(mContext,document);
         addEmptyLine(document, 3);
 
-        document.add(createDataTable(items));
+        document.add(createDataTable());
 
 //        addEmptyLine(document,2);
 //        document.add(createSignBox());
@@ -223,7 +223,7 @@ final class PDFUtility
         document.add(table);
     }
 
-    private static PdfPTable createDataTable(List<String[]> dataTable) throws DocumentException
+    private static PdfPTable createDataTable() throws DocumentException
     {
         PdfPTable table1 = new PdfPTable(5);
         table1.setWidthPercentage(100);

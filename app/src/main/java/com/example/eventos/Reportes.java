@@ -47,8 +47,8 @@ public class Reportes extends Fragment {
                              Bundle savedInstanceState) {
         context=getContext();
         vista= inflater.inflate(R.layout.fragment_reportes, container, false);
+
         inicializando();
-        llenandoSpinner();
 
         button_crearReporte.setOnClickListener(view -> crearReporte());
         spinner_evento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -75,7 +75,6 @@ public class Reportes extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 estadoSeleccionado =adapterView.getSelectedItem().toString();
-                Toast.makeText(context, estadoSeleccionado, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -86,9 +85,17 @@ public class Reportes extends Fragment {
         return vista;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        llenandoSpinner();
+        button_crearReporte.setEnabled(true);
+    }
+
     private void crearReporte() {
 
-
+        button_crearReporte.setEnabled(false);
         DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
         Query dataQuery = myRefe.child("Eventos").orderByChild("id").equalTo(idEventoSeleccionado).limitToFirst(1);
         dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -118,7 +125,7 @@ public class Reportes extends Fragment {
                             invitaciones.clear();
                             for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
                                 boolean registrarInvitacion=false;
-                                if (id_referidoSeleccionado.equals("Todos")) {
+                                if (id_referidoSeleccionado.equals("0")) {
                                     if(estadoSeleccionado.equals("Todos"))registrarInvitacion=true;
                                     if(estadoSeleccionado.equals(userSnapshot.getValue(Modelo_invitacion.class).getEstado()))registrarInvitacion=true;
                                 }
@@ -127,15 +134,18 @@ public class Reportes extends Fragment {
                                     if(estadoSeleccionado.equals(userSnapshot.getValue(Modelo_invitacion.class).getEstado()))registrarInvitacion=true;
                                 }
 
-
-
                                 if(registrarInvitacion==true)    invitaciones.add( userSnapshot.getValue(Modelo_invitacion.class));
 
 
                             }
-                            Intent intent = new Intent(context, MostarReporte.class);
-                            intent.putExtra("datosEvento", evento);
-                            startActivity(intent);
+                            if (invitaciones.size()==0) {
+                                Toast.makeText(context, "Este evento no tiene invitaciones", Toast.LENGTH_LONG).show();
+                            }else{
+                                Intent intent = new Intent(context, MostarReporte.class);
+                                intent.putExtra("datosEvento", evento);
+                                startActivity(intent);
+                            }
+
                         } else {
                             Toast.makeText(context,getString(R.string.EventoInexistente) , Toast.LENGTH_SHORT).show();
                         }

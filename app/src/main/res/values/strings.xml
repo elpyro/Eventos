@@ -92,6 +92,7 @@
     <string name="DireccionWebValidus">https://teamvalidus.com/</string>
     <string name="CrearReporte">Crear Reporte</string>
     <string name="NombreEmpresa">Community 24-7</string>
+    <string name="PDF_guardado_con_exito">PDF guardado</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

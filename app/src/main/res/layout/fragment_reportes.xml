@@ -3,61 +3,180 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Reportes">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <TextView
-        android:layout_marginTop="50dp"
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:theme="@style/texto_titulo"
+            android:text="@string/Reportes"></TextView>
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/texto_titulo"
-        android:text="@string/Evento" />
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20sp"
+        android:layout_marginTop="50sp"
+        android:layout_marginRight="20sp"
+        android:layout_marginBottom="10sp"
+        app:cardBackgroundColor="@color/fondo_cardView"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10sp">
 
-    <Spinner
-        android:id="@+id/spinner_evento"
-        android:layout_margin="30dp"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         />
+        android:layout_height="match_parent"
+        android:layout_margin="22sp"
+        android:orientation="vertical">
 
-    <TextView
-        android:theme="@style/texto_titulo"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Referido" />
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
-    <Spinner
-        android:id="@+id/spinner_referido"
-        android:layout_margin="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/texto_titulo"
-
-        android:text="@string/Estado" />
-
-        <Spinner
-            android:id="@+id/spinner_estado"
+        <TextView
+            android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp" />
+            android:layout_margin="4dp"
+            android:layout_weight="2"
+            android:gravity="left"
+            android:text="@string/Evento"
+            android:theme="@style/texto_sub_titulo"
+            tools:ignore="NestedWeights,TextContrastCheck" />
 
-    <Button
-        android:id="@+id/button_crearReporte"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/boton"
-        android:textColor="@color/black"
-        android:theme="@style/Botones"
-        android:text="@string/CrearReporte" />
+        <Spinner
+            android:id="@+id/spinner_evento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="2"
+                android:gravity="left"
+                android:text="@string/Referido"
+                android:theme="@style/texto_sub_titulo"
+                tools:ignore="NestedWeights,TextContrastCheck" />
+
+            <Spinner
+                android:id="@+id/spinner_referido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                tools:ignore="TouchTargetSizeCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="2"
+                android:gravity="left"
+                android:text="@string/Estado"
+                android:theme="@style/texto_sub_titulo"
+                tools:ignore="NestedWeights,TextContrastCheck" />
+
+            <Spinner
+                android:id="@+id/spinner_estado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                tools:ignore="TouchTargetSizeCheck" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+        <Button
+            android:id="@+id/button_crearReporte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/boton"
+            android:textColor="@color/black"
+            android:theme="@style/Botones"
+            android:text="@string/CrearReporte" />
+    </LinearLayout>
+    <!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical">-->
+<!--    <TextView-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:theme="@style/texto_titulo"-->
+<!--        android:text="@string/Evento" />-->
+
+<!--    <Spinner-->
+<!--        android:id="@+id/spinner_evento"-->
+<!--        android:layout_margin="30dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--         />-->
+
+<!--    <TextView-->
+<!--        android:theme="@style/texto_titulo"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/Referido" />-->
+
+<!--    <Spinner-->
+<!--        android:id="@+id/spinner_referido"-->
+<!--        android:layout_margin="30dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--    />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView9"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:theme="@style/texto_titulo"-->
+
+<!--        android:text="@string/Estado" />-->
+
+<!--        <Spinner-->
+<!--            android:id="@+id/spinner_estado"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="30dp" />-->
+
+
+<!--    </LinearLayout>-->
 </ScrollView>
