@@ -12,6 +12,7 @@
     <uses-permission android:name=" android.permission.BIND_AUTOFILL_SERVICE" />
 
     <application
+        android:name=".PersistenciaFirebase"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -35,12 +36,8 @@
             android:name=".LectorDeCodigosQr"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
-            tools:replace="android:screenOrientation" /> <!-- <activity -->
-        <!-- android:name=".SeleccionarImagen" -->
-        <!-- android:screenOrientation="portrait" -->
-        <!-- android:exported="false" /> -->
-        <!-- <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" -->
-        <!-- android:theme="@style/Base.Theme.AppCompat"/> &lt;!&ndash; optional (needed if default theme has no action bar) &ndash;&gt; -->
+            tools:replace="android:screenOrientation" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.eventos.fileprovider"

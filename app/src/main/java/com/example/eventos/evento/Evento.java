@@ -3,14 +3,18 @@ package com.example.eventos.evento;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -318,10 +322,97 @@ public class Evento extends Fragment {
         return fechaCorrecta;
     }
 
+    private boolean isNetworkConnected(Context context) {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context
+                .CONNECTIVITY_SERVICE);
+        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+        if (info == null || !info.isConnected() || !info.isAvailable()) {
+            return false;
+        }
+        return true;
+    }
+
     private void guardar() {
 
         if (!validarDatos())return;
 
+        if(isNetworkConnected(context)){
+            guardarConImagen();
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("No hay conexion a internet");
+        builder.setMessage("Necesita internet para guardar imagenes en la nube, ¿desea continuar sin guardar imagenes?");
+
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                guardarSinImagen();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        }
+
+
+
+    }
+
+    private void guardarSinImagen() {
+        new Thread(() -> {
+
+            DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
+        @SuppressLint("SimpleDateFormat") String fecha= new SimpleDateFormat("hh:mm aa dd-MM-yy").format(new Date());
+        Modelo_evento evento = new Modelo_evento();
+
+            //si se recibieron argumentos el id es el mismo. EDITAR
+            if (!id_exitente.equals("")){
+                evento.setId(id_exitente);
+            }else{
+                evento.setId(UUID.randomUUID().toString());
+            }
+
+        evento.setNombre(editText_nombre.getText().toString().trim());
+        evento.setDescripcion(editText_descripcion.getText().toString().trim());
+        evento.setCiudad(editText_ciudad.getText().toString().trim());
+        evento.setDireccion(editText_direccion.getText().toString().trim());
+        evento.setFecha(textView_hora.getText().toString().trim() +" " +textView_fecha.getText().toString().trim());
+        evento.setHora(textView_hora.getText().toString().trim());
+        evento.setCosto(editText_costo.getText().toString().trim());
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatoFecha = new SimpleDateFormat("HH:mm aa dd-MM-yyyy");
+        Date fecha_evento = null;
+        try {
+            fecha_evento= formatoFecha.parse((textView_hora.getText().toString().trim() +" " +textView_fecha.getText().toString().trim()));
+        } catch (ParseException exception) {
+            exception.printStackTrace();
+        }
+        evento.setFechaHora(fecha_evento);
+        evento.setBoletos(editText_boletos.getText().toString().trim());
+        if (editText_boletos_vendidos.getText().toString().trim().equals("")){
+            evento.setBoletosVendidos("0");
+        }else{
+            evento.setBoletosVendidos(editText_boletos_vendidos.getText().toString().trim());
+        }
+        //TODO colocar r.string
+        evento.setEstado("Proximamente");
+        evento.setEdicion("Editado: " + PantallaPrincipal.nombreUsuario +" "+ fecha );
+        evento.setUrlImagen("");
+        myRefe.child("Eventos").child(evento.getId()).setValue(evento);
+            requireActivity().runOnUiThread(() -> {
+                Toast.makeText(context, "Evento Guardado", Toast.LENGTH_SHORT).show();
+            });
+
+        }).start();
+        requireActivity().onBackPressed();
+    }
+
+    private void guardarConImagen() {
         new Thread(() -> {
 
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
@@ -333,6 +424,7 @@ public class Evento extends Fragment {
             }else{
                 evento.setId(UUID.randomUUID().toString());
             }
+
 
             FirebaseStorage storage = FirebaseStorage.getInstance();
             // Create a storage reference from our app
@@ -376,7 +468,7 @@ public class Evento extends Fragment {
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat formatoFecha = new SimpleDateFormat("HH:mm aa dd-MM-yyyy");
                     Date fecha_evento = null;
                     try {
-                         fecha_evento= formatoFecha.parse((textView_hora.getText().toString().trim() +" " +textView_fecha.getText().toString().trim()));
+                        fecha_evento= formatoFecha.parse((textView_hora.getText().toString().trim() +" " +textView_fecha.getText().toString().trim()));
                     } catch (ParseException exception) {
                         exception.printStackTrace();
                     }
@@ -392,19 +484,22 @@ public class Evento extends Fragment {
                     evento.setEdicion("Editado: " + PantallaPrincipal.nombreUsuario +" "+ fecha );
                     evento.setUrlImagen(descargaUri.toString());
                     myRefe.child("Eventos").child(evento.getId()).setValue(evento);
-                    Toast.makeText(context, "Evento Guardado", Toast.LENGTH_SHORT).show();
+
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(context, "Evento Guardado", Toast.LENGTH_SHORT).show();
+                    });
                 });
             } catch (Exception e) {
-            try {
-                requireActivity().runOnUiThread(() -> {
-                    try {
-                        Toast.makeText(context, "Problemas de conexion", Toast.LENGTH_SHORT).show();
-                    }catch (Exception ignored){ }
+                try {
+                    requireActivity().runOnUiThread(() -> {
+                        try {
+                            Toast.makeText(context, "Problemas de conexion", Toast.LENGTH_SHORT).show();
+                        }catch (Exception ignored){ }
 
-                });
-            }catch (Exception er){
-                Toast.makeText(context, "Problemas de conexion", Toast.LENGTH_SHORT).show();
-            }
+                    });
+                }catch (Exception er){
+                    Toast.makeText(context, "Problemas de conexion", Toast.LENGTH_SHORT).show();
+                }
             }
 
 

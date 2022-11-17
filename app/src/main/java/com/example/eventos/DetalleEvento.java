@@ -65,12 +65,33 @@ public class DetalleEvento extends Fragment {
 
         incicializando();
         recibirArgumentos();
-
+        cargarPersistencaInvitados();
         button_crearInvitacion.setOnClickListener(view -> abrirCrearInvitacion());
         bottom_asistencia.setOnClickListener(view -> abrirConfirmarAsistencia());
         button_firma.setOnClickListener(view -> abrirConfirmarFirma());
         imageView_imagen_evento.setOnClickListener(view -> MostrarImagenGrande());
+
+
+
+
+
         return vista;
+    }
+
+    private void cargarPersistencaInvitados() {
+        //Es requerido haber consultado previamente una persietencia para mostrarla luego
+
+        DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
+        Query dataQuery = myRefe.child("Invitaciones").orderByChild("id_evento").equalTo(evento.getId());
+        dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //la persistencia se ha guardado
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     private void MostrarImagenGrande() {

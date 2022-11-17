@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -75,6 +74,7 @@ public class AdaptadorAsistencia extends RecyclerView.Adapter<AdaptadorAsistenci
 
             linerarLayout_tarjeta.setOnClickListener(view -> {
                 Bundle bundle = new Bundle();
+
                 bundle.putString("id_invitacion", textView_id_invisible.getText().toString().trim());
                 Navigation.findNavController(view).navigate(R.id.mostrarInvitacion,bundle);
 
