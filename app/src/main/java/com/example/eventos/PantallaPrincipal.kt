@@ -3,27 +3,23 @@ package com.example.eventos
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.view.Menu
-import android.widget.TextView
+import android.view.View
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
 import com.example.eventos.databinding.ActivityMainBinding
-import com.example.eventos.databinding.NavHeaderMainBinding
 import com.example.eventos.modelos.Modelo_usuario
+import com.example.eventos.ui.inicio.Inicio
 import com.firebase.ui.auth.AuthUI
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.util.*
-import kotlin.concurrent.thread
-
 
 
 @Suppress("DEPRECATION")
@@ -31,7 +27,7 @@ class PantallaPrincipal : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var navView: NavigationView
     companion object {
         lateinit var nombreUsuario: String
         lateinit var perfilUsaurio: String
@@ -64,7 +60,7 @@ class PantallaPrincipal : AppCompatActivity() {
 
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
+         navView  = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -78,6 +74,7 @@ class PantallaPrincipal : AppCompatActivity() {
         navView.setBackgroundResource(R.drawable.fondo);
         navView.setItemIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.amarillo)));
         navView.setItemTextColor(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+
 
 
 
@@ -114,9 +111,25 @@ class PantallaPrincipal : AppCompatActivity() {
                                 apline_usuario=usuario?.apline.toString();
                                 usuario_telefono= usuario?.telefono.toString()
 
+                                Inicio.linearlayout_todosLosUsuarios.visibility = View.VISIBLE
+                                navView.getMenu()
+                                    .setGroupVisible(R.id.menu_inicio, true)
+                                if(perfilUsaurio.equals("Administrador")) {
+                                    navView.getMenu()
+                                        .setGroupVisible(R.id.menu_administrador, true)
+                                }else{
+                                    navView.getMenu()
+                                        .setGroupVisible(R.id.menu_administrador, false)
+                                }
                             }
                             return
                         } else {
+                            perfilUsaurio = "Usuario no registrado"
+                            navView.getMenu()
+                                .setGroupVisible(R.id.menu_administrador, false)
+                            navView.getMenu()
+                                .setGroupVisible(R.id.menu_inicio, false)
+                            Inicio.linearlayout_todosLosUsuarios.visibility = View.GONE
                             Toast.makeText(applicationContext, "Usuario no registrado", Toast.LENGTH_SHORT)
                                 .show()
                             binding.appBarMain.toolbar.setTitle("Usuario no registrado")

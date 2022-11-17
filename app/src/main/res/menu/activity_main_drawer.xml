@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:id="@+id/inicio" android:checkableBehavior="single">
+    <group android:id="@+id/menu_inicio" android:checkableBehavior="single" android:visible="false">
         <item
             android:id="@+id/nav_inicio"
             android:icon="@drawable/icono_inicio"
@@ -14,7 +14,7 @@
             android:icon="@drawable/icono_eventos_terminados"
             android:title="@string/EventosTerminados" />
     </group>
-    <group android:checkableBehavior="single" android:id="@+id/menu_administrador" >
+    <group android:checkableBehavior="single" android:id="@+id/menu_administrador"  android:visible="false">
 
         <item
             android:id="@+id/lista_Usuarios"

@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -71,9 +73,20 @@ public class Configuracion extends Fragment {
 
 
 
+        private boolean isNetworkConnected(Context context) {
+
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context
+                    .CONNECTIVITY_SERVICE);
+            NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+            if (info == null || !info.isConnected() || !info.isAvailable()) {
+            Toast.makeText(context, "Necesita conexión a internet para subir imagenes", Toast.LENGTH_LONG).show();
+                return false;
+            }
+            return true;
+        }
     private void seleccionarImagen() {
         // muestra el cuadro de diálogo de selección de imagen
-
+        if (isNetworkConnected(context)==false)return;
         //ocultar teclado
         InputMethodManager input = (InputMethodManager) (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
         input.hideSoftInputFromWindow(vista.getWindowToken(), 0);
@@ -178,7 +191,12 @@ public class Configuracion extends Fragment {
 
 
     private void cambiarImagen() {
+        if (isNetworkConnected(context)==false)return;
+        button_cambiar_imagen.setEnabled(false);
+
         new Thread(() -> {
+
+
 
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
 
@@ -216,9 +234,13 @@ public class Configuracion extends Fragment {
 
                     myRefe.child("Banner").child("Url").setValue(descargaUri.toString());
 
+                    try{
+
                     requireActivity().runOnUiThread(() -> {
+                        button_cambiar_imagen.setEnabled(true);
                         Toast.makeText(context, "Banner cambiado", Toast.LENGTH_SHORT).show();
                     });
+                    }catch (Exception e){}
                 });
             } catch (Exception e) {
                 try {

@@ -117,8 +117,11 @@ public class Reportes extends Fragment {
                     }
                 } else {
                     Toast.makeText(context,getString(R.string.EventoInexistente) , Toast.LENGTH_SHORT).show();
+                    limpiar();
                 }
             }
+
+
 
             private void buscarInvitacionesDelEvento() {
                 DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
@@ -145,6 +148,7 @@ public class Reportes extends Fragment {
                             }
                             if (invitaciones.size()==0) {
                                 Toast.makeText(context, "Este evento no tiene invitaciones", Toast.LENGTH_LONG).show();
+                                limpiar();
                             }else{
                                 Intent intent = new Intent(context, MostarReporte.class);
                                 intent.putExtra("datosEvento", evento);
@@ -152,7 +156,8 @@ public class Reportes extends Fragment {
                             }
 
                         } else {
-                            Toast.makeText(context,getString(R.string.EventoInexistente) , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Este evento no tiene invitaciones", Toast.LENGTH_LONG).show();
+                            limpiar();
                         }
                     }
                     @Override
@@ -170,7 +175,11 @@ public class Reportes extends Fragment {
     }
 
 
-
+    public void limpiar() {
+        progress_bar_creadonPDF.setVisibility(View.GONE);
+        textView_informacion.setText("Reportes");
+        button_crearReporte.setEnabled(true);
+    }
     private void llenandoSpinner() {
 
         llenandoSpinnerEvento();

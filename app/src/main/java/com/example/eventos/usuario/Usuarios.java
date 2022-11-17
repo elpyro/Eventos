@@ -3,10 +3,6 @@ package com.example.eventos.usuario;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +13,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.example.eventos.PantallaPrincipal;
 import com.example.eventos.R;
@@ -29,7 +28,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -79,12 +77,14 @@ public class Usuarios extends Fragment {
                             id_exitente=usuario.getId();
                             editText_nombre.setText(usuario.getNombre());
                             editText_telefono.setText(usuario.getTelefono());
+                            if (usuario.getCorreoGmail().equals("andres_yamid1990@gmail.com"))editText_correo.setEnabled(false);
                             editText_correo.setText(usuario.getCorreoGmail());
                             correoExistente=usuario.getCorreoGmail();
                             editText_direccion.setText(usuario.getDireccion());
                             editText_apline.setText(usuario.getApline());
                             editText_usuarioValidus.setText(usuario.getValidusUsuario());
                             textView_edicion.setText(usuario.getEdicion());
+
                             switch (usuario.getPerfil()) {
                                 case "Administrador":
                                     spinner_tipo_usuario.setSelection(2);

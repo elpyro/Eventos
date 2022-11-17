@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eventos.PantallaPrincipal;
 import com.example.eventos.R;
 import com.example.eventos.modelos.Modelo_evento;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +36,7 @@ import adaptadorRecyclerView.AdaptadorProximosEventos;
 public class Inicio extends Fragment {
     View vista;
     Context context;
-
+    public static LinearLayout linearlayout_todosLosUsuarios;
     private RecyclerView recview;
     private Query referencia;
     private ImageView imagenView_banner;
@@ -48,6 +50,7 @@ public class Inicio extends Fragment {
         vista = inflater.inflate(R.layout.fragment_home, container, false);
         inicializando();
         cargarBanner();
+
         return vista;
     }
 
@@ -78,16 +81,19 @@ public class Inicio extends Fragment {
 
 
     private void inicializando() {
+        linearlayout_todosLosUsuarios=vista.findViewById(R.id.linearlayout_todosLosUsuarios);
         imagenView_banner=vista.findViewById(R.id.imagenView_banner);
         recview=vista.findViewById(R.id.recyclerView_proximosEventos);
         recview.setHasFixedSize(true);
         recview.setLayoutManager(new LinearLayoutManager(context));
         referencia= FirebaseDatabase.getInstance().getReference().child("Eventos").orderByChild("estado").equalTo("Proximamente");
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (PantallaPrincipal.perfilUsaurio!=null ) if ( !PantallaPrincipal.perfilUsaurio.equals("Usuario no registrado"))linearlayout_todosLosUsuarios.setVisibility(View.VISIBLE);
         llenandoRecyclerView();
     }
 
