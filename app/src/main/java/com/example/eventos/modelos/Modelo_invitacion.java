@@ -8,36 +8,16 @@ public class Modelo_invitacion implements Serializable {
     public Modelo_invitacion() {
     }
 
-    public String getTelefono_referido() {
-        return telefono_referido;
-    }
-
-    public void setTelefono_referido(String telefono_referido) {
-        this.telefono_referido = telefono_referido;
-    }
-
-    public String getApline_referido() {
-        return apline_referido;
-    }
-
-    public void setApline_referido(String apline_referido) {
-        this.apline_referido = apline_referido;
-    }
-
-    public String getUsuario_validus_referido() {
-        return usuario_validus_referido;
-    }
-
-    public void setUsuario_validus_referido(String usuario_validus_referido) {
-        this.usuario_validus_referido = usuario_validus_referido;
-    }
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getId_evento() {
+        return id_evento;
     }
 
     public void setId_evento(String id_evento) {
@@ -98,6 +78,30 @@ public class Modelo_invitacion implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getApline_referido() {
+        return apline_referido;
+    }
+
+    public void setApline_referido(String apline_referido) {
+        this.apline_referido = apline_referido;
+    }
+
+    public String getUsuario_validus_referido() {
+        return usuario_validus_referido;
+    }
+
+    public void setUsuario_validus_referido(String usuario_validus_referido) {
+        this.usuario_validus_referido = usuario_validus_referido;
+    }
+
+    public String getTelefono_referido() {
+        return telefono_referido;
+    }
+
+    public void setTelefono_referido(String telefono_referido) {
+        this.telefono_referido = telefono_referido;
     }
 
     public String getNuevo_usuario_validus() {

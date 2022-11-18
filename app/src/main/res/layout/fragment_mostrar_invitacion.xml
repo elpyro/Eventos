@@ -17,16 +17,17 @@
             android:id="@+id/switch_asistencia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:textColor="@color/white"
             android:layout_marginBottom="0dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="45dp"
-            android:gravity="right"
+            android:gravity="end"
             android:scaleX="1.4"
             android:scaleY="1.4"
             android:text="@string/Asistencia"
-            android:theme="@style/SwichAmarillo" />
+            android:theme="@style/SwichAmarillo"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         <androidx.cardview.widget.CardView
         android:id="@+id/cardView_invitacion"
@@ -103,13 +104,14 @@
                     android:theme="@style/texto_cursiva"
                     android:layout_marginStart="10dp"
                     android:text="@string/Fecha" />
+
                 <TextView
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:theme="@style/texto_sub_titulo"
                     android:layout_marginStart="10dp"
-                    android:text="@string/Hora"></TextView>
+                    android:text="@string/Hora" />
                 <TextView
                     android:id="@+id/textView_hora"
                     android:layout_width="wrap_content"

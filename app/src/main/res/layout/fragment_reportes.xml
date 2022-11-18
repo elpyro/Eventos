@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
@@ -18,7 +18,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:theme="@style/texto_titulo"
-            android:text="@string/Reportes"></TextView>
+            android:text="@string/Reportes" />
 
         <ProgressBar
 
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_weight="2"
-            android:gravity="left"
+            android:gravity="start"
             android:text="@string/Evento"
             android:theme="@style/texto_sub_titulo"
             tools:ignore="NestedWeights,TextContrastCheck" />
@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:layout_weight="2"
-                android:gravity="left"
+                android:gravity="start"
                 android:text="@string/Referido"
                 android:theme="@style/texto_sub_titulo"
                 tools:ignore="NestedWeights,TextContrastCheck" />
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:layout_weight="2"
-                android:gravity="left"
+                android:gravity="start"
                 android:text="@string/Estado"
                 android:theme="@style/texto_sub_titulo"
                 tools:ignore="NestedWeights,TextContrastCheck" />

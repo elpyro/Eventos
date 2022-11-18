@@ -1,7 +1,9 @@
 package com.example.eventos.ui.inicio;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,6 +48,13 @@ public class Inicio extends Fragment {
     private ImageView imagenView_banner;
     private   ArrayList<Modelo_evento> lista;
     ValueEventListener oyente;
+    private String  urlBanner="";
+
+    // matrices de permisos
+    private  static final int CAMERA_REQUEST_CODE = 100;
+    private static final int STORAGE_REQUEST_CODE = 101;
+    private String[] cameraPermissions; // cámara y almacenamiento
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,8 +64,73 @@ public class Inicio extends Fragment {
         inicializando();
         cargarBanner();
 
+        cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        // solo almacenamiento
+
+        if (!checkCameraPermission()){
+            requestCameraPermission();
+        }
+
+
+        imagenView_banner.setOnClickListener(view -> mostrarImagenGrande());
         return vista;
     }
+
+    private boolean checkCameraPermission(){
+        // verifica si el permiso de la cámara está habilitado o no
+        boolean result = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+        boolean result1 = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return result && result1;
+    }
+
+    private void requestCameraPermission(){
+        // solicita el permiso de la cámara
+        ActivityCompat.requestPermissions(requireActivity(), cameraPermissions, CAMERA_REQUEST_CODE);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // resultado del permiso permitido / denegado
+        switch (requestCode){
+            case CAMERA_REQUEST_CODE:{
+                if (grantResults.length>0){
+
+                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                    if(!cameraAccepted && !storageAccepted){
+
+                        Toast.makeText(context, getString(R.string.Se_requieren_permisos), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+            break;
+            case STORAGE_REQUEST_CODE:{
+                if (grantResults.length>0){
+
+                    // si se permite devolver verdadero de lo contrario falso
+                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (!storageAccepted){
+                          Toast.makeText(context, getString(R.string.Se_requieren_permiso_almacenamiento), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+            break;
+        }
+    }
+
+    private void mostrarImagenGrande() {
+        Bundle bundle = new Bundle();
+        bundle.putString("url_imagen",urlBanner);
+        Navigation.findNavController(vista).navigate(R.id.mostrarImagenAmpliada,bundle);
+    }
+
 
     private void cargarBanner() {
 
@@ -66,7 +142,8 @@ public class Inicio extends Fragment {
                     if (dataSnapshot.exists()){
                         for(DataSnapshot ignored1 :dataSnapshot.getChildren()) {
                             try {
-                                Picasso.with(context).load(dataSnapshot.child("Url").getValue(String.class)).into(imagenView_banner);
+                                urlBanner=dataSnapshot.child("Url").getValue(String.class);
+                                Picasso.with(context).load(urlBanner).into(imagenView_banner);
 
                             }catch (Exception ignored){
                             }
@@ -97,7 +174,9 @@ public class Inicio extends Fragment {
         super.onResume();
         if (PantallaPrincipal.perfilUsaurio!=null ) if ( !PantallaPrincipal.perfilUsaurio.equals("Usuario no registrado"))linearlayout_todosLosUsuarios.setVisibility(View.VISIBLE);
         llenandoRecyclerView();
+//
     }
+
 
 
     private void llenandoRecyclerView() {
@@ -139,7 +218,9 @@ public class Inicio extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        referencia.removeEventListener(oyente);
+        try {
+            referencia.removeEventListener(oyente);
+        }catch (Exception ignored){}
         vista=null;
     }
 }

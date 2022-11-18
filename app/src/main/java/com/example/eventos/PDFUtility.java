@@ -182,7 +182,7 @@ final class PDFUtility
             logoTable.setHorizontalAlignment(Element.ALIGN_CENTER);
             logoTable.getDefaultCell().setVerticalAlignment(Element.ALIGN_CENTER);
 
-            Drawable drawable=ContextCompat.getDrawable(mContext, R.drawable.logomini);
+            Drawable drawable=ContextCompat.getDrawable(mContext, R.drawable.logo24siete);
             assert drawable != null;
             Bitmap bmp =((BitmapDrawable)drawable).getBitmap();
 

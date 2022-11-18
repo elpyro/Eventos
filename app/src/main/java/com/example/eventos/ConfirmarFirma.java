@@ -170,6 +170,8 @@ public class ConfirmarFirma extends Fragment {
         super.onDetach();
         codigoEncontrado=null;
         vista=null;
-        referencia.removeEventListener(oyente);
+        try {
+            referencia.removeEventListener(oyente);
+        }catch (Exception ignored){}
     }
 }

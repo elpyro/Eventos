@@ -13,14 +13,6 @@ public class Modelo_evento implements Serializable {
         return id;
     }
 
-    public Date getFechaHora() {
-        return fechaHora;
-    }
-
-    public void setFechaHora(Date fechaHora) {
-        this.fechaHora = fechaHora;
-    }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -73,7 +65,6 @@ public class Modelo_evento implements Serializable {
         this.descripcion = descripcion;
     }
 
-
     public String getBoletos() {
         return boletos;
     }
@@ -81,7 +72,6 @@ public class Modelo_evento implements Serializable {
     public void setBoletos(String boletos) {
         this.boletos = boletos;
     }
-
 
     public String getCiudad() {
         return ciudad;
@@ -121,5 +111,13 @@ public class Modelo_evento implements Serializable {
 
     public void setUrlImagen(String urlImagen) {
         this.urlImagen = urlImagen;
+    }
+
+    public Date getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(Date fechaHora) {
+        this.fechaHora = fechaHora;
     }
 }

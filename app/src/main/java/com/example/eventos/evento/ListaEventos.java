@@ -3,6 +3,12 @@ package com.example.eventos.evento;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -10,13 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.eventos.R;
 import com.example.eventos.modelos.Modelo_evento;
@@ -130,7 +129,9 @@ public class ListaEventos extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        referencia.removeEventListener(oyente);
+        try {
+            referencia.removeEventListener(oyente);
+        }catch (Exception ignored){}
         vista=null;
     }
 

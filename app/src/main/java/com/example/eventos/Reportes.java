@@ -53,6 +53,7 @@ public class Reportes extends Fragment {
     ArrayList<Modelo_spinner_recuperarId> nombreEvento;
     ArrayList<Modelo_spinner_recuperarId> nombreReferido;
     private String idEventoSeleccionado, id_referidoSeleccionado, estadoSeleccionado;
+
     private  static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 101;
     private String[] cameraPermissions; // cámara y almacenamiento

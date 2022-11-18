@@ -48,6 +48,7 @@ public class CrearInvitacion extends Fragment {
         Bundle bundle = getArguments();
         if (getArguments() != null) {
             evento =(Modelo_evento) bundle.getSerializable("evento");
+
         }
 
         button_invitar.setOnClickListener(view -> guardarInvitacion());

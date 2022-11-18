@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linerarLayout_tarjeta"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
@@ -14,14 +15,14 @@
 
     <TextView
         android:id="@+id/textView_nombre"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginStart="10dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:text="Nombre"
+        android:text="@string/Nombre"
         android:theme="@style/texto_sub_titulo" />
 
 
@@ -42,7 +43,9 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="10dp"
-        app:srcCompat="@drawable/icono_checke_asistido"></ImageView>
+        app:srcCompat="@drawable/icono_checke_asistido"
+        tools:ignore="ContentDescription" />
+
     <ImageView
         android:id="@+id/imageView_cheked_firmado"
         android:layout_width="wrap_content"
@@ -51,5 +54,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="10dp"
-        app:srcCompat="@drawable/icono_cheked"></ImageView>
+        app:srcCompat="@drawable/icono_cheked"
+        tools:ignore="ContentDescription" />
 </LinearLayout>

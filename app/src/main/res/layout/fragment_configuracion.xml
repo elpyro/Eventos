@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="vertical">
 
@@ -20,7 +20,7 @@
         android:layout_marginTop="1dp"
         app:cardBackgroundColor="@color/fondo_cardView"
         app:cardCornerRadius="20dp"
-        app:cardElevation="10sp" > >
+        app:cardElevation="10sp" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="109dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/logo24siete" />
+                android:src="@drawable/logo24siete"
+                android:contentDescription="@string/banner" />
 
             <Button
                 android:id="@+id/button_cambiar_imagen"
@@ -89,7 +90,9 @@
                 android:gravity="start|top"
                 android:textColor="@color/white"
                 android:theme="@style/texto_sub_titulo"
-                android:inputType="textMultiLine|textCapWords" />
+
+                android:inputType="textMultiLine|textCapWords"
+                tools:ignore="LabelFor" />
 
             <Button
                 android:id="@+id/button_cambiar_habeasData"

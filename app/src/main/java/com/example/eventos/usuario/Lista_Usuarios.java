@@ -129,7 +129,9 @@ public class Lista_Usuarios extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        referencia.removeEventListener(oyente);
+        try {
+            referencia.removeEventListener(oyente);
+        }catch (Exception Ignore){}
         vista=null;
     }
 
