@@ -1,6 +1,5 @@
 package com.example.eventos;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,15 +19,13 @@ import com.google.firebase.database.ValueEventListener;
 
 public class HabeasData extends Fragment {
 
-    private View vista;
-    private Context context;
     private TextView textView_habeasData;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        context=getContext();
-        vista=inflater.inflate(R.layout.fragment_habeas_data, container, false);
-        textView_habeasData=vista.findViewById(R.id.textView_habeasData);
+
+        View vista = inflater.inflate(R.layout.fragment_habeas_data, container, false);
+        textView_habeasData= vista.findViewById(R.id.textView_habeasData);
         cargarHabeasData();
          return vista;
     }
@@ -40,7 +37,7 @@ public class HabeasData extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    for(DataSnapshot ds:dataSnapshot.getChildren()) {
+                    for(DataSnapshot ignored :dataSnapshot.getChildren()) {
                         textView_habeasData.setText(dataSnapshot.child("descripcion").getValue(String.class));
                     }
                 }

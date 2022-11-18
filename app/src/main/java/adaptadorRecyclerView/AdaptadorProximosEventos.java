@@ -2,29 +2,24 @@ package adaptadorRecyclerView;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.eventos.R;
 import com.example.eventos.modelos.Modelo_evento;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,11 +67,13 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
 
     }
 
-    private String  crearCuentaRegresiva(int position, MyViewHolder holder) {
-        String cuenta="";
+    @SuppressLint("SetTextI18n")
+    private void crearCuentaRegresiva(int position, MyViewHolder holder) {
         try {
             Date fechaActual= formatoFecha.parse(fechaActualSinFormato);
             Date fecha_evento= formatoFecha.parse(list.get(position).getFecha());
+            assert fecha_evento != null;
+            assert fechaActual != null;
             long diff = fecha_evento.getTime() - fechaActual.getTime();
 
             long segundos = diff / 1000;
@@ -102,8 +99,9 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
             }
             if (horas<-12) cambiarEstadoEvento(position);
 
-        } catch (ParseException exception) {        }
-        return cuenta;
+        } catch (ParseException exception) {
+            exception.printStackTrace();
+        }
     }
 
     private void cambiarEstadoEvento( int position) {

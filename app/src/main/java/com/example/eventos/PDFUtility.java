@@ -2,12 +2,6 @@ package com.example.eventos;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -24,7 +18,6 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.Barcode128;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -36,19 +29,18 @@ import java.io.FileOutputStream;
 final class PDFUtility
 {
     private static final String TAG = PDFUtility.class.getSimpleName();
-    private static Font FONT_TITLE     = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-    private static Font FONT_SUBTITLE      = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+    private static final Font FONT_TITLE     = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+    private static final Font FONT_SUBTITLE      = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 
-    private static Font FONT_CELL      = new Font(Font.FontFamily.TIMES_ROMAN,  10, Font.NORMAL);
-    private static Font FONT_COLUMN    = new Font(Font.FontFamily.TIMES_ROMAN,  14, Font.NORMAL);
+    private static final Font FONT_CELL      = new Font(Font.FontFamily.TIMES_ROMAN,  10, Font.NORMAL);
+    private static final Font FONT_COLUMN    = new Font(Font.FontFamily.TIMES_ROMAN,  14, Font.NORMAL);
 
     public interface OnDocumentClose
     {
         void onPDFDocumentClose(File file);
     }
 
-    static void createPdf(@NonNull Context mContext, OnDocumentClose mCallback, @NonNull String filePath, boolean isPortrait) throws Exception
-    {
+    static void createPdf(@NonNull Context mContext, OnDocumentClose mCallback, @NonNull String filePath) {
         if(filePath.equals(""))
         {
             throw new NullPointerException("PDF ha resultado vacio");
@@ -67,14 +59,14 @@ final class PDFUtility
 
         Document document = new Document();
         document.setMargins(24f,24f,32f,32f);
-        document.setPageSize(isPortrait? PageSize.A4:PageSize.A4.rotate());
+        document.setPageSize(PageSize.A4);
             PdfWriter pdfWriter = null;
             try{
 
          pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(filePath));
         pdfWriter.setFullCompression();
         pdfWriter.setPageEvent(new PageNumeration());
-            }catch (Exception e){}
+            }catch (Exception ignored){}
 
         document.open();
 
@@ -82,23 +74,22 @@ final class PDFUtility
         try{
 
         addHeader(mContext,document);
-        addEmptyLine(document, 3);
+        addEmptyLine(document);
 
         document.add(createDataTable());
-        }catch (Exception e){}
+        }catch (Exception ignored){}
 
-//        addEmptyLine(document,2);
-//        document.add(createSignBox());
 
         document.close();
 
             try
             {
+                assert pdfWriter != null;
                 pdfWriter.close();
             }
             catch (Exception ex)
             {
-                Log.e(TAG,"Error While Closing pdfWriter : "+ex.toString());
+                Log.e(TAG,"Error While Closing pdfWriter : "+ ex);
             }
         }).start();
             if(mCallback!=null)
@@ -108,9 +99,9 @@ final class PDFUtility
 
     }
 
-    private static  void addEmptyLine(Document document, int number) throws DocumentException
+    private static  void addEmptyLine(Document document) throws DocumentException
     {
-        for (int i = 0; i < number; i++)
+        for (int i = 0; i < 3; i++)
         {
             document.add(new Paragraph(" "));
         }
@@ -192,6 +183,7 @@ final class PDFUtility
             logoTable.getDefaultCell().setVerticalAlignment(Element.ALIGN_CENTER);
 
             Drawable drawable=ContextCompat.getDrawable(mContext, R.drawable.logomini);
+            assert drawable != null;
             Bitmap bmp =((BitmapDrawable)drawable).getBitmap();
 
             ByteArrayOutputStream stream=new ByteArrayOutputStream();
@@ -344,90 +336,4 @@ final class PDFUtility
         return table1;
     }
 
-    private static PdfPTable createSignBox() throws DocumentException
-    {
-        PdfPTable outerTable = new PdfPTable(1);
-        outerTable.setWidthPercentage(100);
-        outerTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
-
-        PdfPTable innerTable = new PdfPTable(2);
-        {
-            innerTable.setWidthPercentage(100);
-            innerTable.setWidths(new float[]{1,1});
-            innerTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
-
-            //ROW-1 : EMPTY SPACE
-            PdfPCell cell = new PdfPCell();
-            cell.setBorder(PdfPCell.NO_BORDER);
-            cell.setFixedHeight(60);
-            innerTable.addCell(cell);
-
-            //ROW-2 : EMPTY SPACE
-            cell = new PdfPCell();
-            cell.setBorder(PdfPCell.NO_BORDER);
-            cell.setFixedHeight(60);
-            innerTable.addCell(cell);
-
-            //ROW-3 : Content Left Aligned
-            cell = new PdfPCell();
-            Paragraph temp = new Paragraph(new Phrase("Signature of Supervisor",FONT_SUBTITLE));
-            cell.addElement(temp);
-
-            temp = new Paragraph(new Phrase("( RAVEESH G S )",FONT_SUBTITLE));
-            temp.setPaddingTop(4f);
-            temp.setAlignment(Element.ALIGN_LEFT);
-            cell.addElement(temp);
-
-            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-            cell.setBorder(PdfPCell.NO_BORDER);
-            cell.setPadding(4f);
-            innerTable.addCell(cell);
-
-            //ROW-4 : Content Right Aligned
-            cell = new PdfPCell(new Phrase("Signature of Staff ",FONT_SUBTITLE));
-            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            cell.setBorder(PdfPCell.NO_BORDER);
-            cell.setPadding(4f);
-            innerTable.addCell(cell);
-        }
-
-        PdfPCell signRow = new PdfPCell(innerTable);
-        signRow.setHorizontalAlignment(Element.ALIGN_LEFT);
-        signRow.setBorder(PdfPCell.NO_BORDER);
-        signRow.setPadding(4f);
-
-        outerTable.addCell(signRow);
-
-        return outerTable;
-    }
-
-    private static Image getImage(byte[] imageByte, boolean isTintingRequired) throws Exception
-    {
-        Paint paint=new Paint();
-        if(isTintingRequired)
-        {
-            paint.setColorFilter(new PorterDuffColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN));
-        }
-        Bitmap input  = BitmapFactory.decodeByteArray(imageByte, 0,imageByte.length);
-        Bitmap output = Bitmap.createBitmap(input.getWidth(),input.getHeight(),Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-        canvas.drawBitmap(input,0,0,paint);
-
-        ByteArrayOutputStream stream=new ByteArrayOutputStream();
-        output.compress(Bitmap.CompressFormat.PNG,100,stream);
-        Image image=Image.getInstance(stream.toByteArray());
-        image.setWidthPercentage(80);
-        return image;
-    }
-
-    private static Image getBarcodeImage(PdfWriter pdfWriter, String barcodeText)
-    {
-        Barcode128 barcode=new Barcode128();
-        //barcode.setBaseline(-1); //BARCODE TEXT ABOVE
-        barcode.setFont(null);
-        barcode.setCode(barcodeText);
-        barcode.setCodeType(Barcode128.CODE128);
-        barcode.setTextAlignment(Element.ALIGN_BASELINE);
-        return barcode.createImageWithBarcode(pdfWriter.getDirectContent(),BaseColor.BLACK,null);
-    }
 }

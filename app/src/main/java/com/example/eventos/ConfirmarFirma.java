@@ -1,17 +1,10 @@
 package com.example.eventos;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +12,13 @@ import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventos.modelos.Modelo_invitacion;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Objects;
 
 import adaptadorRecyclerView.AdaptadorConfimarFirma;
 
@@ -102,41 +103,40 @@ public class ConfirmarFirma extends Fragment {
     private void cargarAsistencia(String id_evento) {
         referencia= FirebaseDatabase.getInstance().getReference().child("Invitaciones").orderByChild("id_evento").equalTo(id_evento);
 
-        if(referencia!=null){
-            oyente= referencia.addValueEventListener(new ValueEventListener() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()){
-                        int firmados=0;
-                        int asistenciaTotal=0;
-                        listaAsistidos =new ArrayList<>();
-                        for(DataSnapshot ds:snapshot.getChildren()){
+        oyente= referencia.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    int firmados=0;
+                    int asistenciaTotal=0;
+                    listaAsistidos =new ArrayList<>();
+                    for(DataSnapshot ds:snapshot.getChildren()){
 
-                            if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Asistido")) {
-                                listaAsistidos.add(ds.getValue(Modelo_invitacion.class));
-                                asistenciaTotal=asistenciaTotal+1;
+                        if (Objects.requireNonNull(ds.getValue(Modelo_invitacion.class)).getEstado().equals("Asistido")) {
+                            listaAsistidos.add(ds.getValue(Modelo_invitacion.class));
+                            asistenciaTotal=asistenciaTotal+1;
 
-                            } else if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Firmado")) {
-                                firmados=firmados+1;
-                                listaAsistidos.add(ds.getValue(Modelo_invitacion.class));
-                            }
-
-
+                        } else if (Objects.requireNonNull(ds.getValue(Modelo_invitacion.class)).getEstado().equals("Firmado")) {
+                            firmados=firmados+1;
+                            listaAsistidos.add(ds.getValue(Modelo_invitacion.class));
                         }
-                        textView_cuenta.setText(firmados+" / "+ asistenciaTotal);
-                        listaAsistidos.sort(Comparator.comparing(Modelo_invitacion::getEstado));
-                        adaptador= new AdaptadorConfimarFirma(listaAsistidos);
-                        recview.setAdapter(adaptador);
+
 
                     }
+                    textView_cuenta.setText(firmados+" / "+ asistenciaTotal);
+                    listaAsistidos.sort(Comparator.comparing(Modelo_invitacion::getEstado));
+                    adaptador= new AdaptadorConfimarFirma(listaAsistidos);
+                    recview.setAdapter(adaptador);
+
                 }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(context, "Error en conexion", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "Error en conexion", Toast.LENGTH_SHORT).show();
+            }
+        });
         if (search_invitados!=null){
             search_invitados.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
@@ -170,5 +170,6 @@ public class ConfirmarFirma extends Fragment {
         super.onDetach();
         codigoEncontrado=null;
         vista=null;
+        referencia.removeEventListener(oyente);
     }
 }

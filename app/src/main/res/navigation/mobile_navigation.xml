@@ -110,4 +110,5 @@
         android:label="@string/Configuracion"
         tools:layout="@layout/fragment_configuracion" />
 
+
 </navigation>

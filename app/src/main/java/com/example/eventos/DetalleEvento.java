@@ -33,6 +33,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Objects;
 
 import adaptadorRecyclerView.AdaptadorAsistencia;
 
@@ -53,10 +54,11 @@ public class DetalleEvento extends Fragment {
 
     private SearchView search_invitados;
     private RecyclerView recview;
-    private Query referencia;
+    private Query referencia,dataQueryCargarEVento;
     private ArrayList<Modelo_invitacion> listaInvitados;
-    private   ValueEventListener oyente;
+    private   ValueEventListener oyente, oyenteCargarEvento;
     AdaptadorAsistencia adaptador=null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,7 +67,7 @@ public class DetalleEvento extends Fragment {
 
         incicializando();
         recibirArgumentos();
-        cargarPersistencaInvitados();
+
         button_crearInvitacion.setOnClickListener(view -> abrirCrearInvitacion());
         bottom_asistencia.setOnClickListener(view -> abrirConfirmarAsistencia());
         button_firma.setOnClickListener(view -> abrirConfirmarFirma());
@@ -74,21 +76,8 @@ public class DetalleEvento extends Fragment {
         return vista;
     }
 
-    private void cargarPersistencaInvitados() {
-        //Es requerido haber consultado previamente una persietencia para mostrarla luego
 
-        DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
-        Query dataQuery = myRefe.child("Invitaciones").orderByChild("id_evento").equalTo(evento.getId());
-        dataQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //la persistencia se ha guardado
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
+
 
     private void MostrarImagenGrande() {
         Bundle bundle = new Bundle();
@@ -120,38 +109,37 @@ public class DetalleEvento extends Fragment {
     private void cargarAsistencia(String id_evento) {
         referencia= FirebaseDatabase.getInstance().getReference().child("Invitaciones").orderByChild("id_evento").equalTo(id_evento);
 
-        if(referencia!=null){
-            oyente= referencia.addValueEventListener(new ValueEventListener() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()){
-                        int asistencia=0;
-                        int asistenciaTotal=0;
-                        listaInvitados=new ArrayList<>();
-                        for(DataSnapshot ds:snapshot.getChildren()){
-                            if (ds.getValue(Modelo_invitacion.class).getId_usuario_referido().equals(PantallaPrincipal.idUsuario)){
-                                listaInvitados.add(ds.getValue(Modelo_invitacion.class));
-                                if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Asistido"))asistencia=asistencia+1;
-                                if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Firmado"))asistencia=asistencia+1;
-                                asistenciaTotal=asistenciaTotal+1;
-
-                            }
+        oyente= referencia.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    int asistencia=0;
+                    int asistenciaTotal=0;
+                    listaInvitados=new ArrayList<>();
+                    for(DataSnapshot ds:snapshot.getChildren()){
+                        if (Objects.requireNonNull(ds.getValue(Modelo_invitacion.class)).getId_usuario_referido().equals(PantallaPrincipal.idUsuario)){
+                            listaInvitados.add(ds.getValue(Modelo_invitacion.class));
+                            if (Objects.requireNonNull(ds.getValue(Modelo_invitacion.class)).getEstado().equals("Asistido"))asistencia=asistencia+1;
+                            if (Objects.requireNonNull(ds.getValue(Modelo_invitacion.class)).getEstado().equals("Firmado"))asistencia=asistencia+1;
+                            asistenciaTotal=asistenciaTotal+1;
 
                         }
-                        textView_cuenta.setText(asistencia+" / "+ asistenciaTotal);
-                        listaInvitados.sort(Comparator.comparing(Modelo_invitacion::getEstado));
-                        adaptador= new AdaptadorAsistencia(listaInvitados);
-                        recview.setAdapter(adaptador);
 
                     }
+                    textView_cuenta.setText(asistencia+" / "+ asistenciaTotal);
+                    listaInvitados.sort(Comparator.comparing(Modelo_invitacion::getEstado));
+                    adaptador= new AdaptadorAsistencia(listaInvitados);
+                    recview.setAdapter(adaptador);
+
                 }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(context, "Error en conexion", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "Error en conexion", Toast.LENGTH_SHORT).show();
+            }
+        });
         if (search_invitados!=null){
             search_invitados.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
@@ -178,7 +166,7 @@ public class DetalleEvento extends Fragment {
             }
             adaptador = new AdaptadorAsistencia(filtro);
             recview.setAdapter(adaptador);
-        }catch (Exception exception){}
+        }catch (Exception ignored){}
 
     }
 
@@ -191,8 +179,8 @@ public class DetalleEvento extends Fragment {
     private void cargarEvento(String id) {
         id_evento = id;
         DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
-        Query dataQuery = myRefe.child("Eventos").orderByChild("id").equalTo(id_evento).limitToFirst(1);
-        dataQuery.addValueEventListener(new ValueEventListener() {
+        dataQueryCargarEVento = myRefe.child("Eventos").orderByChild("id").equalTo(id_evento).limitToFirst(1);
+        oyenteCargarEvento=dataQueryCargarEVento.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -259,5 +247,11 @@ public class DetalleEvento extends Fragment {
 
     }
 
-
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        referencia.removeEventListener(oyente);
+        dataQueryCargarEVento.removeEventListener(oyenteCargarEvento);
+        vista=null;
+    }
 }

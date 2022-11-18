@@ -86,7 +86,7 @@ public class Configuracion extends Fragment {
         }
     private void seleccionarImagen() {
         // muestra el cuadro de diálogo de selección de imagen
-        if (isNetworkConnected(context)==false)return;
+        if (!isNetworkConnected(context))return;
         //ocultar teclado
         InputMethodManager input = (InputMethodManager) (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
         input.hideSoftInputFromWindow(vista.getWindowToken(), 0);
@@ -191,7 +191,7 @@ public class Configuracion extends Fragment {
 
 
     private void cambiarImagen() {
-        if (isNetworkConnected(context)==false)return;
+        if (!isNetworkConnected(context))return;
         button_cambiar_imagen.setEnabled(false);
 
         new Thread(() -> {
@@ -240,7 +240,7 @@ public class Configuracion extends Fragment {
                         button_cambiar_imagen.setEnabled(true);
                         Toast.makeText(context, "Banner cambiado", Toast.LENGTH_SHORT).show();
                     });
-                    }catch (Exception e){}
+                    }catch (Exception ignored){}
                 });
             } catch (Exception e) {
                 try {
@@ -283,7 +283,7 @@ public class Configuracion extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    for(DataSnapshot ds:dataSnapshot.getChildren()) {
+                    for(DataSnapshot ignored1 :dataSnapshot.getChildren()) {
                         try {
                             Picasso.with(context).load(dataSnapshot.child("Url").getValue(String.class)).into(imagenView_banner);
 
@@ -306,7 +306,7 @@ public class Configuracion extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
-                    for(DataSnapshot ds:dataSnapshot.getChildren()) {
+                    for(DataSnapshot ignored :dataSnapshot.getChildren()) {
                     edittext_habeasData.setText(dataSnapshot.child("descripcion").getValue(String.class));
                     }
                 }

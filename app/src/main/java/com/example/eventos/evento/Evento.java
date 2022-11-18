@@ -485,9 +485,9 @@ public class Evento extends Fragment {
                     evento.setUrlImagen(descargaUri.toString());
                     myRefe.child("Eventos").child(evento.getId()).setValue(evento);
 
-                    requireActivity().runOnUiThread(() -> {
-                        Toast.makeText(context, "Evento Guardado", Toast.LENGTH_SHORT).show();
-                    });
+//                    requireActivity().runOnUiThread(() -> {
+//                        Toast.makeText(context, "Evento Guardado", Toast.LENGTH_SHORT).show();
+//                    });
                 });
             } catch (Exception e) {
                 try {

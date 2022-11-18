@@ -1,18 +1,13 @@
 package com.example.eventos;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
 import android.media.ToneGenerator;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.eventos.modelos.Modelo_invitacion;
 import com.google.firebase.database.DatabaseReference;
@@ -20,25 +15,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.util.ArrayList;
-
 
 public class LectorDeCodigosQr extends AppCompatActivity {
-    private ArrayList<Modelo_invitacion> listaAsistidos;
-    private View vistaHeredada;
     String codigoEscaner;
-    private Context context;
     private String desdeFramgento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_lector_de_codigos_qr);
         RecibirArgumentos();
-
-
-
     }
 
 
@@ -112,13 +98,13 @@ public class LectorDeCodigosQr extends AppCompatActivity {
         Modelo_invitacion invitacion = null;
         for (int x = 0; x < ConfirmarAsistencia.listaInvitados.size(); x++) {
              invitacion = ConfirmarAsistencia.listaInvitados.get(x);
-            if (invitacion.getId().equals(codigoEscaner)) {
+            if (invitacion.getId().substring(0,7).equals(codigoEscaner)) {
                 ConfirmarAsistencia.codigoEncontrado = invitacion;
                 encontrado=true;
                 break;
             }
         }
-        if (encontrado==false) {
+        if (!encontrado) {
             Toast.makeText(this, "Codigo invalido", Toast.LENGTH_SHORT).show();
             SonidoBeep();
         }else{
@@ -133,30 +119,29 @@ public class LectorDeCodigosQr extends AppCompatActivity {
     }
 
     private void cambiarEstado(  Modelo_invitacion invitacion) {
-        Modelo_invitacion cambioEstadoInvitacion= invitacion;
-        if ( cambioEstadoInvitacion.getEstado().equals("Invitado")){
-            cambioEstadoInvitacion.setEstado("Asistido");
-
+        if ( invitacion.getEstado().equals("Invitado")){
+            invitacion.setEstado("Asistido");
+            Toast.makeText(this, "Asitencia confirmada", Toast.LENGTH_SHORT).show();
         }else  {
             Toast.makeText(this, "El invitado ya fue marcado Asistido", Toast.LENGTH_SHORT).show();
             SonidoBeep();
         }
 
         DatabaseReference CambiarEstado = FirebaseDatabase.getInstance().getReference();
-        CambiarEstado.child("Invitaciones").child(cambioEstadoInvitacion.getId()).setValue(cambioEstadoInvitacion);
+        CambiarEstado.child("Invitaciones").child(invitacion.getId()).setValue(invitacion);
     }
 
     private void buscarEnListaAsitidos() {
         boolean encontrado=false;
         for (int x = 0; x < ConfirmarFirma.listaAsistidos.size(); x++) {
             Modelo_invitacion invitacion = ConfirmarFirma.listaAsistidos.get(x);
-            if (invitacion.getId().equals(codigoEscaner)) {
+            if (invitacion.getId().substring(0,7).equals(codigoEscaner)) {
                 ConfirmarFirma.codigoEncontrado = invitacion;
                 encontrado=true;
                 break;
             }
         }
-        if (encontrado==false){
+        if (!encontrado){
             Toast.makeText(this, "Codigo invalido", Toast.LENGTH_SHORT).show();
             SonidoBeep();
         }

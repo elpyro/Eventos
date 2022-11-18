@@ -23,15 +23,12 @@ import androidx.core.content.FileProvider;
 import com.github.barteksc.pdfviewer.PDFView;
 
 import java.io.File;
-import java.util.List;
 
 final public class MostarReporte extends AppCompatActivity implements PDFUtility.OnDocumentClose
 {
-    private static final String TAG = MostarReporte.class.getSimpleName();
 
     private Context context;
     private PDFView pdfView;
-    private Button button_compartir;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -40,11 +37,11 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mostrar_reporte);
 
-        button_compartir=findViewById(R.id.button_compartirPdf);
+        Button button_compartir = findViewById(R.id.button_compartirPdf);
         context=this;
 //        Modelo_evento evento=(Modelo_evento) getIntent().getExtras().getSerializable("datosEvento");
 
-        pdfView=(PDFView)findViewById(R.id.vista_pdf);
+        pdfView= findViewById(R.id.vista_pdf);
 
         crearPdf();
 
@@ -64,7 +61,7 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
         String path = Environment.getExternalStorageDirectory().toString() + "/reporte.pdf";
         try
         {
-            PDFUtility.createPdf(this, MostarReporte.this,path,true);
+            PDFUtility.createPdf(this, MostarReporte.this,path);
         }
         catch (Exception e)
         {
@@ -80,6 +77,7 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
         MostrarPdf();
     }
 
+    @SuppressLint("SetTextI18n")
     private void MostrarPdf() {
         try {
             Thread.sleep(500);
@@ -118,9 +116,4 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
     }
 
 
-
-    private List<String[]> getSampleData()
-    {
-        return null;
-    }
 }

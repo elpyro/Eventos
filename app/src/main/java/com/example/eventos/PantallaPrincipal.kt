@@ -66,22 +66,18 @@ class PantallaPrincipal : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_inicio
+                R.id.nav_inicio, R.id.configuracion,R.id.reportes, R.id.eventosTerminados,R.id.mostrarImagenAmpliada,R.id.firmarCliente,R.id.confirmarFirma,R.id.confirmarAsistencia,R.id.editarInvitado,R.id.habeasData,R.id.mostrarInvitacion,R.id.crearInvitacion,R.id.detalleEvento,R.id.listaEventos,R.id.evento,R.id.cerrarSesion,R.id.lista_Usuarios,R.id.usuarios
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        navView.setBackgroundResource(R.drawable.fondo);
-        navView.setItemIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.amarillo)));
-        navView.setItemTextColor(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+        navView.setBackgroundResource(R.drawable.fondo)
+        navView.setItemIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.amarillo)))
+        navView.setItemTextColor(ColorStateList.valueOf(getResources().getColor(R.color.white)))
 
 
-
-
-        login();
-//        Thread.sleep(1000)
-
-
+        login()
+        Thread.sleep(1000)
 
     }
 
@@ -108,7 +104,7 @@ class PantallaPrincipal : AppCompatActivity() {
                                 idUsuario = usuario?.id.toString()
                                 binding.appBarMain.toolbar.setTitle("Hola $nombreUsuario")
                                 usuario_validus_referido=usuario?.validusUsuario.toString()
-                                apline_usuario=usuario?.apline.toString();
+                                apline_usuario=usuario?.apline.toString()
                                 usuario_telefono= usuario?.telefono.toString()
 
                                 Inicio.linearlayout_todosLosUsuarios.visibility = View.VISIBLE
@@ -165,4 +161,6 @@ class PantallaPrincipal : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+
 }

@@ -1,7 +1,10 @@
 package com.example.eventos;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +20,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.eventos.modelos.Modelo_evento;
@@ -35,9 +40,11 @@ import java.util.Objects;
 
 
 public class Reportes extends Fragment {
+    @SuppressLint("StaticFieldLeak")
     public static ProgressBar progress_bar_creadonPDF;
     public static Modelo_evento evento;
     public static ArrayList<Modelo_invitacion> invitaciones=new ArrayList<>();
+    @SuppressLint("StaticFieldLeak")
     public static TextView textView_informacion;
     private Context context;
     private View vista;
@@ -46,6 +53,10 @@ public class Reportes extends Fragment {
     ArrayList<Modelo_spinner_recuperarId> nombreEvento;
     ArrayList<Modelo_spinner_recuperarId> nombreReferido;
     private String idEventoSeleccionado, id_referidoSeleccionado, estadoSeleccionado;
+    private  static final int CAMERA_REQUEST_CODE = 100;
+    private static final int STORAGE_REQUEST_CODE = 101;
+    private String[] cameraPermissions; // cámara y almacenamiento
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,7 +65,7 @@ public class Reportes extends Fragment {
 
         inicializando();
 
-        button_crearReporte.setOnClickListener(view -> crearReporte());
+        button_crearReporte.setOnClickListener(view -> permisos());
         spinner_evento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -89,6 +100,69 @@ public class Reportes extends Fragment {
         return vista;
     }
 
+    private void permisos(){
+    cameraPermissions = new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    // solo almacenamiento
+
+        if (!checkCameraPermission()){
+        requestCameraPermission();
+      }else{
+            crearReporte();
+    }
+
+
+}
+
+
+    private boolean checkCameraPermission(){
+        // verifica si el permiso de la cámara está habilitado o no
+        return ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void requestCameraPermission(){
+        // solicita el permiso de la cámara
+        ActivityCompat.requestPermissions(requireActivity(), cameraPermissions, CAMERA_REQUEST_CODE);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // resultado del permiso permitido / denegado
+        switch (requestCode){
+            case CAMERA_REQUEST_CODE:{
+                if (grantResults.length>0){
+
+                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                    if(!cameraAccepted && !storageAccepted){
+                        Toast.makeText(context, getString(R.string.Se_requieren_permisos), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            break;
+            case STORAGE_REQUEST_CODE:{
+                if (grantResults.length>0){
+
+                    // si se permite devolver verdadero de lo contrario falso
+                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (!storageAccepted){
+                        Toast.makeText(context, getString(R.string.Se_requieren_permiso_almacenamiento), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+            break;
+        }
+    }
+
+
+
+
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -97,6 +171,7 @@ public class Reportes extends Fragment {
         button_crearReporte.setEnabled(true);
     }
 
+    @SuppressLint("SetTextI18n")
     private void crearReporte() {
         textView_informacion.setText("Creando PDF...");
         progress_bar_creadonPDF.setVisibility(View.VISIBLE);
@@ -135,14 +210,14 @@ public class Reportes extends Fragment {
                                 boolean registrarInvitacion=false;
                                 if (id_referidoSeleccionado.equals("0")) {
                                     if(estadoSeleccionado.equals("Todos"))registrarInvitacion=true;
-                                    if(estadoSeleccionado.equals(userSnapshot.getValue(Modelo_invitacion.class).getEstado()))registrarInvitacion=true;
+                                    if(estadoSeleccionado.equals(Objects.requireNonNull(userSnapshot.getValue(Modelo_invitacion.class)).getEstado()))registrarInvitacion=true;
                                 }
-                                if (id_referidoSeleccionado.equals( userSnapshot.getValue(Modelo_invitacion.class).getId_usuario_referido())) {
+                                if (id_referidoSeleccionado.equals( Objects.requireNonNull(userSnapshot.getValue(Modelo_invitacion.class)).getId_usuario_referido())) {
                                     if(estadoSeleccionado.equals("Todos"))registrarInvitacion=true;
-                                    if(estadoSeleccionado.equals(userSnapshot.getValue(Modelo_invitacion.class).getEstado()))registrarInvitacion=true;
+                                    if(estadoSeleccionado.equals(Objects.requireNonNull(userSnapshot.getValue(Modelo_invitacion.class)).getEstado()))registrarInvitacion=true;
                                 }
 
-                                if(registrarInvitacion==true)    invitaciones.add( userSnapshot.getValue(Modelo_invitacion.class));
+                                if(registrarInvitacion)    invitaciones.add( userSnapshot.getValue(Modelo_invitacion.class));
 
 
                             }
@@ -175,17 +250,16 @@ public class Reportes extends Fragment {
     }
 
 
+    @SuppressLint("SetTextI18n")
     public void limpiar() {
         progress_bar_creadonPDF.setVisibility(View.GONE);
         textView_informacion.setText("Reportes");
         button_crearReporte.setEnabled(true);
     }
     private void llenandoSpinner() {
-
         llenandoSpinnerEvento();
         llenandoSpinnerReferido();
         llenandoSpinnerEstado();
-
     }
 
     private void llenandoSpinnerEstado() {

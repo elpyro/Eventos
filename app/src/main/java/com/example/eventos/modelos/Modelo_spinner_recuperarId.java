@@ -1,17 +1,15 @@
 package com.example.eventos.modelos;
 
+import androidx.annotation.NonNull;
+
 public class Modelo_spinner_recuperarId {
 
  
         String id, nombre, vista;
 
-        public Modelo_spinner_recuperarId() {
-        }
-
     public Modelo_spinner_recuperarId(String id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.vista = vista;
     }
 
     public String getId() {
@@ -37,6 +35,7 @@ public class Modelo_spinner_recuperarId {
     public void setVista(String vista) {
         this.vista = vista;
     }
+    @NonNull
     @Override
     public String toString(){
         vista=nombre;

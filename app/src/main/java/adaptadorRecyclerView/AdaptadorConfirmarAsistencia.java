@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
@@ -19,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventos.R;
 import com.example.eventos.modelos.Modelo_invitacion;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -61,11 +57,12 @@ public class AdaptadorConfirmarAsistencia extends RecyclerView.Adapter<Adaptador
 
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView textView_nombre, textView_id_invisible;
+        private final TextView textView_nombre;
+        private final TextView textView_id_invisible;
 
-        private ImageView imageView_cheked_firmado, imageView_cheked_asistido;
-        private LinearLayout linerarLayout_tarjeta;
-       
+        private final ImageView imageView_cheked_firmado;
+        private final ImageView imageView_cheked_asistido;
+
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,7 +71,7 @@ public class AdaptadorConfirmarAsistencia extends RecyclerView.Adapter<Adaptador
             textView_id_invisible=itemView.findViewById(R.id.textView_invisible);
             imageView_cheked_firmado=itemView.findViewById(R.id.imageView_cheked_firmado);
             imageView_cheked_asistido=itemView.findViewById(R.id.imageView_cheked);
-            linerarLayout_tarjeta=itemView.findViewById(R.id.linerarLayout_tarjeta);
+            LinearLayout linerarLayout_tarjeta = itemView.findViewById(R.id.linerarLayout_tarjeta);
 
             linerarLayout_tarjeta.setOnClickListener(view -> {
                 Bundle bundle = new Bundle();

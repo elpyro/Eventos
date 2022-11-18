@@ -45,6 +45,7 @@ public class MostrarInvitacion extends Fragment {
     private TextView textView_costo;
     private TextView textView_fecha;
     private TextView textView_nombre_evento;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch switch_asistencia;
     @SuppressLint("StaticFieldLeak")
     public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion, textView_invitado_por, textView_apline, textView_validus_referido, textView_telefono_referido,textView_hora;
@@ -69,6 +70,7 @@ public class MostrarInvitacion extends Fragment {
         return vista;
     }
 
+    @SuppressLint("SetTextI18n")
     private void cambiarEstado() {
                 Modelo_invitacion cambioEstadoInvitacion= invitacion;
                 if ( cambioEstadoInvitacion.getEstado().equals("Invitado")){
@@ -167,7 +169,7 @@ public class MostrarInvitacion extends Fragment {
     private void crearCodigoQr() {
         try {
             BarcodeEncoder barcodeEncoder=new BarcodeEncoder();
-            String mensaje="!No olvides tu cita! \n"+"Inf: "+textView_invitado_por.getText().toString()+" "+ textView_telefono_referido.getText().toString()+"\n"+ id_invitacion;
+            String mensaje="!No olvides tu cita! \n"+"Inf: "+textView_invitado_por.getText().toString()+" "+ textView_telefono_referido.getText().toString()+"\n"+ id_invitacion.substring(0,7);
             Bitmap bitmap= barcodeEncoder.encodeBitmap(mensaje, BarcodeFormat.QR_CODE,1000, 1000);
             imageView_qr.setImageBitmap(bitmap);
 
@@ -240,13 +242,17 @@ public class MostrarInvitacion extends Fragment {
                             if (PantallaPrincipal.perfilUsaurio.equals("Promotor")){
                                 switch_asistencia.setVisibility(View.GONE);
                             }
-                            if(invitacion.getEstado().equals("Invitado")){
-                                switch_asistencia.setChecked(false);
-                            } else if (invitacion.getEstado().equals("Asistido")){
-                                switch_asistencia.setChecked(true);
-                            } else if (invitacion.getEstado().equals("Firmado")){
-                                switch_asistencia.setChecked(true);
-                                switch_asistencia.setEnabled(false);
+                            switch (invitacion.getEstado()) {
+                                case "Invitado":
+                                    switch_asistencia.setChecked(false);
+                                    break;
+                                case "Asistido":
+                                    switch_asistencia.setChecked(true);
+                                    break;
+                                case "Firmado":
+                                    switch_asistencia.setChecked(true);
+                                    switch_asistencia.setEnabled(false);
+                                    break;
                             }
 
                             crearCodigoQr();

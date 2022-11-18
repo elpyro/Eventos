@@ -40,10 +40,6 @@ public class Modelo_invitacion implements Serializable {
         this.id = id;
     }
 
-    public String getId_evento() {
-        return id_evento;
-    }
-
     public void setId_evento(String id_evento) {
         this.id_evento = id_evento;
     }

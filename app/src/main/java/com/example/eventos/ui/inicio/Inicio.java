@@ -1,5 +1,6 @@
 package com.example.eventos.ui.inicio;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import adaptadorRecyclerView.AdaptadorProximosEventos;
 public class Inicio extends Fragment {
     View vista;
     Context context;
+    @SuppressLint("StaticFieldLeak")
     public static LinearLayout linearlayout_todosLosUsuarios;
     private RecyclerView recview;
     private Query referencia;
@@ -62,7 +64,7 @@ public class Inicio extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()){
-                        for(DataSnapshot ds:dataSnapshot.getChildren()) {
+                        for(DataSnapshot ignored1 :dataSnapshot.getChildren()) {
                             try {
                                 Picasso.with(context).load(dataSnapshot.child("Url").getValue(String.class)).into(imagenView_banner);
 
@@ -137,7 +139,7 @@ public class Inicio extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        oyente=null;
+        referencia.removeEventListener(oyente);
         vista=null;
     }
 }

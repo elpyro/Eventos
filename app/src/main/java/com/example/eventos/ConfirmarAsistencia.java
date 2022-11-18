@@ -1,18 +1,10 @@
 package com.example.eventos;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +13,12 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.eventos.modelos.Modelo_evento;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.eventos.modelos.Modelo_invitacion;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 import adaptadorRecyclerView.AdaptadorConfirmarAsistencia;
 
@@ -39,7 +37,7 @@ public class ConfirmarAsistencia extends Fragment {
 
     public static Modelo_invitacion codigoEncontrado;
     private Context context;
-    public static View vista;
+    private View vista;
     private Button button_escanear;
 
     private SearchView search_invitados;
@@ -68,9 +66,7 @@ public class ConfirmarAsistencia extends Fragment {
         startActivity(intent);
 
     }
-    public void mostrarInvitacion(String id_invitacion){
 
-    }
 
     private void recibirArgumentos() {
         Bundle bundle = getArguments();
@@ -99,37 +95,37 @@ public class ConfirmarAsistencia extends Fragment {
     }
 
     private void cargarAsistencia(String id_evento) {
+
         referencia= FirebaseDatabase.getInstance().getReference().child("Invitaciones").orderByChild("id_evento").equalTo(id_evento);
 
-        if(referencia!=null){
-            oyente= referencia.addValueEventListener(new ValueEventListener() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()){
-                        int asistencia=0;
-                        int asistenciaTotal=0;
-                        listaInvitados=new ArrayList<>();
-                        for(DataSnapshot ds:snapshot.getChildren()){
-                            listaInvitados.add(ds.getValue(Modelo_invitacion.class));
-                            if (ds.getValue(Modelo_invitacion.class).getEstado().equals("Asistido")||ds.getValue(Modelo_invitacion.class).getEstado().equals("Firmado")) asistencia=asistencia+1;
-                            asistenciaTotal=asistenciaTotal+1;
-
-                        }
-                        textView_cuenta.setText(asistencia+" / "+ asistenciaTotal);
-                        listaInvitados.sort(Comparator.comparing(Modelo_invitacion::getEstado));
-                        Collections.reverse(listaInvitados);
-                        adaptador= new AdaptadorConfirmarAsistencia(listaInvitados);
-                        recview.setAdapter(adaptador);
+        oyente= referencia.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    int asistencia=0;
+                    int asistenciaTotal=0;
+                    listaInvitados=new ArrayList<>();
+                    for(DataSnapshot ds:snapshot.getChildren()){
+                        listaInvitados.add(ds.getValue(Modelo_invitacion.class));
+                        if (Objects.requireNonNull(ds.getValue(Modelo_invitacion.class)).getEstado().equals("Asistido")|| Objects.requireNonNull(ds.getValue(Modelo_invitacion.class)).getEstado().equals("Firmado")) asistencia=asistencia+1;
+                        asistenciaTotal=asistenciaTotal+1;
 
                     }
+                    textView_cuenta.setText(asistencia+" / "+ asistenciaTotal);
+                    listaInvitados.sort(Comparator.comparing(Modelo_invitacion::getEstado));
+                    Collections.reverse(listaInvitados);
+                    adaptador= new AdaptadorConfirmarAsistencia(listaInvitados);
+                    recview.setAdapter(adaptador);
+
                 }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(context, "Error en conexion", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "Error en conexion", Toast.LENGTH_SHORT).show();
+            }
+        });
         if (search_invitados!=null){
             search_invitados.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
@@ -154,7 +150,11 @@ public class ConfirmarAsistencia extends Fragment {
         }
         adaptador = new AdaptadorConfirmarAsistencia(filtro);
         recview.setAdapter(adaptador);
-
-
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        referencia.removeEventListener(oyente);
+        vista=null;
     }
 }

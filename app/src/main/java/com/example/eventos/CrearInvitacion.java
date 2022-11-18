@@ -1,18 +1,22 @@
 package com.example.eventos;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.eventos.modelos.Modelo_evento;
 import com.example.eventos.modelos.Modelo_invitacion;
@@ -22,7 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
 
@@ -57,7 +60,9 @@ public class CrearInvitacion extends Fragment {
     }
 
 
+    @SuppressLint("SuspiciousIndentation")
     private void guardarInvitacion() {
+
 
         if (!validarDatos()) return;
 
@@ -65,7 +70,7 @@ public class CrearInvitacion extends Fragment {
 
             DatabaseReference myRefe = FirebaseDatabase.getInstance().getReference();
             Modelo_invitacion invitacion = new Modelo_invitacion();
-            String id_invitacion=(UUID.randomUUID().toString()).substring(0,7);
+            String id_invitacion=(UUID.randomUUID().toString());
             invitacion.setId(id_invitacion);
             invitacion.setNombre(editText_nombre.getText().toString().trim());
             invitacion.setTelefono(editText_telefono.getText().toString().trim());
@@ -86,17 +91,33 @@ public class CrearInvitacion extends Fragment {
 
             myRefe.child("Invitaciones").child(invitacion.getId()).setValue(invitacion);
 
-            editText_nombre.setText("");
-            editText_telefono.setText("");
-            editText_correo.setText("");
-            
+            limpiar();
+
             Bundle bundle = new Bundle();
             bundle.putString("id_invitacion",id_invitacion);
             Navigation.findNavController(vista).navigate(R.id.mostrarInvitacion,bundle);
 
-            restarBoletoEvento(evento.getId());
+            if(isNetworkConnected(context))restarBoletoEvento(evento.getId());
 
 
+
+    }
+
+    private void limpiar() {
+        editText_nombre.setText("");
+        editText_telefono.setText("");
+        editText_correo.setText("");
+        //ocultar teclado
+        InputMethodManager input = (InputMethodManager) (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
+        input.hideSoftInputFromWindow(vista.getWindowToken(), 0);
+    }
+
+    private boolean isNetworkConnected(Context context) {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context
+                .CONNECTIVITY_SERVICE);
+        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+        return info != null && info.isConnected() && info.isAvailable();
     }
 
     private void restarBoletoEvento(String id_evento) {

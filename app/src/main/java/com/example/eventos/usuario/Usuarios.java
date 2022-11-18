@@ -77,7 +77,7 @@ public class Usuarios extends Fragment {
                             id_exitente=usuario.getId();
                             editText_nombre.setText(usuario.getNombre());
                             editText_telefono.setText(usuario.getTelefono());
-                            if (usuario.getCorreoGmail().equals("andres_yamid1990@gmail.com"))editText_correo.setEnabled(false);
+                            if (usuario.getCorreoGmail().equals("andresyamid1990@gmail.com"))editText_correo.setEnabled(false);
                             editText_correo.setText(usuario.getCorreoGmail());
                             correoExistente=usuario.getCorreoGmail();
                             editText_direccion.setText(usuario.getDireccion());
