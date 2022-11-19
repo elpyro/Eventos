@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,7 +93,8 @@ public class FirmarCliente extends Fragment {
         try {
 
 
-            String mPath = getActivity().getDatabasePath("bienvenida.jpg").toString();
+            String mPath =Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES)+"/bienvenida.jpg";
 
             // create bitmap screen capture
             View v1 = requireActivity().getWindow().getDecorView().getRootView().findViewById(R.id.cardView_tarjeta_registro);
@@ -110,7 +112,7 @@ public class FirmarCliente extends Fragment {
 
             cardView_tarjeta_registro.setVisibility(View.GONE);
         } catch (Throwable e) {
-            Toast.makeText(context, "Error al crear la invitacion"+e, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Error al crear la invitacion: "+e, Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }
@@ -123,27 +125,20 @@ public class FirmarCliente extends Fragment {
 
             try { Intent sendIntent = new Intent("android.intent.action.MAIN");
                 sendIntent.setAction(Intent.ACTION_SEND); sendIntent.setType("text/application/pdf");
-                File file = new File( getActivity().getDatabasePath("reporte.pdf").toString());
-                File filejh = new File( getActivity().getDatabasePath("bienvenida.jpg").toString());
+
+                File file = new File(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES)+"/bienvenida.jpg");
                 Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
 
                 sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
                 sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
                 //phone number without "+" prefix sendIntent.setPackage("com.whatsapp");
                 startActivity(sendIntent); } catch(Exception e) {
-                Log.e("2","eroro compartiendo"+ e);
+                Log.e("2","Erro compartiendo"+ e);
                 Toast.makeText(getContext(), "Error compartiendo: " + e, Toast.LENGTH_LONG).show(); }
 
     }
-//
-//    private boolean whatsappInstalledOrNot(){
-//        PackageManager pm = requireContext().getPackageManager();
-//        boolean app_installed;
-//        try {
-//            pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES); app_installed = true;
-//        } catch (PackageManager.NameNotFoundException e)
-//        { app_installed = false; } return app_installed;
-//    }
+
 
     private boolean validarDatos() {
 

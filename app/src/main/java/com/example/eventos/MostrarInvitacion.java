@@ -133,7 +133,8 @@ public class MostrarInvitacion extends Fragment {
                 try { Intent sendIntent = new Intent("android.intent.action.MAIN");
                     sendIntent.setAction(Intent.ACTION_SEND); sendIntent.setType("text/application/pdf");
 
-                    File file = new File(Environment.getExternalStorageDirectory().toString() + "/invitacion.jpg");
+                    File file = new File(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_PICTURES)+ "/invitacion.jpg");
                     Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
 
                     sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -148,7 +149,8 @@ public class MostrarInvitacion extends Fragment {
         try {
             cardView_invitacion.setBackgroundResource(R.drawable.fondo_tarjeta_invitacion);
 
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + "invitacion" + ".jpg";
+            String mPath =Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES)+ "/invitacion" + ".jpg";
 
             // create bitmap screen capture
             View v1 = requireActivity().getWindow().getDecorView().getRootView().findViewById(R.id.cardView_invitacion);

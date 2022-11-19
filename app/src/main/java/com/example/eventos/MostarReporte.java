@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -39,7 +40,6 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
 
         Button button_compartir = findViewById(R.id.button_compartirPdf);
         context=this;
-//        Modelo_evento evento=(Modelo_evento) getIntent().getExtras().getSerializable("datosEvento");
 
         pdfView= findViewById(R.id.vista_pdf);
 
@@ -58,7 +58,8 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
     }
 
     private void crearPdf() {
-        String path = Environment.getExternalStorageDirectory().toString() + "/reporte.pdf";
+        String path = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS)+ "/reporte.pdf";
         try
         {
             PDFUtility.createPdf(this, MostarReporte.this,path);
@@ -84,7 +85,10 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        File file = new File(Environment.getExternalStorageDirectory().toString() + "/reporte.pdf");
+        try {
+
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS) + "/reporte.pdf");
         pdfView.fromFile(file)
                 .enableSwipe(true)
                 .swipeHorizontal(false)
@@ -95,6 +99,10 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
 
         Reportes.textView_informacion.setText("Reportes");
         Reportes.progress_bar_creadonPDF.setVisibility(View.GONE);
+        }catch (Exception e){
+            Toast.makeText(context, "Error mostrando pdf: "+e, Toast.LENGTH_SHORT).show();
+            Log.e ("Error mostrando pdf", e+"");
+        }
 
     }
 
@@ -103,8 +111,8 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
 
         try {
 
-        }catch (Exception e){}
-        File file = new File(Environment.getExternalStorageDirectory().toString() + "/reporte.pdf");
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS) + "/reporte.pdf");
 
         Uri uri = FileProvider.getUriForFile(context, "com.eventos.fileprovider", file);
 
@@ -115,6 +123,10 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
                 .createChooserIntent()
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
+        }catch (Exception e){
+            Toast.makeText(context, "Error compartiendo: "+e, Toast.LENGTH_SHORT).show();
+            Log.e ("Error compartiendo", e+"");
+        }
 
     }
 

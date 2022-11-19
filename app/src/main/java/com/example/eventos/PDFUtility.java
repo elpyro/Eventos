@@ -77,7 +77,9 @@ final class PDFUtility
         addEmptyLine(document);
 
         document.add(createDataTable());
-        }catch (Exception ignored){}
+        }catch (Exception e){
+            Log.e(TAG,"Error creando pdf : "+ e);
+        }
 
 
         document.close();
@@ -219,12 +221,10 @@ final class PDFUtility
             table.addCell(cell);
         }
 
-        //Paragraph paragraph=new Paragraph("",new Font(Font.FontFamily.TIMES_ROMAN, 2.0f, Font.NORMAL, BaseColor.BLACK));
-        //paragraph.add(table);
-        //document.add(paragraph);
         Paragraph paragraph=new Paragraph((mContext.getString(R.string.NombreEmpresa)),FONT_TITLE);
         paragraph.setAlignment(Element.ALIGN_CENTER);
         document.add(paragraph);
+
         document.add(table);
     }
 
