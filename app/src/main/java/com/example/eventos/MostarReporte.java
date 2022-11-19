@@ -101,6 +101,9 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
 
     private void compartirPDF(){
 
+        try {
+
+        }catch (Exception e){}
         File file = new File(Environment.getExternalStorageDirectory().toString() + "/reporte.pdf");
 
         Uri uri = FileProvider.getUriForFile(context, "com.eventos.fileprovider", file);

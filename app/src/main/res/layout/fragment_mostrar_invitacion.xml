@@ -81,9 +81,9 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:text="@string/Nombre"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:textStyle="bold"
-                android:theme="@style/texto_cursiva" />
+                android:theme="@style/texto_sub_titulo" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -269,7 +269,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
@@ -279,6 +279,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/Telefono"
+                    android:layout_gravity="center"
                     android:theme="@style/texto_sub_titulo" />
 
                 <TextView
@@ -286,8 +287,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="@string/Ciudad"
+                    android:text="@string/Telefono"
+                    android:layout_gravity="center"
+
                     android:theme="@style/texto_plano" />
+
+
+
+                        <ImageView
+                            android:id="@+id/imageView_whatapps"
+                            android:layout_width="41dp"
+                            android:layout_height="41dp"
+                            android:layout_gravity="end"
+                            android:foregroundGravity="right"
+                            android:layout_weight="1"
+                            android:src="@drawable/icono_whatsapp" />
+
+
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -308,6 +326,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:foregroundGravity="center"
                     android:text="@string/Correo"
                     android:theme="@style/texto_plano" />
             </LinearLayout>

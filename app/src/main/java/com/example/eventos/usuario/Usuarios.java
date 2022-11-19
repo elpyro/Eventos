@@ -151,6 +151,14 @@ public class Usuarios extends Fragment {
             editText_telefono.setError("Requerido");
             datosAceptados=false;
         }
+        if (editText_apline.getText().toString().length()<3){
+            editText_telefono.setError("Requerido");
+            datosAceptados=false;
+        }
+        if (editText_direccion.getText().toString().length()<3){
+            editText_telefono.setError("Requerido");
+            datosAceptados=false;
+        }
         if (!validarEmail(editText_correo.getText().toString().trim())){
             editText_correo.setError("Email no válido");
             datosAceptados=false;

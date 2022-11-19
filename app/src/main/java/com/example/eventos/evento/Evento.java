@@ -112,9 +112,9 @@ public class Evento extends Fragment {
     }
 
     private void seleccionarImagen() {
-                        // muestra el cuadro de diálogo de selección de imagen
 
-                //ocultar teclado
+
+        //ocultar teclado
         InputMethodManager input = (InputMethodManager) (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
         input.hideSoftInputFromWindow(vista.getWindowToken(), 0);
 

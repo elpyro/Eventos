@@ -61,9 +61,9 @@ final class PDFUtility
         document.setMargins(24f,24f,32f,32f);
         document.setPageSize(PageSize.A4);
             PdfWriter pdfWriter = null;
-            try{
 
-         pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            try{
+        pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(filePath));
         pdfWriter.setFullCompression();
         pdfWriter.setPageEvent(new PageNumeration());
             }catch (Exception ignored){}
@@ -158,7 +158,11 @@ final class PDFUtility
             temp.setAlignment(Element.ALIGN_LEFT);
             cell.addElement(temp);
 
-            temp = new Paragraph("Fecha: "+Reportes.evento.getFecha(),FONT_SUBTITLE);
+
+            String fecha=(Reportes.evento.getFecha().substring(Reportes.evento.getFecha().length() - 10));
+            String hora=(Reportes.evento.getHora().substring(0,10));
+
+            temp = new Paragraph("Fecha: "+fecha+" Hora: "+hora,FONT_SUBTITLE);
             temp.setAlignment(Element.ALIGN_LEFT);
             cell.addElement(temp);
 
@@ -199,7 +203,7 @@ final class PDFUtility
 
             logoTable.addCell(logoCell);
 
-            logoCell = new PdfPCell(new Phrase((mContext.getString(R.string.NombreEmpresa)),FONT_CELL));
+            logoCell = new PdfPCell(new Phrase("",FONT_CELL));
             logoCell.setHorizontalAlignment(Element.ALIGN_CENTER);
             logoCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
             logoCell.setBorder(PdfPCell.NO_BORDER);

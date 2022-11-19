@@ -180,6 +180,7 @@ public class Inicio extends Fragment {
 
 
     private void llenandoRecyclerView() {
+        try {
 
         if(referencia!=null){
             oyente= referencia.addValueEventListener(new ValueEventListener() {
@@ -212,6 +213,10 @@ public class Inicio extends Fragment {
                     Toast.makeText(context, "Error en conexion", Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+
+        }catch (Exception e){
+            Toast.makeText(context, "Error en conexion", Toast.LENGTH_SHORT).show();
         }
     }
 

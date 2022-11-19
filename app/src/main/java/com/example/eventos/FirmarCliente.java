@@ -3,11 +3,10 @@ package com.example.eventos;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +92,7 @@ public class FirmarCliente extends Fragment {
         try {
 
 
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + "bienvenida" + ".jpg";
+            String mPath = getActivity().getDatabasePath("bienvenida.jpg").toString();
 
             // create bitmap screen capture
             View v1 = requireActivity().getWindow().getDecorView().getRootView().findViewById(R.id.cardView_tarjeta_registro);
@@ -121,34 +120,30 @@ public class FirmarCliente extends Fragment {
 
         String smsNumber = "57"+ editText_telefono.getText().toString().trim();
         smsNumber= smsNumber.replace(" ", "");
-        boolean isWhatsappInstalled = whatsappInstalledOrNot();
-        if (isWhatsappInstalled) {
+
             try { Intent sendIntent = new Intent("android.intent.action.MAIN");
                 sendIntent.setAction(Intent.ACTION_SEND); sendIntent.setType("text/application/pdf");
-
-                File file = new File(Environment.getExternalStorageDirectory().toString() + "/bienvenida.jpg");
+                File file = new File( getActivity().getDatabasePath("reporte.pdf").toString());
+                File filejh = new File( getActivity().getDatabasePath("bienvenida.jpg").toString());
                 Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
 
                 sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
                 sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
                 //phone number without "+" prefix sendIntent.setPackage("com.whatsapp");
-                startActivity(sendIntent); } catch(Exception e)
-            { Toast.makeText(getContext(), "Error/n" + e, Toast.LENGTH_SHORT).show(); } } else
-        { Uri uri = Uri.parse("market://details?id=com.whatsapp");
-            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-            Toast.makeText(getContext(), getString(R.string.WhatsApp_no_instalado), Toast.LENGTH_SHORT).show();
-            this.startActivity(goToMarket); }
+                startActivity(sendIntent); } catch(Exception e) {
+                Log.e("2","eroro compartiendo"+ e);
+                Toast.makeText(getContext(), "Error compartiendo: " + e, Toast.LENGTH_LONG).show(); }
 
     }
-
-    private boolean whatsappInstalledOrNot(){
-        PackageManager pm = requireContext().getPackageManager();
-        boolean app_installed;
-        try {
-            pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES); app_installed = true;
-        } catch (PackageManager.NameNotFoundException e)
-        { app_installed = false; } return app_installed;
-    }
+//
+//    private boolean whatsappInstalledOrNot(){
+//        PackageManager pm = requireContext().getPackageManager();
+//        boolean app_installed;
+//        try {
+//            pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES); app_installed = true;
+//        } catch (PackageManager.NameNotFoundException e)
+//        { app_installed = false; } return app_installed;
+//    }
 
     private boolean validarDatos() {
 
@@ -162,6 +157,19 @@ public class FirmarCliente extends Fragment {
             datosAceptados=false;
         }
 
+        if (editText_correo.getText().toString().length()<3){
+            editText_correo.setError("Requerido");
+            datosAceptados=false;
+        }
+
+        if (editText_usuarioValidus.getText().toString().length()<3){
+            editText_usuarioValidus.setError("Requerido");
+            datosAceptados=false;
+        }
+        if (edittext_clave_validus.getText().toString().length()<3){
+            edittext_clave_validus.setError("Requerido");
+            datosAceptados=false;
+        }
         return datosAceptados;
     }
 

@@ -3,7 +3,6 @@ package com.example.eventos;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +31,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -50,7 +50,7 @@ public class MostrarInvitacion extends Fragment {
     @SuppressLint("StaticFieldLeak")
     public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion, textView_invitado_por, textView_apline, textView_validus_referido, textView_telefono_referido,textView_hora;
     private Button button_compartir, button_editar;
-    private ImageView imageView_qr;
+    private ImageView imageView_qr,imageView_whatapps;
     private CardView cardView_invitacion;
     public String id_invitacion;
     Modelo_invitacion invitacion;
@@ -67,8 +67,10 @@ public class MostrarInvitacion extends Fragment {
         button_compartir.setOnClickListener(view -> prepararInvitacion());
         button_editar.setOnClickListener(view -> editarInvitado());
         switch_asistencia.setOnClickListener(view -> cambiarEstado());
+        imageView_whatapps.setOnClickListener(view -> enviaMensajeWhatsApp());
         return vista;
     }
+
 
     @SuppressLint("SetTextI18n")
     private void cambiarEstado() {
@@ -105,12 +107,29 @@ public class MostrarInvitacion extends Fragment {
         compartirInvitacionWhatsapp();
     }
 
+
+    public void enviaMensajeWhatsApp() {
+
+
+        String smsNumber = "57"+ textView_telefono_invitado.getText().toString().trim();
+        smsNumber= smsNumber.replace(" ", "");
+
+            try { Intent sendIntent = new Intent("android.intent.action.MAIN");
+                sendIntent.setAction(Intent.ACTION_SEND); sendIntent.setType("text/application/pdf");
+                sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hola, ");
+                startActivity(sendIntent);
+            } catch(Exception e)  {
+                Toast.makeText(getContext(), "Error enviado Whatsapp: "  + e, Toast.LENGTH_SHORT).show();
+            }
+
+
+    }
     private void compartirInvitacionWhatsapp() {
 
             String smsNumber = "57"+ textView_telefono_invitado.getText().toString().trim();
             smsNumber= smsNumber.replace(" ", "");
-            boolean isWhatsappInstalled = whatsappInstalledOrNot();
-            if (isWhatsappInstalled) {
+
                 try { Intent sendIntent = new Intent("android.intent.action.MAIN");
                     sendIntent.setAction(Intent.ACTION_SEND); sendIntent.setType("text/application/pdf");
 
@@ -119,23 +138,9 @@ public class MostrarInvitacion extends Fragment {
 
                     sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
                     sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
-                    //phone number without "+" prefix sendIntent.setPackage("com.whatsapp");
                     startActivity(sendIntent); } catch(Exception e)
-                { Toast.makeText(getContext(), "Error/n" + e, Toast.LENGTH_SHORT).show(); } } else
-            { Uri uri = Uri.parse("market://details?id=com.whatsapp");
-                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                Toast.makeText(getContext(), getString(R.string.WhatsApp_no_instalado), Toast.LENGTH_SHORT).show();
-                this.startActivity(goToMarket); }
+                { Toast.makeText(getContext(), "Error enviado Whatsapp:" + e, Toast.LENGTH_SHORT).show(); }
 
-    }
-
-    private boolean whatsappInstalledOrNot(){
-        PackageManager pm = requireContext().getPackageManager();
-        boolean app_installed;
-        try {
-            pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES); app_installed = true;
-        } catch (PackageManager.NameNotFoundException e)
-        { app_installed = false; } return app_installed;
     }
 
 
@@ -203,6 +208,7 @@ public class MostrarInvitacion extends Fragment {
         textView_invitado_por=vista.findViewById(R.id.textView_invitado_por);
         switch_asistencia=vista.findViewById(R.id.switch_asistencia);
         textView_hora=vista.findViewById(R.id.textView_hora);
+        imageView_whatapps=vista.findViewById(R.id.imageView_whatapps);
 
     }
 

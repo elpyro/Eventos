@@ -51,6 +51,9 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        try {
+
+
         holder.textView_nombre.setText(list.get(position).getNombre());
         holder.textView_invitados.setText(list.get(position).getBoletosVendidos());
         holder.textView_boletos.setText(list.get(position).getBoletos());
@@ -58,7 +61,7 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
         holder.textView_cuenta_regresiva.setTextColor(Color.parseColor("#FFFFFF"));
         crearCuentaRegresiva(position, holder);
 
-
+        }catch (Exception e){}
         try {
             Picasso.with(context).load(list.get(position).getUrlImagen()).into(holder.imageView_evento);
         }catch (Exception ignored){}
@@ -71,7 +74,7 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
     private void crearCuentaRegresiva(int position, MyViewHolder holder) {
         try {
             Date fechaActual= formatoFecha.parse(fechaActualSinFormato);
-            Date fecha_evento= formatoFecha.parse(list.get(position).getFecha());
+            Date fecha_evento= (list.get(position).getFechaHora());
             assert fecha_evento != null;
             assert fechaActual != null;
             long diff = fecha_evento.getTime() - fechaActual.getTime();
@@ -100,7 +103,7 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
             if (horas<-12) cambiarEstadoEvento(position);
 
         } catch (ParseException exception) {
-            exception.printStackTrace();
+
         }
     }
 

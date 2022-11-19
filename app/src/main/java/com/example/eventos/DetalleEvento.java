@@ -201,8 +201,9 @@ public class DetalleEvento extends Fragment {
                         estado_evento=evento.getEstado();
                         int boletosDisponibles= Integer.parseInt(evento.getBoletos())-Integer.parseInt(evento.getBoletosVendidos());
                         textView_disponibles.setText(boletosDisponibles+"");
-                        if (!evento.getEstado().equals("Terminado"))linearLayout_botones_todos.setVisibility(View.VISIBLE);
-                        if (!PantallaPrincipal.perfilUsaurio.equals("Promotor")) linearLayout_botones_administradores_auditores.setVisibility(View.VISIBLE);
+
+                        mostrarBotones();
+
                         try {
                             Picasso.with(context).load(evento.getUrlImagen()).into(imageView_imagen_evento);
                         }catch (Exception ignored){
@@ -214,6 +215,22 @@ public class DetalleEvento extends Fragment {
                     Toast.makeText(context,getString(R.string.EventoInexistente) , Toast.LENGTH_SHORT).show();
                 }
             }
+
+            private void mostrarBotones() {
+                if (!PantallaPrincipal.perfilUsaurio.equals("Promotor")) linearLayout_botones_administradores_auditores.setVisibility(View.VISIBLE);
+                if (!evento.getEstado().equals("Terminado")){
+                    button_crearInvitacion.setVisibility(View.VISIBLE);
+                    bottom_asistencia.setVisibility(View.VISIBLE);
+                    button_firma.setVisibility(View.VISIBLE);
+                }else {
+                    button_crearInvitacion.setVisibility(View.GONE);
+                    bottom_asistencia.setVisibility(View.GONE);
+                    button_firma.setVisibility(View.VISIBLE);
+                }
+
+
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(context, getString(R.string.problemasConexion), Toast.LENGTH_SHORT).show();
