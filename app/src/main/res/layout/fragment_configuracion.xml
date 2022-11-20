@@ -91,7 +91,7 @@
                 android:textColor="@color/white"
                 android:theme="@style/texto_sub_titulo"
 
-                android:inputType="textMultiLine|textCapWords"
+                android:inputType="textMultiLine|textCapSentences"
                 tools:ignore="LabelFor" />
 
             <Button

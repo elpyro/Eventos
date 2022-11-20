@@ -152,11 +152,11 @@ public class Usuarios extends Fragment {
             datosAceptados=false;
         }
         if (editText_apline.getText().toString().length()<3){
-            editText_telefono.setError("Requerido");
+            editText_apline.setError("Requerido");
             datosAceptados=false;
         }
         if (editText_direccion.getText().toString().length()<3){
-            editText_telefono.setError("Requerido");
+            editText_direccion.setError("Requerido");
             datosAceptados=false;
         }
         if (!validarEmail(editText_correo.getText().toString().trim())){

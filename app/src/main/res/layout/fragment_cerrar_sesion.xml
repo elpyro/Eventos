@@ -3,28 +3,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".cerrarSesion.CerrarSesion">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+
+            android:layout_marginTop="200dp"
+            app:cardBackgroundColor="@color/fondo_cardView"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10sp" >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="25dp"
+    android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView_Usuario"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/Usuario"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/Usuario"
             android:theme="@style/texto_titulo" />
 
-        <TextView
+
+                <TextView
             android:id="@+id/textView_perfil"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/Perfil"
-            android:layout_margin="10dp"
+                    android:layout_marginTop="10dp"
             android:layout_gravity="center_horizontal"
             android:theme="@style/texto_titulo" />
-
+</LinearLayout>
+        </androidx.cardview.widget.CardView>
         <Button
             android:id="@+id/button_cerrarSesion"
             android:layout_width="wrap_content"
@@ -33,7 +51,7 @@
             android:layout_gravity="center"
             android:background="@drawable/boton"
             android:gravity="center"
-
+            android:layout_marginTop="10dp"
             android:textColor="@color/black"
             android:theme="@style/Botones"
             android:text="@string/CerraSesion" />
