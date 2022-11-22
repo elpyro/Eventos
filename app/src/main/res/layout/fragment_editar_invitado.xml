@@ -108,6 +108,6 @@
             android:textColor="@color/black"
             android:layout_gravity="center"
             android:theme="@style/Botones"
-            android:text="@string/Editar" />
+            android:text="@string/Guardar" />
     </LinearLayout>
 </ScrollView>

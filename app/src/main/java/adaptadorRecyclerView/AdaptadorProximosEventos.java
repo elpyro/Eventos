@@ -75,8 +75,8 @@ public class AdaptadorProximosEventos extends RecyclerView.Adapter<AdaptadorProx
         try {
             Date fechaActual= formatoFecha.parse(fechaActualSinFormato);
             Date fecha_evento= (list.get(position).getFechaHora());
-            assert fecha_evento != null;
-            assert fechaActual != null;
+//            assert fecha_evento != null;
+//            assert fechaActual != null;
             long diff = fecha_evento.getTime() - fechaActual.getTime();
 
             long segundos = diff / 1000;

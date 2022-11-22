@@ -61,11 +61,15 @@ public class EventosTerminados extends Fragment {
                         for(DataSnapshot ds:snapshot.getChildren()){
                             lista.add(ds.getValue(Modelo_evento.class));
                         }
-                        lista.sort(Comparator.comparing(Modelo_evento::getFechaHora));
-                        Collections.reverse(lista);
+                        try {
+                            lista.sort(Comparator.comparing(Modelo_evento::getFechaHora));
+                            Collections.reverse(lista);
+                        }catch (Exception e){
+                            Toast.makeText(context, "Error en fecha", Toast.LENGTH_SHORT).show();
+                        }
+
                         adapador= new AdaptadorEventosTerminados(lista);
                         recview.setAdapter(adapador);
-
 
                     }
                 }

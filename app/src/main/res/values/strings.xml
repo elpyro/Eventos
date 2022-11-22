@@ -94,6 +94,8 @@
     <string name="NombreEmpresa">Community 24-7</string>
     <string name="PDF_guardado_con_exito">PDF guardado</string>
     <string name="Cambiar">Cambiar</string>
+    <string name="Acceso">Acceso</string>
+    <string name="gmail">\@gmail.com</string>
 
     <string-array name="Tipo">
         <item>"Seleccione"</item>

@@ -103,7 +103,7 @@ final class PDFUtility
 
     private static  void addEmptyLine(Document document) throws DocumentException
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 1; i++)
         {
             document.add(new Paragraph(" "));
         }
@@ -127,9 +127,6 @@ final class PDFUtility
         table.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
         table.getDefaultCell().setVerticalAlignment(Element.ALIGN_CENTER);
         table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-
-
-
 
         PdfPCell cell;
 
@@ -168,15 +165,9 @@ final class PDFUtility
             temp.setAlignment(Element.ALIGN_LEFT);
             cell.addElement(temp);
 
-            temp = new Paragraph("Costo: "+Reportes.evento.getCosto()+" Boletos Vendidos: "+Reportes.evento.getBoletosVendidos(),FONT_SUBTITLE);
+            temp = new Paragraph("Costo: "+Reportes.evento.getCosto()+"  / Vendidos: "+Reportes.evento.getBoletosVendidos(),FONT_SUBTITLE);
             temp.setAlignment(Element.ALIGN_LEFT);
             cell.addElement(temp);
-
-
-
-
-
-
 
             table.addCell(cell);
         }
@@ -224,6 +215,7 @@ final class PDFUtility
         Paragraph paragraph=new Paragraph((mContext.getString(R.string.NombreEmpresa)),FONT_TITLE);
         paragraph.setAlignment(Element.ALIGN_CENTER);
         document.add(paragraph);
+        addEmptyLine(document);
 
         document.add(table);
     }
@@ -339,5 +331,6 @@ final class PDFUtility
 
         return table1;
     }
+
 
 }

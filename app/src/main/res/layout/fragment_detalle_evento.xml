@@ -37,7 +37,6 @@
                 android:visibility="gone"
                 android:layout_marginTop="10dp"
                 android:layout_gravity="center"
-                android:background="@drawable/cardview_evento"
                 app:cardCornerRadius="10dp">
 
                 <Button

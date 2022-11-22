@@ -73,6 +73,7 @@ public class Inicio extends Fragment {
 
 
         imagenView_banner.setOnClickListener(view -> mostrarImagenGrande());
+
         return vista;
     }
 
@@ -192,7 +193,12 @@ public class Inicio extends Fragment {
                         for(DataSnapshot ds:snapshot.getChildren()){
                             lista.add(ds.getValue(Modelo_evento.class));
                         }
-                        lista.sort(Comparator.comparing(Modelo_evento::getFechaHora));
+                        try {
+                            lista.sort(Comparator.comparing(Modelo_evento::getFechaHora));
+                        }catch (Exception e){
+                            Toast.makeText(context , "Un se puede ordenar por fecha, verificar fecha evento", Toast.LENGTH_SHORT).show();
+                        }
+
                         AdaptadorProximosEventos adapador= new AdaptadorProximosEventos(lista);
                         recview.setAdapter(adapador);
 

@@ -1,17 +1,21 @@
 package com.example.eventos;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
+import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +39,8 @@ public class FirmarCliente extends Fragment {
     private Button button_firmar;
     private CardView cardView_tarjeta_registro;
     private TextView textView_titulo,textView_validus_referido,textView_apline,textView_telefono_referido,textView_invitado_por,edittext_clave_validus,editText_usuarioValidus,editText_correo,editText_telefono,editText_nombre,textView_password,textView_nombre_firmado,textView_Usuario_validus;
+    private ImageView imageView_bottonWhatapps;
+    private String aperturaInvitacion="No enviada";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,7 +49,75 @@ public class FirmarCliente extends Fragment {
         inicializando();
         recibirArgumentos();
         button_firmar.setOnClickListener(view -> firmarInvitado());
+
+        edittext_clave_validus.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                textView_password.setText(edittext_clave_validus.getText().toString().trim());
+            }
+        });
+
+
+        editText_usuarioValidus.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                textView_Usuario_validus.setText(editText_usuarioValidus.getText().toString().trim());
+            }
+        });
+
+        imageView_bottonWhatapps.setOnClickListener(view -> enviarMensajeWhataaps());
+
+
         return vista;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!aperturaInvitacion.equals("No enviada")){
+            compartirInvitacionWhatsapp();
+            aperturaInvitacion="No enviada";
+            Navigation.findNavController(vista).navigateUp();
+
+        }
+    }
+
+    public void enviarMensajeWhataaps() {
+
+
+        String smsNumber = "57"+ textView_telefono_referido.getText().toString().trim();
+        smsNumber= smsNumber.replace(" ", "");
+        smsNumber= smsNumber.replace("+57", "");
+
+
+        try { Intent sendIntent = new Intent("android.intent.action.MAIN");
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.setType("text/plain");
+            sendIntent.setPackage("com.whatsapp");
+            sendIntent.setComponent(new ComponentName("com.whatsapp","com.whatsapp.Conversation"));
+            sendIntent.putExtra("jid", PhoneNumberUtils.stripSeparators(smsNumber)+"@s.whatsapp.net");
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "Hola, ");
+            startActivity(sendIntent);
+        } catch(Exception e)  {
+            Toast.makeText(getContext(), "Error enviado Whatsapp: "  + e, Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
     private void firmarInvitado() {
@@ -70,7 +144,8 @@ public class FirmarCliente extends Fragment {
         Toast.makeText(context, "Usuario firmado", Toast.LENGTH_SHORT).show();
 
         compartirTarjeta();
-        Navigation.findNavController(vista).navigateUp();
+
+
 
 
     }
@@ -85,8 +160,23 @@ public class FirmarCliente extends Fragment {
                 e.printStackTrace();
             }
 
-            compartirInvitacionWhatsapp();
+            prepararInvitacion();
         }
+
+    private void prepararInvitacion() {
+        String smsNumber = "57" + editText_telefono.getText().toString().trim();
+        smsNumber = smsNumber.replace(" ", "");
+        smsNumber = smsNumber.replace("+57", "");
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            String uri = "whatsapp://send?phone=" + smsNumber + "&text=" + "Hola sr@ " + editText_nombre.getText().toString().trim() + ", mucho gusto mi nombre es " + PantallaPrincipal.nombreUsuario.trim() + ", Bienvenido a nuetra comunidad";
+            intent.setData(Uri.parse(uri));
+            aperturaInvitacion = "Enviada";
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
     private void crearImagenTarjeta() {
@@ -120,22 +210,42 @@ public class FirmarCliente extends Fragment {
 
     private void compartirInvitacionWhatsapp() {
 
+
         String smsNumber = "57"+ editText_telefono.getText().toString().trim();
         smsNumber= smsNumber.replace(" ", "");
 
-            try { Intent sendIntent = new Intent("android.intent.action.MAIN");
-                sendIntent.setAction(Intent.ACTION_SEND); sendIntent.setType("text/application/pdf");
+        try {
+            Intent sendIntent = new Intent("android.intent.action.MAIN");
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.setType("text/application/pdf");
+            File file = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES)+ "/bienvenida.jpg");
+            Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
 
-                File file = new File(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES)+"/bienvenida.jpg");
-                Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
+            sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
+            aperturaInvitacion="Enviada";
+            startActivity(sendIntent);
+        } catch(Exception e)
+        { Toast.makeText(getContext(), "Error enviado Whatsapp:" + e, Toast.LENGTH_SHORT).show(); }
 
-                sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
-                //phone number without "+" prefix sendIntent.setPackage("com.whatsapp");
-                startActivity(sendIntent); } catch(Exception e) {
-                Log.e("2","Erro compartiendo"+ e);
-                Toast.makeText(getContext(), "Error compartiendo: " + e, Toast.LENGTH_LONG).show(); }
+
+
+//            try { Intent sendIntent = new Intent("android.intent.action.MAIN");
+//                sendIntent.setAction(Intent.ACTION_SEND); sendIntent.setType("image/jpeg");
+//
+//                File file = new File(Environment.getExternalStoragePublicDirectory(
+//                        Environment.DIRECTORY_PICTURES)+"/bienvenida.jpg");
+//                Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
+//
+//                sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+//                sendIntent.setPackage("com.whatsapp");
+//                sendIntent.setComponent(new ComponentName("com.whatsapp","com.whatsapp.Conversation"));
+//                sendIntent.putExtra("jid", PhoneNumberUtils.stripSeparators(smsNumber)+"@s.whatsapp.net");
+//
+//                startActivity(sendIntent); } catch(Exception e) {
+//                Log.e("2","Erro compartiendo"+ e);
+//                Toast.makeText(getContext(), "Error compartiendo: " + e, Toast.LENGTH_LONG).show(); }
 
     }
 
@@ -173,7 +283,7 @@ public class FirmarCliente extends Fragment {
         textView_validus_referido =vista.findViewById(R.id.textView_validus);
         textView_apline=vista.findViewById(R.id.textView_apline);
         textView_telefono_referido=vista.findViewById(R.id.textView_telefono_referido);
-        textView_invitado_por=vista.findViewById(R.id.textView_invitado_por);
+        textView_invitado_por=vista.findViewById(R.id.textView_nombre_referido);
         edittext_clave_validus=vista.findViewById(R.id.edittext_clave_validus);
         editText_usuarioValidus=vista.findViewById(R.id.editText_usuarioValidus);
         editText_correo=vista.findViewById(R.id.editText_correo);
@@ -185,6 +295,7 @@ public class FirmarCliente extends Fragment {
         textView_Usuario_validus=vista.findViewById(R.id.textView_Usuario_validus);
         cardView_tarjeta_registro=vista.findViewById(R.id.cardView_tarjeta_registro);
         cardView_tarjeta_registro.setBackgroundResource(R.drawable.fondo_firma);
+        imageView_bottonWhatapps=vista.findViewById(R.id.imageView_whatapps);
     }
 
     @SuppressLint("SetTextI18n")

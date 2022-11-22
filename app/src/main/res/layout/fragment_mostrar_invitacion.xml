@@ -410,7 +410,7 @@
                         android:theme="@style/texto_sub_titulo" />
 
                     <TextView
-                        android:id="@+id/textView_invitado_por"
+                        android:id="@+id/textView_nombre_referido"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"

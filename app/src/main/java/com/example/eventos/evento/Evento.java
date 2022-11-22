@@ -387,26 +387,32 @@ public class Evento extends Fragment {
         evento.setCosto(editText_costo.getText().toString().trim());
         @SuppressLint("SimpleDateFormat") SimpleDateFormat formatoFecha = new SimpleDateFormat("HH:mm aa dd-MM-yyyy");
         Date fecha_evento = null;
-        try {
-            fecha_evento= formatoFecha.parse((textView_hora.getText().toString().trim() +" " +textView_fecha.getText().toString().trim()));
-        } catch (ParseException exception) {
-            exception.printStackTrace();
-        }
-        evento.setFechaHora(fecha_evento);
-        evento.setBoletos(editText_boletos.getText().toString().trim());
-        if (editText_boletos_vendidos.getText().toString().trim().equals("")){
-            evento.setBoletosVendidos("0");
-        }else{
-            evento.setBoletosVendidos(editText_boletos_vendidos.getText().toString().trim());
-        }
-        //TODO colocar r.string
-        evento.setEstado("Proximamente");
-        evento.setEdicion("Editado: " + PantallaPrincipal.nombreUsuario +" "+ fecha );
-        evento.setUrlImagen("");
-        myRefe.child("Eventos").child(evento.getId()).setValue(evento);
-            requireActivity().runOnUiThread(() -> {
-                Toast.makeText(context, "Evento Guardado", Toast.LENGTH_SHORT).show();
-            });
+
+            try {
+                fecha_evento= formatoFecha.parse((textView_hora.getText().toString().trim() +" " +textView_fecha.getText().toString().trim()));
+
+                evento.setFechaHora(fecha_evento);
+                evento.setBoletos(editText_boletos.getText().toString().trim());
+                if (editText_boletos_vendidos.getText().toString().trim().equals("")){
+                    evento.setBoletosVendidos("0");
+                }else{
+                    evento.setBoletosVendidos(editText_boletos_vendidos.getText().toString().trim());
+                }
+                //TODO colocar r.string
+                evento.setEstado("Proximamente");
+                evento.setEdicion("Editado: " + PantallaPrincipal.nombreUsuario +" "+ fecha );
+                evento.setUrlImagen("");
+                myRefe.child("Eventos").child(evento.getId()).setValue(evento);
+
+
+                requireActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Error guardando, verifciar fecha", Toast.LENGTH_LONG).show());
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Error guardando, verifciar fecha", Toast.LENGTH_LONG).show());
+            }
+
+
 
         }).start();
         requireActivity().onBackPressed();
@@ -469,9 +475,7 @@ public class Evento extends Fragment {
                     Date fecha_evento = null;
                     try {
                         fecha_evento= formatoFecha.parse((textView_hora.getText().toString().trim() +" " +textView_fecha.getText().toString().trim()));
-                    } catch (ParseException exception) {
-                        exception.printStackTrace();
-                    }
+
                     evento.setFechaHora(fecha_evento);
                     evento.setBoletos(editText_boletos.getText().toString().trim());
                     if (editText_boletos_vendidos.getText().toString().trim().equals("")){
@@ -484,22 +488,15 @@ public class Evento extends Fragment {
                     evento.setEdicion("Editado: " + PantallaPrincipal.nombreUsuario +" "+ fecha );
                     evento.setUrlImagen(descargaUri.toString());
                     myRefe.child("Eventos").child(evento.getId()).setValue(evento);
+                        Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show();
+                    } catch (ParseException exception) {
+                        exception.printStackTrace();
+                        Toast.makeText(context, "Error guardando evento, intentenlo de nuevo", Toast.LENGTH_LONG).show();
+                    }
 
-//                    requireActivity().runOnUiThread(() -> {
-//                        Toast.makeText(context, "Evento Guardado", Toast.LENGTH_SHORT).show();
-//                    });
                 });
             } catch (Exception e) {
-                try {
-                    requireActivity().runOnUiThread(() -> {
-                        try {
-                            Toast.makeText(context, "Problemas de conexion", Toast.LENGTH_SHORT).show();
-                        }catch (Exception ignored){ }
 
-                    });
-                }catch (Exception er){
-                    Toast.makeText(context, "Problemas de conexion", Toast.LENGTH_SHORT).show();
-                }
             }
 
 

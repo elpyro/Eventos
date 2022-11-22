@@ -70,8 +70,11 @@ public class ListaEventos extends Fragment {
                         for(DataSnapshot ds:snapshot.getChildren()){
                             lista.add(ds.getValue(Modelo_evento.class));
                         }
-                        lista.sort(Comparator.comparing(Modelo_evento::getFechaHora));
-                        Collections.reverse(lista);
+                        try {
+                            lista.sort(Comparator.comparing(Modelo_evento::getFechaHora));
+                            Collections.reverse(lista);
+
+                        }catch (Exception e){}
                         AdaptadorEventos adapador= new AdaptadorEventos(lista);
                         recview.setAdapter(adapador);
                     }

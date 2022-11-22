@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class Usuarios extends Fragment {
     private Button boton_guardar;
     private EditText editText_nombre, editText_telefono,editText_correo,editText_direccion, editText_apline, editText_usuarioValidus;
     private TextView textView_titulo,textView_edicion;
+    private Switch switch_Acceso;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,12 +58,20 @@ public class Usuarios extends Fragment {
         recibirArgumentos();
 
         boton_guardar.setOnClickListener((View v) -> guardar());
+        switch_Acceso.setOnClickListener(view -> mostrarMensaje());
+
 
     return vista;
     }
 
+    private void mostrarMensaje() {
+        if(!switch_Acceso.isChecked()) Toast.makeText(context, "Este usuario no tendra acceso a la aplicación", Toast.LENGTH_LONG).show();
+    }
+
     private void recibirArgumentos() {
+
         //si hay argumentos el usuario va a ser editado
+        switch_Acceso.setChecked(true);
         if (getArguments() != null) {
             textView_titulo.setText(getString(R.string.EditarUsuario));
             String id_usuario = getArguments().getString("id_usuario");
@@ -77,7 +87,19 @@ public class Usuarios extends Fragment {
                             id_exitente=usuario.getId();
                             editText_nombre.setText(usuario.getNombre());
                             editText_telefono.setText(usuario.getTelefono());
-                            if (usuario.getCorreoGmail().equals("andresyamid1990@gmail.com"))editText_correo.setEnabled(false);
+
+                            if (usuario.getCorreoGmail().equals("andresyamid1990@gmail.com")){
+                                editText_correo.setEnabled(false);
+                                switch_Acceso.setEnabled(false);
+                            }
+
+                                if(usuario.getAcceso().equals("Permitido")){
+                                    switch_Acceso.setChecked(true);
+                                }else{
+                                    switch_Acceso.setChecked(false);
+                                }
+
+
                             editText_correo.setText(usuario.getCorreoGmail());
                             correoExistente=usuario.getCorreoGmail();
                             editText_direccion.setText(usuario.getDireccion());
@@ -121,6 +143,8 @@ public class Usuarios extends Fragment {
         editText_usuarioValidus=vista.findViewById(R.id.editText_usuarioValidus);
         textView_titulo= vista.findViewById(R.id.textView_titulo);
         textView_edicion=vista.findViewById(R.id.textView_edicion);
+        switch_Acceso=vista.findViewById(R.id.switch_Acceso);
+
 
         String [] opciones= {"Promotor","Auditor","Administrador"};
 
@@ -229,6 +253,11 @@ public class Usuarios extends Fragment {
             usuario.setApline(editText_apline.getText().toString().trim());
             usuario.setValidusUsuario(editText_usuarioValidus.getText().toString().trim());
             usuario.setEdicion("Editado: " +PantallaPrincipal.nombreUsuario +" "+ fecha );
+            if(switch_Acceso.isChecked()){
+                usuario.setAcceso("Permitido");
+            }else{
+                usuario.setAcceso("Prohibido");
+            }
             myRefe.child("Usuarios").child(usuario.getId()).setValue(usuario);
 
             requireActivity().runOnUiThread(() -> Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show());

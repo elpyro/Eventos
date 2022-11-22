@@ -1,12 +1,15 @@
 package com.example.eventos;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.telephony.PhoneNumberUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,12 +51,13 @@ public class MostrarInvitacion extends Fragment {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch switch_asistencia;
     @SuppressLint("StaticFieldLeak")
-    public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion, textView_invitado_por, textView_apline, textView_validus_referido, textView_telefono_referido,textView_hora;
+    public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion, textView_nombre_referido, textView_apline, textView_validus_referido, textView_telefono_referido,textView_hora;
     private Button button_compartir, button_editar;
     private ImageView imageView_qr,imageView_whatapps;
     private CardView cardView_invitacion;
-    public String id_invitacion;
+    public String id_invitacion, aperturaInvitacion="No enviada";
     Modelo_invitacion invitacion;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,10 +71,44 @@ public class MostrarInvitacion extends Fragment {
         button_compartir.setOnClickListener(view -> prepararInvitacion());
         button_editar.setOnClickListener(view -> editarInvitado());
         switch_asistencia.setOnClickListener(view -> cambiarEstado());
-        imageView_whatapps.setOnClickListener(view -> enviaMensajeWhatsApp());
+        imageView_whatapps.setOnClickListener(view -> openWhatsApp());
+
         return vista;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!aperturaInvitacion.equals("No enviada")){
+            compartirImagen();
+            aperturaInvitacion="No enviada";
+        }
+    }
+
+    private void compartirImagen() {
+        String smsNumber = "57" + textView_telefono_invitado.getText().toString().trim();
+        smsNumber= smsNumber.replace(" ", "");
+        smsNumber= smsNumber.replace("+57", "");
+        try {
+
+            Intent sendIntent = new Intent("android.intent.action.MAIN");
+
+            sendIntent.setAction(Intent.ACTION_SEND);
+
+            sendIntent.setType("text/application/pdf");
+                    File file = new File(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_PICTURES)+ "/invitacion.jpg");
+                    Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
+
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                    sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
+                    startActivity(sendIntent);
+
+        } catch(Exception e)
+        {
+            Toast.makeText(getContext(), "Error enviado Whatsapp:" + e, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @SuppressLint("SetTextI18n")
     private void cambiarEstado() {
@@ -113,34 +151,90 @@ public class MostrarInvitacion extends Fragment {
 
         String smsNumber = "57"+ textView_telefono_invitado.getText().toString().trim();
         smsNumber= smsNumber.replace(" ", "");
+        smsNumber= smsNumber.replace("+57", "");
 
             try { Intent sendIntent = new Intent("android.intent.action.MAIN");
-                sendIntent.setAction(Intent.ACTION_SEND); sendIntent.setType("text/application/pdf");
-                sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.setType("text/plain");
+                sendIntent.setPackage("com.whatsapp");
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "Hola, ");
+                sendIntent.setComponent(new ComponentName("com.whatsapp","com.whatsapp.Conversation"));
+                sendIntent.putExtra("jid", PhoneNumberUtils.stripSeparators(smsNumber)+"@s.whatsapp.net");
+
                 startActivity(sendIntent);
             } catch(Exception e)  {
+                Log.e("error ", "Error whatapps"+e);
                 Toast.makeText(getContext(), "Error enviado Whatsapp: "  + e, Toast.LENGTH_SHORT).show();
             }
 
 
     }
+    private void openWhatsApp() {
+        String smsNumber = "57" + textView_telefono_invitado.getText().toString().trim();
+        smsNumber= smsNumber.replace(" ", "");
+        smsNumber= smsNumber.replace("+57", "");
+
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                String uri = "whatsapp://send?phone=" + smsNumber + "&text=" + "Hola ";
+                intent.setData(Uri.parse(uri));
+                startActivity(intent);
+
+            } catch (Exception e){
+                Log.e ("error","error :"+e);
+                e.printStackTrace();
+            }
+    }
+
     private void compartirInvitacionWhatsapp() {
+        String smsNumber = "57" + textView_telefono_invitado.getText().toString().trim();
+        smsNumber= smsNumber.replace(" ", "");
+        smsNumber= smsNumber.replace("+57", "");
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            String uri = "whatsapp://send?phone=" + smsNumber + "&text=" + "Hola sr@ "+ textView_nombre_invitado.getText().toString().trim()+", mucho gusto mi nombre es "+ textView_nombre_referido.getText().toString().trim()+ ", le envio la inviación a nuestro evento";
+            intent.setData(Uri.parse(uri));
+            aperturaInvitacion="Enviada";
+            startActivity(intent);
 
-            String smsNumber = "57"+ textView_telefono_invitado.getText().toString().trim();
-            smsNumber= smsNumber.replace(" ", "");
 
-                try { Intent sendIntent = new Intent("android.intent.action.MAIN");
-                    sendIntent.setAction(Intent.ACTION_SEND); sendIntent.setType("text/application/pdf");
+        } catch (Exception e){
+            Log.e ("error","error :"+e);
+            e.printStackTrace();
+        }
 
-                    File file = new File(Environment.getExternalStoragePublicDirectory(
-                            Environment.DIRECTORY_PICTURES)+ "/invitacion.jpg");
-                    Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
+//
+//                    String smsNumber = "57"+ textView_telefono_invitado.getText().toString().trim();
+//                    smsNumber= smsNumber.replace(" ", "");
+//
+//                        try {
+//
+//                            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+//                            sendIntent.setComponent(new ComponentName("com.whatsapp", "com.whatsapp.contact.picker.ContactPicker"));
+//                            sendIntent.setType("text/plain");
+//                            sendIntent.putExtra("jid", PhoneNumberUtils.stripSeparators(smsNumber) + "@s.whatsapp.net");
+//
+//                            File file = new File(Environment.getExternalStoragePublicDirectory(
+//                                    Environment.DIRECTORY_PICTURES)+ "/invitacion.jpg");
+//                            Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
+//                            sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+//
+//
+//                            startActivity(sendIntent);
 
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                    sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
-                    startActivity(sendIntent); } catch(Exception e)
-                { Toast.makeText(getContext(), "Error enviado Whatsapp:" + e, Toast.LENGTH_SHORT).show(); }
+                    //Intent sendIntent = new Intent("android.intent.action.MAIN");
+
+                    //                    sendIntent.setAction(Intent.ACTION_SEND);
+//
+//                    sendIntent.setType("text/application/pdf");
+//                    File file = new File(Environment.getExternalStoragePublicDirectory(
+//                            Environment.DIRECTORY_PICTURES)+ "/invitacion.jpg");
+//                    Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
+//
+//                    sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+//                    sendIntent.putExtra("jid", smsNumber + "@s.whatsapp.net");
+//                    startActivity(sendIntent);
+
 
     }
 
@@ -176,7 +270,7 @@ public class MostrarInvitacion extends Fragment {
     private void crearCodigoQr() {
         try {
             BarcodeEncoder barcodeEncoder=new BarcodeEncoder();
-            String mensaje="!No olvides tu cita! \n"+"Inf: "+textView_invitado_por.getText().toString()+" "+ textView_telefono_referido.getText().toString()+"\n"+ id_invitacion.substring(0,7);
+            String mensaje="!No olvides tu cita! \n"+"Inf: "+ textView_nombre_referido.getText().toString()+" "+ textView_telefono_referido.getText().toString()+"\n"+ id_invitacion.substring(0,7);
             Bitmap bitmap= barcodeEncoder.encodeBitmap(mensaje, BarcodeFormat.QR_CODE,1000, 1000);
             imageView_qr.setImageBitmap(bitmap);
 
@@ -207,7 +301,7 @@ public class MostrarInvitacion extends Fragment {
         textView_nombre_evento=vista.findViewById(R.id.textView_nombre_evento);
         cardView_invitacion=vista.findViewById(R.id.cardView_invitacion);
         textView_nombreEnInvitacion=vista.findViewById(R.id.textView_nombreEnInvitacion);
-        textView_invitado_por=vista.findViewById(R.id.textView_invitado_por);
+        textView_nombre_referido =vista.findViewById(R.id.textView_nombre_referido);
         switch_asistencia=vista.findViewById(R.id.switch_asistencia);
         textView_hora=vista.findViewById(R.id.textView_hora);
         imageView_whatapps=vista.findViewById(R.id.imageView_whatapps);
@@ -243,7 +337,7 @@ public class MostrarInvitacion extends Fragment {
                             textView_telefono_invitado.setText(invitacion.getTelefono());
                             textView_correo_invitado.setText(invitacion.getCorreo());
                             textView_estado.setText(invitacion.getEstado());
-                            textView_invitado_por.setText(invitacion.getNombre_referido());
+                            textView_nombre_referido.setText(invitacion.getNombre_referido());
                             textView_telefono_referido.setText(invitacion.getTelefono_referido());
                             textView_validus_referido.setText(invitacion.getUsuario_validus_referido());
                             textView_apline.setText(invitacion.getApline_referido());

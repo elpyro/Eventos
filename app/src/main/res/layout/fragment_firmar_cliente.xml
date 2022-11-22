@@ -202,7 +202,7 @@
                     android:theme="@style/texto_sub_titulo" />
 
                 <TextView
-                    android:id="@+id/textView_invitado_por"
+                    android:id="@+id/textView_nombre_referido"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -210,8 +210,9 @@
                     android:theme="@style/texto_plano" />
             </LinearLayout>
 
+
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
@@ -221,6 +222,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/Telefono"
+                    android:layout_gravity="center"
                     android:theme="@style/texto_sub_titulo" />
 
                 <TextView
@@ -228,8 +230,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
+                    android:layout_gravity="center"
                     android:text="@string/Telefono"
                     android:theme="@style/texto_plano" />
+
+                <ImageView
+                    android:id="@+id/imageView_whatapps"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:layout_gravity="end"
+                    android:foregroundGravity="right"
+                    android:layout_weight="1"
+                    android:src="@drawable/icono_whatsapp" />
             </LinearLayout>
 
             <LinearLayout

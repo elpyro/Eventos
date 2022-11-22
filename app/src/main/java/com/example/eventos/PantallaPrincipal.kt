@@ -99,6 +99,7 @@ class PantallaPrincipal : AppCompatActivity() {
                                 val usuario: Modelo_usuario? = userSnapshot.getValue(
                                     Modelo_usuario::class.java
                                 )
+
                                 nombreUsuario = usuario?.nombre.toString()
                                 perfilUsaurio = usuario?.perfil.toString()
                                 idUsuario = usuario?.id.toString()
@@ -107,16 +108,28 @@ class PantallaPrincipal : AppCompatActivity() {
                                 apline_usuario=usuario?.apline.toString()
                                 usuario_telefono= usuario?.telefono.toString()
 
-                                Inicio.linearlayout_todosLosUsuarios.visibility = View.VISIBLE
-                                navView.getMenu()
-                                    .setGroupVisible(R.id.menu_inicio, true)
-                                if(perfilUsaurio.equals("Administrador")) {
+                                if(usuario?.acceso.toString().equals("Permitido")){
+                                    Inicio.linearlayout_todosLosUsuarios.visibility = View.VISIBLE
                                     navView.getMenu()
-                                        .setGroupVisible(R.id.menu_administrador, true)
+                                        .setGroupVisible(R.id.menu_inicio, true)
+                                    if(perfilUsaurio.equals("Administrador")) {
+                                        navView.getMenu()
+                                            .setGroupVisible(R.id.menu_administrador, true)
+                                    }else{
+                                        navView.getMenu()
+                                            .setGroupVisible(R.id.menu_administrador, false)
+                                    }
                                 }else{
                                     navView.getMenu()
                                         .setGroupVisible(R.id.menu_administrador, false)
+                                    navView.getMenu()
+                                        .setGroupVisible(R.id.menu_inicio, false)
+                                    Inicio.linearlayout_todosLosUsuarios.visibility = View.GONE
+                                    Toast.makeText(applicationContext, "Usuario restringido", Toast.LENGTH_SHORT)
+                                        .show()
+                                    binding.appBarMain.toolbar.setTitle("Usuario restringido")
                                 }
+
                             }
                             return
                         } else {
