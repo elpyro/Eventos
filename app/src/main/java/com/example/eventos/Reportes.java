@@ -203,7 +203,6 @@ public class Reportes extends Fragment {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
                        evento = userSnapshot.getValue(Modelo_evento.class);
-                        assert evento != null;
 
                         buscarInvitacionesDelEvento();
 

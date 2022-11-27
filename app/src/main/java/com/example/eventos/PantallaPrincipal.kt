@@ -77,7 +77,7 @@ class PantallaPrincipal : AppCompatActivity() {
 
 
         login()
-        Thread.sleep(1000)
+        Thread.sleep(1500)
 
     }
 
@@ -108,6 +108,8 @@ class PantallaPrincipal : AppCompatActivity() {
                                 apline_usuario=usuario?.apline.toString()
                                 usuario_telefono= usuario?.telefono.toString()
 
+
+
                                 if(usuario?.acceso.toString().equals("Permitido")){
                                     Inicio.linearlayout_todosLosUsuarios.visibility = View.VISIBLE
                                     navView.getMenu()
@@ -130,6 +132,7 @@ class PantallaPrincipal : AppCompatActivity() {
                                     binding.appBarMain.toolbar.setTitle("Usuario restringido")
                                 }
 
+
                             }
                             return
                         } else {
@@ -148,8 +151,6 @@ class PantallaPrincipal : AppCompatActivity() {
                     override fun onCancelled(error: DatabaseError) {}
                 })
             } else {
-
-//                    textView_credenciales.setVisibility(View.VISIBLE);
                 startActivityForResult(
                     AuthUI.getInstance()
                         .createSignInIntentBuilder()

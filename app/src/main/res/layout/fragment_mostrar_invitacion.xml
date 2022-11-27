@@ -194,13 +194,26 @@
                     android:text="@string/Direccion" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageView_qr"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/Imagen"
+                    android:src="@drawable/icono_qr" />
             <ImageView
                 android:layout_marginTop="10dp"
-                android:id="@+id/imageView_qr"
+                android:id="@+id/imageView_flayer"
                 android:layout_width="match_parent"
-                android:layout_height="167dp"
-                android:src="@drawable/icono_qr"
+                android:layout_height="180dp"
+                android:layout_weight="1"
                 android:contentDescription="@string/Imagen" />
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -59,7 +59,7 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
 
     private void crearPdf() {
         String path = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS)+ "/reporte.pdf";
+                Environment.DIRECTORY_DOCUMENTS)+ "/unity1_7.pdf";
         try
         {
             PDFUtility.createPdf(this, MostarReporte.this,path);
@@ -88,7 +88,7 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
         try {
 
         File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS) + "/reporte.pdf");
+                Environment.DIRECTORY_DOCUMENTS) + "/unity1_7.pdf");
         pdfView.fromFile(file)
                 .enableSwipe(true)
                 .swipeHorizontal(false)
@@ -112,7 +112,7 @@ final public class MostarReporte extends AppCompatActivity implements PDFUtility
         try {
 
         File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS) + "/reporte.pdf");
+                Environment.DIRECTORY_DOCUMENTS) + "/unity1_7.pdf");
 
         Uri uri = FileProvider.getUriForFile(context, "com.eventos.fileprovider", file);
 

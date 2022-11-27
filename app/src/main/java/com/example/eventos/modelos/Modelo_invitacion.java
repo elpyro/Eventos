@@ -3,9 +3,17 @@ package com.example.eventos.modelos;
 import java.io.Serializable;
 
 public class Modelo_invitacion implements Serializable {
-    String id, id_evento,id_usuario_referido,nombre_evento, nombre_referido, nombre, telefono, correo, estado, apline_referido, usuario_validus_referido, telefono_referido, nuevo_usuario_validus, nuevo_codigo_validus, fecha, costo, ciudad, direccion;
+    String id, id_evento,id_usuario_referido,nombre_evento, nombre_referido, nombre, telefono, correo, estado, apline_referido, usuario_validus_referido, telefono_referido, nuevo_usuario_validus, nuevo_codigo_validus, fecha, costo, ciudad, direccion, url_imagen;
 
     public Modelo_invitacion() {
+    }
+
+    public String getUrl_imagen() {
+        return url_imagen;
+    }
+
+    public void setUrl_imagen(String url_imagen) {
+        this.url_imagen = url_imagen;
     }
 
     public String getId() {

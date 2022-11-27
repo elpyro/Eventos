@@ -33,7 +33,7 @@ final class PageNumeration extends PdfPageEventHelper
             table.setWidths(new float[]{3,1});
 
             //1st Column
-            Anchor anchor = new Anchor(new Phrase("Community24-7", FONT_FOOTER));
+            Anchor anchor = new Anchor(new Phrase("Unity", FONT_FOOTER));
             anchor.setReference("");
             cell = new PdfPCell(anchor);
 

@@ -187,7 +187,7 @@ public class DetalleEvento extends Fragment {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
                         Modelo_evento evento = userSnapshot.getValue(Modelo_evento.class);
-                        assert evento != null;
+
 
                         textView_nombre_evento.setText(evento.getNombre());
                         textView_descripcion.setText(evento.getDescripcion());
@@ -267,8 +267,11 @@ public class DetalleEvento extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        referencia.removeEventListener(oyente);
-        dataQueryCargarEVento.removeEventListener(oyenteCargarEvento);
-        vista=null;
+        try {
+            referencia.removeEventListener(oyente);
+            dataQueryCargarEVento.removeEventListener(oyenteCargarEvento);
+            vista=null;
+        }catch (Exception e){}
+
     }
 }

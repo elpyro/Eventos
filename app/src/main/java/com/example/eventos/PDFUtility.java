@@ -48,8 +48,6 @@ final class PDFUtility
         File file = new File(filePath);
         new Thread(() -> {
 
-
-
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
@@ -86,12 +84,12 @@ final class PDFUtility
 
             try
             {
-                assert pdfWriter != null;
                 pdfWriter.close();
             }
             catch (Exception ex)
             {
-                Log.e(TAG,"Error While Closing pdfWriter : "+ ex);
+
+                Log.e("Error pdf","Error creando PDF : "+ ex);
             }
         }).start();
             if(mCallback!=null)
@@ -113,7 +111,7 @@ final class PDFUtility
     {
         document.addCreationDate();
         //document.add(new Meta("",""));
-        document.addAuthor( "Community 24-7");
+        document.addAuthor( "Unity");
         document.addCreator("Eloy Castellanos");
         document.addHeader("Ing Eloy Castellanos","castellanoseloy@gmail.com");
     }
@@ -179,7 +177,7 @@ final class PDFUtility
             logoTable.setHorizontalAlignment(Element.ALIGN_CENTER);
             logoTable.getDefaultCell().setVerticalAlignment(Element.ALIGN_CENTER);
 
-            Drawable drawable=ContextCompat.getDrawable(mContext, R.drawable.logo24siete);
+            Drawable drawable=ContextCompat.getDrawable(mContext, R.drawable.logo_fondonegro);
             assert drawable != null;
             Bitmap bmp =((BitmapDrawable)drawable).getBitmap();
 

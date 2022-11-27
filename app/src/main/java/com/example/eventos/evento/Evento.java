@@ -228,7 +228,7 @@ public class Evento extends Fragment {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
                            evento = userSnapshot.getValue(Modelo_evento.class);
-                            assert evento != null;
+
                             id_exitente=evento.getId();
                             editText_nombre.setText(evento.getNombre());
                             editText_descripcion.setText(evento.getDescripcion());
@@ -310,7 +310,7 @@ public class Evento extends Fragment {
         try {
             fechaSeleccionada = dateFormat.parse(textView_fecha.getText().toString());
             Date fechaActualf=dateFormat.parse(fechaActual);
-            assert fechaSeleccionada != null;
+
             if (fechaSeleccionada.compareTo(fechaActualf)<0 ){
                 fechaCorrecta=false;
                 Toast.makeText(context, "Fecha incorrecta", Toast.LENGTH_SHORT).show();
@@ -540,8 +540,11 @@ public class Evento extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        InputMethodManager input = (InputMethodManager) (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
-        input.hideSoftInputFromWindow(vista.getWindowToken(), 0);
-        vista=null;
+        try {
+            InputMethodManager input = (InputMethodManager) (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE));
+            input.hideSoftInputFromWindow(vista.getWindowToken(), 0);
+            vista=null;
+        }catch (Exception e){}
+
     }
 }

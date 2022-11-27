@@ -83,7 +83,7 @@ public class Usuarios extends Fragment {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
                             Modelo_usuario usuario = userSnapshot.getValue(Modelo_usuario.class);
-                            assert usuario != null;
+
                             id_exitente=usuario.getId();
                             editText_nombre.setText(usuario.getNombre());
                             editText_telefono.setText(usuario.getTelefono());

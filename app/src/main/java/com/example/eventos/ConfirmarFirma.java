@@ -168,9 +168,10 @@ public class ConfirmarFirma extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        codigoEncontrado=null;
-        vista=null;
+
         try {
+            codigoEncontrado=null;
+            vista=null;
             referencia.removeEventListener(oyente);
         }catch (Exception ignored){}
     }

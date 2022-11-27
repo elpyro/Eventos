@@ -88,6 +88,7 @@ public class CrearInvitacion extends Fragment {
             invitacion.setCiudad(evento.getCiudad());
             invitacion.setCosto(evento.getCosto());
             invitacion.setDireccion(evento.getDireccion());
+            invitacion.setUrl_imagen(evento.getUrlImagen());
 
 
             myRefe.child("Invitaciones").child(invitacion.getId()).setValue(invitacion);
@@ -130,7 +131,7 @@ public class CrearInvitacion extends Fragment {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         Modelo_evento evento = userSnapshot.getValue(Modelo_evento.class);
-                        assert evento != null;
+
 
                         int boletos_vendidos = Integer.parseInt(evento.getBoletosVendidos());
                         boletos_vendidos = boletos_vendidos + 1;

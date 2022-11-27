@@ -34,6 +34,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,7 +54,7 @@ public class MostrarInvitacion extends Fragment {
     @SuppressLint("StaticFieldLeak")
     public static TextView textView_correo_invitado,textView_telefono_invitado,textView_nombre_invitado, textView_nombreEnInvitacion, textView_nombre_referido, textView_apline, textView_validus_referido, textView_telefono_referido,textView_hora;
     private Button button_compartir, button_editar;
-    private ImageView imageView_qr,imageView_whatapps;
+    private ImageView imageView_qr,imageView_whatapps, imageView_flayer;
     private CardView cardView_invitacion;
     public String id_invitacion, aperturaInvitacion="No enviada";
     Modelo_invitacion invitacion;
@@ -95,9 +96,9 @@ public class MostrarInvitacion extends Fragment {
 
             sendIntent.setAction(Intent.ACTION_SEND);
 
-            sendIntent.setType("text/application/pdf");
+            sendIntent.setType("image/jpg");
                     File file = new File(Environment.getExternalStoragePublicDirectory(
-                            Environment.DIRECTORY_PICTURES)+ "/invitacion.jpg");
+                            Environment.DIRECTORY_PICTURES)+ "/unity1_7.jpg");
                     Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
 
                     sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -136,13 +137,6 @@ public class MostrarInvitacion extends Fragment {
     private void prepararInvitacion() {
         crearImagenInvitacion();
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        compartirInvitacionWhatsapp();
     }
 
 
@@ -192,18 +186,17 @@ public class MostrarInvitacion extends Fragment {
         smsNumber= smsNumber.replace("+57", "");
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            String uri = "whatsapp://send?phone=" + smsNumber + "&text=" + "Hola sr@ "+ textView_nombre_invitado.getText().toString().trim()+", mucho gusto mi nombre es "+ textView_nombre_referido.getText().toString().trim()+ ", le envio la inviación a nuestro evento";
+            String uri = "whatsapp://send?phone=" + smsNumber + "&text=" + "Hola sr@ "+ textView_nombre_invitado.getText().toString().trim()+", mucho gusto mi nombre es "+ textView_nombre_referido.getText().toString().trim()+ ", le envío la inviación a nuestro evento";
             intent.setData(Uri.parse(uri));
             aperturaInvitacion="Enviada";
             startActivity(intent);
-
 
         } catch (Exception e){
             Log.e ("error","error :"+e);
             e.printStackTrace();
         }
 
-//
+//f
 //                    String smsNumber = "57"+ textView_telefono_invitado.getText().toString().trim();
 //                    smsNumber= smsNumber.replace(" ", "");
 //
@@ -226,7 +219,7 @@ public class MostrarInvitacion extends Fragment {
 
                     //                    sendIntent.setAction(Intent.ACTION_SEND);
 //
-//                    sendIntent.setType("text/application/pdf");
+//                    sendIntent.setType("image/jpg");
 //                    File file = new File(Environment.getExternalStoragePublicDirectory(
 //                            Environment.DIRECTORY_PICTURES)+ "/invitacion.jpg");
 //                    Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
@@ -244,7 +237,7 @@ public class MostrarInvitacion extends Fragment {
             cardView_invitacion.setBackgroundResource(R.drawable.fondo_tarjeta_invitacion);
 
             String mPath =Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES)+ "/invitacion" + ".jpg";
+                    Environment.DIRECTORY_PICTURES)+ "/unity1_7" + ".jpg";
 
             // create bitmap screen capture
             View v1 = requireActivity().getWindow().getDecorView().getRootView().findViewById(R.id.cardView_invitacion);
@@ -252,7 +245,9 @@ public class MostrarInvitacion extends Fragment {
             Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
             v1.setDrawingCacheEnabled(false);
 
+
             File imageFile = new File(mPath);
+
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 100;
@@ -261,9 +256,22 @@ public class MostrarInvitacion extends Fragment {
             outputStream.close();
 
             cardView_invitacion.setBackgroundResource(R.drawable.fondo_cardview);
+
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            compartirInvitacionWhatsapp();
+
         } catch (Throwable e) {
-            Toast.makeText(context, "Error al crear la invitacion", Toast.LENGTH_LONG).show();
+
+            Toast.makeText(context, "Error al crear la invitacion"+e, Toast.LENGTH_LONG).show();
+
             e.printStackTrace();
+            return;
         }
     }
 
@@ -277,10 +285,6 @@ public class MostrarInvitacion extends Fragment {
         }catch (Exception er){
             Toast.makeText(context, "No se pudo generar el codigo Qr "+er, Toast.LENGTH_SHORT).show();
         }
-
-
-
-
     }
 
     private void inicializar() {
@@ -305,6 +309,7 @@ public class MostrarInvitacion extends Fragment {
         switch_asistencia=vista.findViewById(R.id.switch_asistencia);
         textView_hora=vista.findViewById(R.id.textView_hora);
         imageView_whatapps=vista.findViewById(R.id.imageView_whatapps);
+        imageView_flayer=vista.findViewById(R.id.imageView_flayer);
 
     }
 
@@ -323,7 +328,9 @@ public class MostrarInvitacion extends Fragment {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
                             invitacion = userSnapshot.getValue(Modelo_invitacion.class);
-                            assert invitacion != null;
+                            try{
+                                Picasso.with(context).load(invitacion.getUrl_imagen()).into(imageView_flayer);
+                            }catch (Exception e){}
 
                             textView_nombreEnInvitacion.setText(invitacion.getNombre());
                             textView_nombre_evento.setText(invitacion.getNombre_evento());

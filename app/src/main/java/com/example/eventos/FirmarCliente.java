@@ -38,7 +38,7 @@ public class FirmarCliente extends Fragment {
     private Modelo_invitacion invitacion;
     private Button button_firmar;
     private CardView cardView_tarjeta_registro;
-    private TextView textView_titulo,textView_validus_referido,textView_apline,textView_telefono_referido,textView_invitado_por,edittext_clave_validus,editText_usuarioValidus,editText_correo,editText_telefono,editText_nombre,textView_password,textView_nombre_firmado,textView_Usuario_validus;
+    private TextView textView_titulo,textView_correo, textView_validus_referido,textView_apline,textView_telefono_referido,textView_invitado_por,edittext_clave_validus,editText_usuarioValidus,editText_correo,editText_telefono,editText_nombre,textView_password,textView_nombre_firmado,textView_Usuario_validus;
     private ImageView imageView_bottonWhatapps;
     private String aperturaInvitacion="No enviada";
     @Override
@@ -65,6 +65,7 @@ public class FirmarCliente extends Fragment {
         });
 
 
+
         editText_usuarioValidus.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -79,6 +80,20 @@ public class FirmarCliente extends Fragment {
             }
         });
 
+        editText_correo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                textView_correo.setText(editText_correo.getText().toString().trim());
+            }
+        });
+
         imageView_bottonWhatapps.setOnClickListener(view -> enviarMensajeWhataaps());
 
 
@@ -89,8 +104,9 @@ public class FirmarCliente extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         if(!aperturaInvitacion.equals("No enviada")){
-            compartirInvitacionWhatsapp();
+                  compartirInvitacionWhatsapp();
             aperturaInvitacion="No enviada";
             Navigation.findNavController(vista).navigateUp();
 
@@ -143,8 +159,7 @@ public class FirmarCliente extends Fragment {
 
         Toast.makeText(context, "Usuario firmado", Toast.LENGTH_SHORT).show();
 
-        compartirTarjeta();
-
+        crearImagenTarjeta();
 
 
 
@@ -152,15 +167,9 @@ public class FirmarCliente extends Fragment {
 
     private void compartirTarjeta() {
 
-            crearImagenTarjeta();
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-            prepararInvitacion();
+
         }
 
     private void prepararInvitacion() {
@@ -169,7 +178,7 @@ public class FirmarCliente extends Fragment {
         smsNumber = smsNumber.replace("+57", "");
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            String uri = "whatsapp://send?phone=" + smsNumber + "&text=" + "Hola sr@ " + editText_nombre.getText().toString().trim() + ", mucho gusto mi nombre es " + PantallaPrincipal.nombreUsuario.trim() + ", Bienvenido a nuetra comunidad";
+            String uri = "whatsapp://send?phone=" + smsNumber + "&text=" + "Hola sr@ " + editText_nombre.getText().toString().trim() + ", mucho gusto mi nombre es " + PantallaPrincipal.nombreUsuario.trim() + ", Bienvenido a nuestra comunidad";
             intent.setData(Uri.parse(uri));
             aperturaInvitacion = "Enviada";
             startActivity(intent);
@@ -184,7 +193,10 @@ public class FirmarCliente extends Fragment {
 
 
             String mPath =Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES)+"/bienvenida.jpg";
+                    Environment.DIRECTORY_PICTURES)+"/unity1_7.jpg";
+            textView_Usuario_validus.setText(editText_usuarioValidus.getText().toString().trim());
+            textView_correo.setText(editText_correo.getText().toString().trim());
+            textView_password.setText(edittext_clave_validus.getText().toString().trim());
 
             // create bitmap screen capture
             View v1 = requireActivity().getWindow().getDecorView().getRootView().findViewById(R.id.cardView_tarjeta_registro);
@@ -201,6 +213,15 @@ public class FirmarCliente extends Fragment {
             outputStream.close();
 
             cardView_tarjeta_registro.setVisibility(View.GONE);
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            prepararInvitacion();
+
         } catch (Throwable e) {
             Toast.makeText(context, "Error al crear la invitacion: "+e, Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -217,9 +238,9 @@ public class FirmarCliente extends Fragment {
         try {
             Intent sendIntent = new Intent("android.intent.action.MAIN");
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.setType("text/application/pdf");
+            sendIntent.setType("image/jpg");
             File file = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES)+ "/bienvenida.jpg");
+                    Environment.DIRECTORY_PICTURES)+ "/unity1_7.jpg");
             Uri uri = FileProvider.getUriForFile(requireContext(), "com.eventos.fileprovider", file);
 
             sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -296,6 +317,7 @@ public class FirmarCliente extends Fragment {
         cardView_tarjeta_registro=vista.findViewById(R.id.cardView_tarjeta_registro);
         cardView_tarjeta_registro.setBackgroundResource(R.drawable.fondo_firma);
         imageView_bottonWhatapps=vista.findViewById(R.id.imageView_whatapps);
+        textView_correo=vista.findViewById(R.id.textView_correo);
     }
 
     @SuppressLint("SetTextI18n")
@@ -313,7 +335,7 @@ public class FirmarCliente extends Fragment {
             textView_telefono_referido.setText(invitacion.getTelefono_referido());
             textView_apline.setText(invitacion.getApline_referido());
             textView_validus_referido.setText(invitacion.getUsuario_validus_referido());
-
+            textView_correo.setText((invitacion.getCorreo()));
             textView_nombre_firmado.setText(invitacion.getNombre());
             textView_password.setText(invitacion.getNuevo_codigo_validus());
             textView_Usuario_validus.setText(invitacion.getNuevo_usuario_validus());
